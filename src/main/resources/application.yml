@@ -1,0 +1,68 @@
+#server 실행 port
+server:
+  8080
+
+spring:
+  application:
+    name: springboot_jpa
+
+  #mysql 연결 정보
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/springboot_jpa?serverTimezone=UTC&characterEncoding=UTF-8
+    username: springboot_jpa
+    password: hi882735
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  #mongoDb 연결 정보
+  data :
+    mongodb :
+      uri : mongodb://localhost:27017/springBoot #로컬 connection 연결 uri
+      database : local # db 이름
+#      host: //
+#      port: //
+#      username: //
+#      password : //
+#      database : //
+#      authentication-database : admin
+
+  thymeleaf:
+    cache: false
+
+  #jpa 설정
+  jpa:
+    open-in-view: false
+    show-sql: true
+    hibernate:
+      ddl-auto: update #테이블을 매 번 새로 만들지 않고 update하게끔 설정하는 속성값
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: usk883135@gmail.com #구글 계정
+    password: vwwvejgrqsalzcym #앱 비밀번호
+    protocol : smtp #반드시 소문자
+    properties:
+      mail:
+        protocol : smtp #반드시 소문자
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+          connectiontimeout: 20000
+          timeout: 20000
+          writetimeout: 20000
+    auth-code-expiration: 900000 # 15분
+
+  redis:
+    host: localhost #localhost
+    port: 6379 #6379
+
+jwt:
+  access:
+    secret: IamKangConquerorDushIamKangConquerorDushIamKangConquerorDushIamKangConquerorDush
+    expiration: 3600000
+
+  refresh:
+    secret: UmvengersAssembleU2zin
+    expiration: 204800000

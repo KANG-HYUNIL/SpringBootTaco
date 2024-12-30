@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Title</title>
+    </head>
+    <body>
+        <h2>Spring Boot Thymeleaf Example</h2>
+        <button type="button" onclick="saveReq()">Post Write</button>
+        <button type="button" onclick="listReq()">Post List</button>
+    </body>
+
+    <script>
+        const saveReq = () => {
+            location.href = "/board/save";
+        }
+
+        const listReq = () => {
+            location.href = "/board/";
+        }
+    </script>
+</html>
