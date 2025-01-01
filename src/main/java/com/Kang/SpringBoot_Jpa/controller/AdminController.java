@@ -24,6 +24,39 @@ public class AdminController {
         return "/admin/admin";
     }
 
+
+    @GetMapping("/project")
+    public String getProject()
+    {
+        //Project 데이터 가져오는 코드 필요
+
+        return "/admin/adminProject";
+    }
+
+    @GetMapping("/session")
+    public String getSession()
+    {
+        //Session 데이터 가져오는 코드 필요
+
+
+        return "/admin/adminSession";
+    }
+
+    @GetMapping("/project/write")
+    public  String getWriteProject()
+    {
+
+        return "/admin/adminWriteProject";
+    }
+
+    @GetMapping("/session/write")
+    public  String getWriteSession()
+    {
+        return "/admin/adminWriteSession";
+    }
+
+
+
     //본문 게시물 작성 요청 메서드
 
 

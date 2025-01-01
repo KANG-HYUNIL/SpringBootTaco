@@ -16,7 +16,6 @@ import java.time.Duration;
 import java.util.Random;
 
 @Service
-@Transactional
 @RequiredArgsConstructor
 public class MemberService {
 
@@ -29,6 +28,7 @@ public class MemberService {
     @Value("${spring.mail.auth-code-expiration}")
     private long authCodeExpirationMillis;
 
+    @Transactional
     //회원가입 시 이메일 인증 요청에 대한 처리, 이미 존재하는 이메일 사용 불가
     public void sendSignUpCodeToEmail(String toEmail)
     {
@@ -55,6 +55,7 @@ public class MemberService {
         }
     }
 
+    @Transactional
     //아이디 및 비밀번호 찾기 시 이메일 인증 요청에 대한 처리, 이미 존재하는 이메일이여야만 함
     public void sendFindCodeToEmail(String toEmail)
     {

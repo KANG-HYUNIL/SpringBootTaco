@@ -1,15 +1,53 @@
 package com.Kang.SpringBoot_Jpa.controller;
 
+import com.Kang.SpringBoot_Jpa.dto.ProjectDTO;
+import com.Kang.SpringBoot_Jpa.dto.SessionDTO;
+import com.Kang.SpringBoot_Jpa.service.MainService;
+import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-@Controller
+import java.util.List;
+import java.util.Map;
+
+@RestController
+@RequiredArgsConstructor
 public class MainController {
+
+    //MainService 객체 주입
+    private final MainService mainService;
+
+
+
     @GetMapping("/") //Get 요청 처리 메서드와 URL 매핑
     public String index() {
         //System.out.println("MainController.index()");
         return "index";
     }
+
+    @GetMapping("/session")
+    public String session(Model model)
+    {
+
+        Map<String, List<SessionDTO>> sessionData = mainService.getSessionGroupByTerm();
+        model.addAttribute("sessionData", sessionData);
+        return "main/session";
+    }
+
+    @GetMapping("/project")
+    public String project(Model model)
+    {
+
+        Map<String, List<ProjectDTO>> projectData = mainService.getProjectGroupByTerm();
+        model.addAttribute("projectData", projectData);
+        return "main/project";
+    }
+
+
+
+
 
 //    @PostMapping("/save") //Post 요청 처리 메서드와 URL 매핑
 //    public String save()

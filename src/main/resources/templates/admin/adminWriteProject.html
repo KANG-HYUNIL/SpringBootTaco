@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin</title>
+</head>
+<body>
+<div class="navbar">
+  <button onclick="navigateToAdminHome()">Home</button>
+  <button onclick="navigateToAdminProject()">Project</button>
+  <button onclick="navigateToAdminSession()">Session</button>
+</div>
+
+<script type="text/javascript" th:src="@{/javascript/adminWriteProject.js}" defer></script>
+<script type="text/javascript" th:src="@{/javascript/adminPublic.js}" defer></script>
+</body>
+</html>
