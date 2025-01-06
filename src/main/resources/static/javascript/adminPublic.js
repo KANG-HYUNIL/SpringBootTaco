@@ -11,8 +11,13 @@ document.addEventListener("DOMContentLoaded", function() {
         window.location.href = '/admin/session';
     }
 
+    function navigateToAdminApplication(){
+    window.location.href = "/admin/application";
+    }
+
     // Export functions to be used in HTML
     window.navigateToAdminHome = navigateToAdminHome;
     window.navigateToAdminProject = navigateToAdminProject;
     window.navigateToAdminSession = navigateToAdminSession;
+    window.navigateToAdminApplication = navigateToAdminApplication;
 });

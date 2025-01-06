@@ -1,23 +1,153 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
-    <head>
-        <meta charset="UTF-8">
-        <title>Title</title>
-    </head>
-    <body>
-    <div class="navbar">
-        <button>Home</button>
-        <button onclick="navigateToAbout()">About</button>
-        <button onclick="navigateToSession()">Session</button>
-        <button onclick="navigateToProject()">Project</button>
-        <button onclick="navigateToFAQ()">FAQ</button>
-        <button onclick="navigateToLogin()">Log In / Sign Up</button>
+<html lang="ko" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TEST - IT 동아리</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://ai-public.creatie.ai/gen_page/tailwind-custom.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com/3.4.5?plugins=forms@0.5.7,typography@0.5.13,aspect-ratio@0.4.2,container-queries@0.1.1"></script>
+    <script src="https://ai-public.creatie.ai/gen_page/tailwind-config.min.js" data-color="#000000" data-border-radius="small"></script>
+    <script type="text/javascript" th:src="@{/javascript/public.js}" defer></script>
+</head>
+<body class="font-['Noto_Sans_KR'] bg-gray-50">
+<nav class="fixed top-0 left-0 right-0 bg-white shadow-sm z-50">
+    <div class="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between h-16">
+            <div class="flex items-center">
+                <a href="#" onclick="navigateToHome()" class="flex-shrink-0">
+                    <span class="text-2xl font-bold text-custom">TEST</span>
+                </a>
+            </div>
+            <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
+                <a href="#" onclick="navigateToHome()" class="inline-flex items-center px-1 pt-1 border-b-2 border-custom text-sm font-medium text-gray-900">
+                    Main
+                </a>
+                <a href="#" onclick="navigateToAbout()" class="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700">
+                    About
+                </a>
+                <a href="#" onclick="navigateToSession()" class="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700">
+                    Session
+                </a>
+                <a href="#" onclick="navigateToProject()" class="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700">
+                    Project
+                </a>
+                <a href="#" onclick="navigateToFAQ()" class="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700">
+                    FAQ
+                </a>
+                <a href="#" onclick="navigateToSignUp()" class="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700">
+                    Application
+                </a>
+            </div>
+            <div class="hidden sm:ml-6 sm:flex sm:items-center">
+                <button onclick="navigateToLogin()" class="!rounded-button bg-custom text-white px-4 py-2 text-sm font-medium hover:bg-custom/90">
+                    로그인/회원가입
+                </button>
+            </div>
+        </div>
     </div>
+</nav>
 
-        <script type="text/javascript" th:src="@{/javascript/index.js}" defer></script>
-        <script type="text/javascript" th:src="@{/javascript/public.js}" defer></script>
-    </body>
+<main class="pt-16">
+    <section class="relative h-[600px] bg-gray-900">
+        <div class="absolute inset-0">
+            <img src="https://creatie.ai/ai/api/search-image?query=A modern tech workspace with clean minimalist design, featuring computers, collaborative spaces, and innovative technology elements, perfect for showcasing an IT club environment. The image should have a dark, professional atmosphere with subtle lighting.&width=1440&height=600&orientation=landscape&flag=9e03da7f-b2e7-4476-9fe2-1f57fde51651" class="w-full h-full object-cover opacity-50" alt="Hero Image">
+        </div>
+        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center">
+            <div class="text-center">
+                <h1 class="text-4xl font-bold tracking-tight text-white sm:text-5xl md:text-6xl">
+                    <span class="block">미래를 선도하는</span>
+                    <span class="block text-custom">IT 동아리</span>
+                </h1>
+                <p class="mt-3 text-base text-gray-300 sm:mt-5 sm:text-lg sm:max-w-xl sm:mx-auto md:mt-5 md:text-xl">
+                    혁신적인 아이디어와 기술로 더 나은 미래를 만들어갑니다
+                </p>
+            </div>
+        </div>
+    </section>
 
+    <section class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <h2 class="text-3xl font-bold text-gray-900">주요 활동 분야</h2>
+                <p class="mt-4 text-lg text-gray-600">우리 동아리는 다양한 IT 분야에서 활동하고 있습니다</p>
+            </div>
 
+            <div class="mt-16 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
+                <div class="relative bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                    <div class="text-custom mb-4">
+                        <i class="fas fa-code text-3xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-900">웹 개발</h3>
+                    <p class="mt-4 text-gray-600">최신 웹 기술을 활용한 프로젝트 개발 및 스터디를 진행합니다</p>
+                </div>
 
+                <div class="relative bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                    <div class="text-custom mb-4">
+                        <i class="fas fa-mobile-alt text-3xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-900">앱 개발</h3>
+                    <p class="mt-4 text-gray-600">모바일 애플리케이션 개발을 통해 실무 경험을 쌓습니다</p>
+                </div>
+
+                <div class="relative bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                    <div class="text-custom mb-4">
+                        <i class="fas fa-brain text-3xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-900">AI/ML</h3>
+                    <p class="mt-4 text-gray-600">인공지능과 머신러닝 기술을 학습하고 프로젝트에 적용합니다</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-16 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="lg:text-center">
+                <h2 class="text-3xl font-bold text-gray-900">우리의 비전</h2>
+                <p class="mt-4 max-w-2xl text-lg text-gray-600 lg:mx-auto">
+                    기술과 창의성을 바탕으로 혁신적인 솔루션을 만들어내는 IT 전문가 커뮤니티를 지향합니다
+                </p>
+            </div>
+
+            <div class="mt-16">
+                <dl class="space-y-10 md:space-y-0 md:grid md:grid-cols-2 md:gap-x-8 md:gap-y-10">
+                    <div class="relative">
+                        <dt>
+                            <div class="absolute flex items-center justify-center h-12 w-12 rounded-md bg-custom text-white">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <p class="ml-16 text-lg leading-6 font-medium text-gray-900">팀워크 중심</p>
+                        </dt>
+                        <dd class="mt-2 ml-16 text-base text-gray-600">
+                            협업을 통한 프로젝트 수행으로 실무 능력을 향상시킵니다
+                        </dd>
+                    </div>
+
+                    <div class="relative">
+                        <dt>
+                            <div class="absolute flex items-center justify-center h-12 w-12 rounded-md bg-custom text-white">
+                                <i class="fas fa-lightbulb"></i>
+                            </div>
+                            <p class="ml-16 text-lg leading-6 font-medium text-gray-900">창의적 문제해결</p>
+                        </dt>
+                        <dd class="mt-2 ml-16 text-base text-gray-600">
+                            새로운 시각으로 문제를 바라보고 혁신적인 해결책을 제시합니다
+                        </dd>
+                    </div>
+                </dl>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer class="bg-gray-900">
+    <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+        <div class="text-center text-gray-400 text-sm">
+            <p>&copy; 2024 TEST IT 동아리. All rights reserved.</p>
+        </div>
+    </div>
+</footer>
+</body>
 </html>

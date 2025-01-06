@@ -27,6 +27,12 @@ public class MainController {
         return "index";
     }
 
+    @GetMapping("/about")
+    public String about()
+    {
+        return "main/about";
+    }
+
     @GetMapping("/session")
     public String session(Model model)
     {

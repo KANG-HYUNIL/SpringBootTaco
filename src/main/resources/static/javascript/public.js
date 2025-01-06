@@ -1,4 +1,3 @@
-
 document.addEventListener("DOMContentLoaded", function() {
     function navigateToHome() {
         window.location.href = '/';
@@ -17,18 +16,23 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     function navigateToFAQ() {
-        //window.location.href = '/faq';
+        window.location.href = '/faq';
     }
 
     function navigateToLogin() {
-        window.location.href = '/login';
+        window.location.href = '/account/login';
     }
 
-    // Export functions to be used in HTML
+    function navigateToSignUp() {
+        window.location.href = "/account/signup";
+    }
+
+    // HTML에서 사용할 수 있도록 함수 내보내기
     window.navigateToHome = navigateToHome;
     window.navigateToAbout = navigateToAbout;
     window.navigateToSession = navigateToSession;
     window.navigateToProject = navigateToProject;
     window.navigateToFAQ = navigateToFAQ;
     window.navigateToLogin = navigateToLogin;
+    window.navigateToSignUp = navigateToSignUp;
 });

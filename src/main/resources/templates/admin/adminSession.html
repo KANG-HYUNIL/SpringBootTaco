@@ -1,17 +1,110 @@
-<!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
-<head>
-    <meta charset="UTF-8">
-    <title>Admin</title>
-</head>
-<body>
-<div class="navbar">
-    <button onclick="navigateToAdminHome()">Home</button>
-    <button onclick="navigateToAdminProject()">Project</button>
-    <button onclick="navigateToAdminSession()">Session</button>
-</div>
+<!DOCTYPE html><html lang="ko" xmlns:th="http://www.w3.org/1999/xhtml"><head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>TEST - IT 동아리</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+    <link href="https://ai-public.creatie.ai/gen_page/tailwind-custom.css" rel="stylesheet"/>
+    <script src="https://cdn.tailwindcss.com/3.4.5?plugins=forms@0.5.7,typography@0.5.13,aspect-ratio@0.4.2,container-queries@0.1.1"></script>
+    <script src="https://ai-public.creatie.ai/gen_page/tailwind-config.min.js" data-color="#000000" data-border-radius="small"></script>
+    <style>.dropdown-content { display: none; } .dropdown button:focus + .dropdown-content, .dropdown-content:hover { display: block; } .dropdown-content:not(:hover):not(:focus-within) { display: none; }</style></head>
+    <script type="text/javascript" th:src="@{/javascript/adminSession.js}" defer></script>
+    <script type="text/javascript" th:src="@{/javascript/adminPublic.js}" defer></script>
 
-<script type="text/javascript" th:src="@{/javascript/adminSession.js}" defer></script>
-<script type="text/javascript" th:src="@{/javascript/adminPublic.js}" defer></script>
-</body>
-</html>
+<body class="font-[&#39;Noto_Sans_KR&#39;] bg-gray-50">
+<nav class="fixed top-0 left-0 right-0 bg-white shadow-sm z-50">
+    <div class="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between h-16">
+            <div class="flex items-center">
+                <a href="#" class="flex-shrink-0">
+                    <span class="text-2xl font-bold text-custom">TEST ADMIN</span>
+                </a>
+            </div>
+            <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
+                <a href="#" onclick="navigateToAdminHome()" class="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700">Account</a>
+                <a href="#" class="inline-flex items-center px-1 pt-1 border-b-2 border-custom text-sm font-medium text-gray-900">Session</a>
+                <a href="#" onclick="navigateToAdminProject()" class="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700">Project</a>
+                <a href="#" onclick="navigateToAdminApplication()" class="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700">Application</a>
+            </div>
+            <div class="hidden sm:ml-6 sm:flex sm:items-center">
+                <button class="!rounded-button bg-custom text-white px-4 py-2 text-sm font-medium hover:bg-custom/90">
+                    로그인/회원가입
+                </button>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<main class="pt-16 mb-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
+        <div class="flex justify-between items-center mt-8 max-w-6xl mx-auto">
+            <select class="w-64 p-2 border border-gray-300 rounded-md shadow-sm focus:border-custom focus:ring-custom">
+                <option value="">기수 선택</option>
+                <option value="2">2기</option>
+                <option value="3">3기</option>
+                <option value="4">4기</option>
+            </select>
+            <button class="!rounded-button bg-custom text-white px-8 py-4 text-sm font-medium hover:bg-custom/90">Session 작성</button>
+        </div>
+        <div class="mt-12 grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto">
+            <div class="relative group rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300">
+                <div class="aspect-w-16 aspect-h-9">
+                    <img src="https://picsum.photos/800/450" alt="Session thumbnail" class="object-cover w-full h-full"/>
+                </div>
+                <div class="absolute bottom-0 left-0 right-0 bg-black p-6 border-t border-gray-600 relative">
+                    <div class="absolute top-2 right-2 dropdown inline-block">
+                        <button class="text-gray-400 hover:text-white"><i class="fas fa-cog fa-3x"></i></button>
+                        <div class="dropdown-content hidden absolute right-0 bottom-full mb-2 w-36 bg-white rounded-md shadow-lg z-10 border border-black">
+                            <button class="w-full text-left px-4 py-2 text-2xl text-gray-700 hover:bg-gray-100 border-b border-black">수정</button>
+                            <button class="w-full text-left px-4 py-2 text-2xl text-gray-700 hover:bg-gray-100">삭제</button>
+                        </div>
+                    </div>
+                    <p class="text-white text-sm font-medium">4기</p>
+                    <h4 class="text-white text-lg font-semibold mt-1">Session 1</h4>
+                    <h3 class="text-white text-xl font-bold mt-1">Git/Github 기초</h3>
+                </div>
+            </div>
+            <div class="relative group rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300">
+                <div class="aspect-w-16 aspect-h-9">
+                    <img src="https://picsum.photos/800/451" alt="Session thumbnail" class="object-cover w-full h-full"/>
+                </div>
+                <div class="absolute bottom-0 left-0 right-0 bg-black p-6 border-t border-gray-600 relative">
+                    <div class="absolute top-2 right-2 dropdown inline-block">
+                        <button class="text-gray-400 hover:text-white"><i class="fas fa-cog fa-3x"></i></button>
+                        <div class="dropdown-content hidden absolute right-0 bottom-full mb-2 w-36 bg-white rounded-md shadow-lg z-10 border border-black">
+                            <button class="w-full text-left px-4 py-2 text-2xl text-gray-700 hover:bg-gray-100 border-b border-black">수정</button>
+                            <button class="w-full text-left px-4 py-2 text-2xl text-gray-700 hover:bg-gray-100">삭제</button>
+                        </div>
+                    </div>
+                    <p class="text-white text-sm font-medium">4기</p>
+                    <h4 class="text-white text-lg font-semibold mt-1">Session 2</h4>
+                    <h3 class="text-white text-xl font-bold mt-1">React 기초</h3>
+                </div>
+            </div>
+            <div class="relative group rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300">
+                <div class="aspect-w-16 aspect-h-9">
+                    <img src="https://picsum.photos/800/452" alt="Session thumbnail" class="object-cover w-full h-full"/>
+                </div>
+                <div class="absolute bottom-0 left-0 right-0 bg-black p-6 border-t border-gray-600 relative">
+                    <div class="absolute top-2 right-2 dropdown inline-block">
+                        <button class="text-gray-400 hover:text-white"><i class="fas fa-cog fa-3x"></i></button>
+                        <div class="dropdown-content hidden absolute right-0 bottom-full mb-2 w-36 bg-white rounded-md shadow-lg z-10 border border-black">
+                            <button class="w-full text-left px-4 py-2 text-2xl text-gray-700 hover:bg-gray-100 border-b border-black">수정</button>
+                            <button class="w-full text-left px-4 py-2 text-2xl text-gray-700 hover:bg-gray-100">삭제</button>
+                        </div>
+                    </div>
+                    <p class="text-white text-sm font-medium">4기</p>
+                    <h4 class="text-white text-lg font-semibold mt-1">Session 3</h4>
+                    <h3 class="text-white text-xl font-bold mt-1">Spring Boot 기초</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+<footer class="bg-gray-900">
+    <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+        <div class="text-center text-gray-400 text-sm">
+            <p>© 2024 TEST IT 동아리. All rights reserved.</p>
+        </div>
+    </div>
+</footer>

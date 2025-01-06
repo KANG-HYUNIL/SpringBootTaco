@@ -363,6 +363,50 @@ Access Token을 요청에 실어 보냈는데 만료되었을 경우,
 
 프론트엔드에서는 권한이 필요한 요청을 보냈을 때에 401 응답을 받는다면, Refresh 토큰을 통해 Access Token을 재발급 받는 요청을 보내어 Access Token을 재발급 받아야 한다
 
+로그인 성공 후 jwt token 받을 때 프론트에 저장하는 방법
+
+```java
+fetch('/account/login', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    id: 'user_id',
+    password: 'user_password'
+  }),
+  credentials: 'include' // 쿠키를 포함하여 요청
+})
+.then(response => {
+  if (response.ok) {
+    return response.json();
+  } else {
+    throw new Error('Login failed');
+  }
+})
+.then(data => {
+  // 응답에서 access token과 refresh token을 저장
+  const accessToken = response.headers.get('access');
+  const refreshToken = getCookie('refresh'); // 쿠키에서 refresh token을 가져옴
+
+  // 토큰을 로컬 스토리지에 저장
+  localStorage.setItem('accessToken', accessToken);
+  localStorage.setItem('refreshToken', refreshToken);
+})
+.catch(error => {
+  console.error('Error:', error);
+});
+
+
+function getCookie(name) {
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
+}
+
+
+```
+
 
 ```java
 Token을 요청에 실어 보낼 때에는 다음과 같이 보내야 한다
