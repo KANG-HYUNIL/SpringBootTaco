@@ -14,6 +14,11 @@ public interface UserRepository  extends JpaRepository<UserEntity, String> {
     @NonNull
     Optional<UserEntity> findById(@Nonnull String id); //id로 UserEntity를 찾는 메소드
 
+    @Nonnull
+    Optional<UserEntity> findByName(@Nonnull String name); //name으로 UserEntity를 찾는 메소드
+
+    boolean existByName(@Nonnull String name); //name으로 UserEntity가 존재하는지 확인하는 메소드
+
     boolean existsById(@Nonnull String id); //id로 UserEntity가 존재하는지 확인하는 메소드
 
     boolean existsByEmail(@Nonnull String email); //email로 UserEntity가 존재하는지 확인하는 메소드

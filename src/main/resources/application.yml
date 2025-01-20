@@ -6,6 +6,11 @@ spring:
   application:
     name: springboot_jpa
 
+  #favicon 사용 안함 설정
+  mvc:
+    favicon:
+      enabled: false
+
   #mysql 연결 정보
   datasource:
     url: jdbc:mysql://127.0.0.1:3306/springboot_jpa?serverTimezone=UTC&characterEncoding=UTF-8

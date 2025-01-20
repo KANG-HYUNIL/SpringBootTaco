@@ -30,7 +30,7 @@ public class SecurityConfig {
     //서로 다른 메서드에서 모두 Bean을 사용하여 동일한 클래스를 반환한다면,
     //Qualifier 어노테이션을 통해 구분하여 사용해야 함
 
-    private final String loginURL = "/account/login"; //로그인 URL
+    private final String loginURL = "/login"; //로그인 URL
 
     //AuthenticationManager가 인자로 받을 AuthenticationConfiguraion 객체 생성자 주입
     //스프링 시큐리티에서 인증을 설정하는 클래스
@@ -64,10 +64,10 @@ public class SecurityConfig {
     }
 
 //    //특정 경로에 대해 스프링 시큐리티를 아예 거치지 않게 설정
-//    @Bean
-//    public WebSecurityCustomizer webSecurityCustomizer(){
-//        return web -> web.ignoring().requestMatchers("/dush", "/dush2");
-//    }
+    @Bean
+    public WebSecurityCustomizer webSecurityCustomizer(){
+        return web -> web.ignoring().requestMatchers("/favicon.ico", "/static/**", "/public/**", "/resources/**" , "/javascript/**");
+    }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -82,8 +82,8 @@ public class SecurityConfig {
                         "/member/email/signup_verification_req", //회원가입 이메일 인증 요청
                         "/account/signup", //회원가입
                         "/member/email/find_verification_req", //계정 찾기 이메일 인증 요청
-                        "/member/emails/verifications", //이메일 인증 번호 대조 요청
-                        "/account/login" //로그인
+                        "/member/emails/verifications" //이메일 인증 번호 대조 요청
+
                         ));
 
         //csrf disable
@@ -101,9 +101,11 @@ public class SecurityConfig {
         //경로별 인가 작업, 허용 경로 변경 및 경로 추가 시 항상 수정 필요 fixme
         http
                 .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers(publicPaths.toArray(new String[0])).permitAll() //특정 경로에서 모두 허용, 경로 변경 필요
+
+                        //.requestMatchers("").authenticated() //특정 경로에서 권한 요구. fixme
                         .requestMatchers("/admin/**").hasRole("ADMIN") //특정 경로에서 ADMIN만 허용
-                        .anyRequest().authenticated());
+                        .requestMatchers("/admin.html").permitAll() //admin.html 얻는 요청 모두 허용
+                        .anyRequest().permitAll()); //나머지 요청 모두 허용
 
         //세션 설정
         http

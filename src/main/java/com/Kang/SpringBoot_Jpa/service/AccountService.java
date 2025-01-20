@@ -4,10 +4,7 @@ import com.Kang.SpringBoot_Jpa.Converter.UserConverter;
 import com.Kang.SpringBoot_Jpa.dto.SignUpDTO;
 import com.Kang.SpringBoot_Jpa.dto.UserDTO;
 import com.Kang.SpringBoot_Jpa.entity.UserEntity;
-import com.Kang.SpringBoot_Jpa.exception.AccountLoginException;
-import com.Kang.SpringBoot_Jpa.exception.DuplicateDataException;
-import com.Kang.SpringBoot_Jpa.exception.InvalidAuthCodeException;
-import com.Kang.SpringBoot_Jpa.exception.InvalidInputException;
+import com.Kang.SpringBoot_Jpa.exception.*;
 import com.Kang.SpringBoot_Jpa.repository.UserRepository;
 
 import com.Kang.SpringBoot_Jpa.utils.InputValidator;
@@ -105,5 +102,34 @@ public class AccountService {
         //회원가입 성공
     }
 
+    //id로 UserEntity 가져오기
+    public UserEntity getUserById(String id)
+    {
+        //id로 UserEntity 가져오기
+        Optional<UserEntity> userEntity = userRepository.findById(id);
+        //UserEntity가 존재하지 않으면 예외 처리
+        if (userEntity.isEmpty())
+        {
+            throw new NoDataException("User id not found");
+        }
+
+        //UserEntity 반환
+        return userEntity.get();
+    }
+
+    //name으로 UserEntity 가져오기
+    public UserEntity getUserByName(String name)
+    {
+        //name으로 UserEntity 가져오기
+        Optional<UserEntity> userEntity = userRepository.findByName(name);
+        //UserEntity가 존재하지 않으면 예외 처리
+        if (userEntity.isEmpty())
+        {
+            throw new NoDataException("User name not found");
+        }
+
+        //UserEntity 반환
+        return userEntity.get();
+    }
 
 }

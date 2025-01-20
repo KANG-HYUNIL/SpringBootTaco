@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
 
-@RestController
+@Controller
 @RequiredArgsConstructor
 public class MainController {
 
@@ -51,7 +51,11 @@ public class MainController {
         return "main/project";
     }
 
-
+    @GetMapping("/faq")
+    public String faq(Model model)
+    {
+        return "main/faq";
+    }
 
 
 

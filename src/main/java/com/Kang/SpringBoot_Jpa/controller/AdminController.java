@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 // /admin 경로로 오는 요청 처리 Controller
-@RestController
+@Controller
 @RequestMapping("/admin")
 @RequiredArgsConstructor
 public class AdminController {
@@ -66,6 +66,7 @@ public class AdminController {
 
     //Session 게시물 작성 요청 메서드
     @PostMapping("/writeSession")
+    @ResponseBody
     public ResponseEntity<?> writeSession(@RequestBody SessionDTO sessionDTO)
     {
 
@@ -76,6 +77,7 @@ public class AdminController {
 
     //Session 게시물 수정 요청 메서드
     @PostMapping("/fixSession")
+    @ResponseBody
     public ResponseEntity<?> fixSession(@RequestBody SessionDTO sessionDTO)
     {
         adminService.fixSession(sessionDTO);
@@ -84,6 +86,7 @@ public class AdminController {
 
     //Project 게시물 작성 요청 메서드
     @PostMapping("/writeProject")
+    @ResponseBody
     public ResponseEntity<?> writeProject(@RequestBody ProjectDTO projectDTO)
     {
         adminService.writeProject(projectDTO);
@@ -92,6 +95,7 @@ public class AdminController {
 
     //Project 게시물 수정 요청 메서드
     @PostMapping("/fixProject")
+    @ResponseBody
     public ResponseEntity<?> fixProject(@RequestBody ProjectDTO projectDTO)
     {
         adminService.fixProject(projectDTO);

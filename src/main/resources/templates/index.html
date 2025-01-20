@@ -10,6 +10,7 @@
     <script src="https://cdn.tailwindcss.com/3.4.5?plugins=forms@0.5.7,typography@0.5.13,aspect-ratio@0.4.2,container-queries@0.1.1"></script>
     <script src="https://ai-public.creatie.ai/gen_page/tailwind-config.min.js" data-color="#000000" data-border-radius="small"></script>
     <script type="text/javascript" th:src="@{/javascript/public.js}" defer></script>
+    <link rel="icon" href="data:;base64,iVBORw0KGgo=">
 </head>
 <body class="font-['Noto_Sans_KR'] bg-gray-50">
 <nav class="fixed top-0 left-0 right-0 bg-white shadow-sm z-50">
@@ -40,7 +41,7 @@
                     Application
                 </a>
             </div>
-            <div class="hidden sm:ml-6 sm:flex sm:items-center">
+            <div id="navBar" class="hidden sm:ml-6 sm:flex sm:items-center">
                 <button onclick="navigateToLogin()" class="!rounded-button bg-custom text-white px-4 py-2 text-sm font-medium hover:bg-custom/90">
                     로그인/회원가입
                 </button>

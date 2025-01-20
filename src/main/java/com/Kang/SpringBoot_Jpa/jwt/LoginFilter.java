@@ -1,6 +1,7 @@
 package com.Kang.SpringBoot_Jpa.jwt;
 
 import com.Kang.SpringBoot_Jpa.dto.LoginDTO;
+import com.Kang.SpringBoot_Jpa.exception.InvalidInputException;
 import com.Kang.SpringBoot_Jpa.service.CustomUserDetails;
 import com.Kang.SpringBoot_Jpa.service.RedisService;
 import com.Kang.SpringBoot_Jpa.utils.InputValidator;
@@ -74,11 +75,15 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         LoginDTO loginDTO = new LoginDTO();
 
         try{
-            ObjectMapper objectMapper = new ObjectMapper(); //JSON 데이터를 객체로 변환하기 위한 ObjectMapper 객체 생성
-            ServletInputStream inputStream = request.getInputStream();  //요청에서 데이터를 읽어오기 위한 InputStream 객체 생성
-            String messageBody = StreamUtils.copyToString(inputStream, StandardCharsets.UTF_8); //InputStream을 문자열로 변환
-            loginDTO = objectMapper.readValue(messageBody, LoginDTO.class); //JSON 데이터를 LoginDTO 객체로 변환
-
+            //요청의 InputStream을 통해 json body를 읽어옴
+            ObjectMapper objectMapper = new ObjectMapper();
+            ServletInputStream inputStream = request.getInputStream();
+            if (inputStream.available() > 0) {
+                String messageBody = StreamUtils.copyToString(inputStream, StandardCharsets.UTF_8);
+                loginDTO = objectMapper.readValue(messageBody, LoginDTO.class);
+            } else {
+                throw new RuntimeException("No content to map due to end-of-input");
+            }
         }
         catch (IOException e)
         {
@@ -90,7 +95,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         String password = loginDTO.getPassword(); //request.getParameter("password");
 
         if (!InputValidator.isValid(username) || !InputValidator.isPasswordValid(password)) {
-            throw new AuthenticationException("Invalid username or password") {};
+            throw new InvalidInputException("Invalid username or password") {};
         }
 
         //스프링 시큐리티에서 username과 password를 검증하기 위해서는 token에 담아야 함
@@ -147,8 +152,8 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
         Cookie cookie = new Cookie(key, value); //쿠키 생성
         cookie.setMaxAge(24*60*60); //쿠키 만료 시간 설정
-        //cookie.setSecure(true); //https에서만 쿠키 전송
-        //cookie.setPath("/"); //쿠키 경로 설정
+        cookie.setSecure(true); //https에서만 쿠키 전송
+        cookie.setPath("/"); //쿠키 경로 설정
         cookie.setHttpOnly(true); //자바스크립트에서 쿠키 접근 불가
 
         return cookie;
