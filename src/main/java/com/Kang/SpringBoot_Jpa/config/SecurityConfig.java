@@ -72,20 +72,6 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
-        //허용 경로 설정
-        ArrayList<String> publicPaths =
-                new ArrayList<>(Arrays.asList(
-                        "/login", //로그인
-                        "/", //홈
-                        "/join",
-                        "/reissue", //Refresh Token 재발급
-                        "/member/email/signup_verification_req", //회원가입 이메일 인증 요청
-                        "/account/signup", //회원가입
-                        "/member/email/find_verification_req", //계정 찾기 이메일 인증 요청
-                        "/member/emails/verifications" //이메일 인증 번호 대조 요청
-
-                        ));
-
         //csrf disable
         http
                 .csrf((auth) -> auth.disable());

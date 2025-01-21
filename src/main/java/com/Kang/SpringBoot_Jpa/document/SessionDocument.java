@@ -4,6 +4,8 @@ import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.List;
+
 @Document(collection = "sessionData") //실제 mongodb의 collection 이름과 동일해야 함
 @Data
 public class SessionDocument {
@@ -19,4 +21,5 @@ public class SessionDocument {
 
     private String content; //본문 내용
 
+    private List<String> attachmentFilePaths; //첨부 파일 경로들
 }

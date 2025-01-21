@@ -561,6 +561,8 @@ public class SessionDTO {
 
     private String content; //세션의 내용
 
+    private List<String> attachmentFilePaths; //첨부 파일 경로들
+
 }
 ```
 
@@ -580,6 +582,8 @@ public class SessionDocument {
     private String title; //제목
 
     private String content; //본문 내용
+
+    private List<String> attachmentFilePaths; //첨부 파일 경로들
 
 }
 ```
@@ -602,6 +606,8 @@ public class ProjectDTO {
     private String title; //프로젝트의 제목
 
     private String content; //프로젝트의 내용
+
+    private List<String> attachmentFilePaths; //첨부파일 경로들
 
 }
 ```
@@ -626,6 +632,8 @@ public class ProjectDocument {
 
     private String content; //본문 내용
 
+    private List<String> attachmentFilePaths; //첨부 파일 경로들
+
 }
 ```
 
@@ -640,6 +648,8 @@ __________________________________________
 구상으로는, 게시물에서 일반 문자들은 바로 CSR로 웹 페이지에 렌더링시키고,
 파일들은 문자들 사이의 img, video 태그를 발견 시에 프론트에서 다시 해당 파일을 가져오는 요청을 보내게끔(src 경로 통해)
 
+이미지는 텍스트 에디터 상에서 바로 업로드가 가능하나, 동영상은 개발 속도에 의해 직접 업로드가 안된다.
+대신 유튜브에 업로드 한 동영상을 가져와서 활용할 수 있다.
 
 관련 DTO 및 Entity
 

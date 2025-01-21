@@ -2,6 +2,8 @@ package com.Kang.SpringBoot_Jpa.dto;
 
 import lombok.*;
 
+import java.util.List;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -24,5 +26,7 @@ public class ProjectDTO {
     private String title; //프로젝트의 제목
 
     private String content; //프로젝트의 내용
+
+    private List<String> attachmentFilePaths; //첨부 파일 경로들
 
 }

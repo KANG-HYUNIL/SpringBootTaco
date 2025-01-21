@@ -60,9 +60,10 @@ public class AdminService {
             newSessionDTO.setThumbnail(sessionDTO.getThumbnail());
         }
 
-        // term, title 설정
+        // term, title, attachmentFilePaths 설정
         newSessionDTO.setTerm(sessionDTO.getTerm());
         newSessionDTO.setTitle(sessionDTO.getTitle());
+        newSessionDTO.setAttachmentFilePaths(sessionDTO.getAttachmentFilePaths());
 
         // content 설정
         String content = sessionDTO.getContent();
@@ -79,7 +80,8 @@ public class AdminService {
             }
             // content 설정
             newSessionDTO.setContent(doc.body().html());
-        } else {
+        }
+        else {
             newSessionDTO.setContent(content);
         }
 
@@ -101,6 +103,7 @@ public class AdminService {
         sessionDocument.setTerm(sessionDTO.getTerm());
         sessionDocument.setTitle(sessionDTO.getTitle());
         sessionDocument.setContent(sessionDTO.getContent());
+        sessionDocument.setAttachmentFilePaths(sessionDTO.getAttachmentFilePaths());
 
         // Save the updated document back to MongoDB
         sessionRepository.save(sessionDocument);
@@ -112,24 +115,30 @@ public class AdminService {
         ProjectDTO newProjectDTO = new ProjectDTO();
 
         // Process thumbnail
+        //썸네일 이미지를 예비 파일 경로에서 실제 파일 경로로 이동 및 파일 경로 갱신
         DisplayedFileDTO thumbnailFile = fileService.fileRealUpload(projectDTO.getThumbnail());
-        if (thumbnailFile != null) {
+        if (thumbnailFile != null)
+        {
             newProjectDTO.setThumbnail(thumbnailFile.getFilePath());
-        } else {
+        } else
+        {
             newProjectDTO.setThumbnail(projectDTO.getThumbnail());
         }
 
-        // Copy term, team, and title
+        // Copy term, team, and title, attachmentFilePaths
         newProjectDTO.setTerm(projectDTO.getTerm());
         newProjectDTO.setTeam(projectDTO.getTeam());
         newProjectDTO.setTitle(projectDTO.getTitle());
+        newProjectDTO.setAttachmentFilePaths(projectDTO.getAttachmentFilePaths());
 
-        // Process content
+        // Process content, 텍스트 에디터 내의 게시물 내용 부분 관리
         String content = projectDTO.getContent();
         if (StringUtils.hasText(content)) {
+            // Parse the HTML content using Jsoup
             Document doc = Jsoup.parse(content);
             Elements mediaElements = doc.select("img[src], video[src]");
 
+            //이미지 태그들에 대해 예비 파일 경로에서 실제 저장 경로로 이동 후 경로 수정
             for (Element mediaElement : mediaElements) {
                 String src = mediaElement.attr("src");
                 DisplayedFileDTO fileDTO = fileService.fileRealUpload(src);
@@ -137,8 +146,10 @@ public class AdminService {
                 mediaElement.attr("src", newSrc);
             }
 
+            // content 설정
             newProjectDTO.setContent(doc.body().html());
-        } else {
+        }
+        else {
             newProjectDTO.setContent(content);
         }
 
@@ -162,6 +173,7 @@ public class AdminService {
         projectDocument.setTeam(projectDTO.getTeam());
         projectDocument.setTitle(projectDTO.getTitle());
         projectDocument.setContent(projectDTO.getContent());
+        projectDocument.setAttachmentFilePaths(projectDTO.getAttachmentFilePaths());
 
         // Save the updated document back to MongoDB
         projectRepository.save(projectDocument);

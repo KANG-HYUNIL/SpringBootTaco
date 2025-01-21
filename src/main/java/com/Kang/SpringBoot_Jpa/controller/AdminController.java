@@ -1,10 +1,12 @@
 package com.Kang.SpringBoot_Jpa.controller;
 
+import com.Kang.SpringBoot_Jpa.dto.DisplayedFileDTO;
 import com.Kang.SpringBoot_Jpa.dto.ProjectDTO;
 import com.Kang.SpringBoot_Jpa.dto.SessionDTO;
 import com.Kang.SpringBoot_Jpa.service.AdminService;
 import lombok.RequiredArgsConstructor;
 import org.apache.coyote.Response;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -72,7 +74,7 @@ public class AdminController {
 
         adminService.writeSession(sessionDTO);
 
-        return null;
+        return new ResponseEntity<>("Session Upload Complete", HttpStatus.OK);
     }
 
     //Session 게시물 수정 요청 메서드
@@ -90,7 +92,7 @@ public class AdminController {
     public ResponseEntity<?> writeProject(@RequestBody ProjectDTO projectDTO)
     {
         adminService.writeProject(projectDTO);
-        return null;
+        return new ResponseEntity<>("Project Upload Complete", HttpStatus.OK);
     }
 
     //Project 게시물 수정 요청 메서드

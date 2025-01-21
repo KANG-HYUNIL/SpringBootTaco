@@ -60,7 +60,7 @@ public class ReissueService {
         String newRefresh = jwtUtil.createRefreshJwt(username, role);
 
         //fixme Redis 활용으로 변경 필요
-        redisService.deleteValues("refresh_" + username);
+        redisService.deleteValues(refreshString + username);
         addRefreshEntity(username, newRefresh);
 
         response.setHeader("access", newAccess);

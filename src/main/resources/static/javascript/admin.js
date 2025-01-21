@@ -17,6 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
     fetch(url, {
         method: 'POST',
         headers: {
+            'Content-Type': 'application/json',
             //header에 access token
             'access': accessToken
         }
@@ -29,15 +30,15 @@ document.addEventListener('DOMContentLoaded', () => {
         //406 응답 시에는 refresh token을 통해 재발급
         else if (response.status === 406) {
             //refresh token 가져오기 fixme
-            const refreshToken = localStorage.getItem('refresh');
+            //const refreshToken = localStorage.getItem('refresh');
 
             const reissueURL = '/reissue';
 
             fetch(reissueURL, {
                 method: 'POST',
                 headers: {
-                    "refresh" : Refresh Token
-                    },
+                    'Content-Type': 'application/json'
+                },
 
                 credentials: 'include' // Include cookies for refresh token
             })
