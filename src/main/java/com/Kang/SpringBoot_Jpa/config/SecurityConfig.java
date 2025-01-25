@@ -89,9 +89,9 @@ public class SecurityConfig {
                 .authorizeHttpRequests((auth) -> auth
 
                         //.requestMatchers("").authenticated() //특정 경로에서 권한 요구. fixme
-                        .requestMatchers("/admin/**").hasRole("ADMIN") //특정 경로에서 ADMIN만 허용
-                        .requestMatchers("/admin.html").permitAll() //admin.html 얻는 요청 모두 허용
-                        .anyRequest().permitAll()); //나머지 요청 모두 허용
+                        .requestMatchers("/admin/").permitAll() // Allow access to the admin main page for all users
+                        .requestMatchers("/admin/**").hasRole("ADMIN") // Restrict other admin-related requests to users with ROLE_ADMIN
+                        .anyRequest().permitAll()); // Allow access to all other requests
 
         //세션 설정
         http

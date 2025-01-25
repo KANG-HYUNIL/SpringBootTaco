@@ -11,6 +11,7 @@ import jakarta.servlet.ServletInputStream;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -33,6 +34,7 @@ import java.util.Iterator;
 //여기서는 상속받고 Override를 통해 커스텀 필터 생성
 //또한 로그인 성공 시 JwtUtil의 메서드 이용해 Jwt Token 발급
 //SecurityConfig의 설정에 따라, /login 으로 POST 시 자동으로 등록된 이 Filter가 요청을 가로챔
+@Slf4j
 public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
 
@@ -74,6 +76,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         //json body로 데이터를 전달할 때에 처리법
         LoginDTO loginDTO = new LoginDTO();
 
+        //fixme
         try{
             //요청의 InputStream을 통해 json body를 읽어옴
             ObjectMapper objectMapper = new ObjectMapper();
@@ -94,6 +97,8 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         String username = loginDTO.getId(); //요청에 username 멤버가 없어서, 강제로 추출 후 사용
         String password = loginDTO.getPassword(); //request.getParameter("password");
 
+
+
         if (!InputValidator.isValid(username) || !InputValidator.isPasswordValid(password)) {
             throw new InvalidInputException("Invalid username or password") {};
         }
@@ -101,19 +106,22 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         //스프링 시큐리티에서 username과 password를 검증하기 위해서는 token에 담아야 함
         UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(username, password, null);
 
+
+
         //token에 담은 검증을 위한 AuthenticationManager로 전달
         return authenticationManager.authenticate(authToken);
     }
 
     //로그인 성공시 실행하는 메소드 (여기서 JWT를 발급하면 됨)
     @Override
-    protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authentication) {
+    protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authentication) throws IOException {
 
         //사용자 정보가 담긴 CustomUserDetails 생성
         CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
 
         //CustomUserDetails에서 username(id) 추출
         String username = customUserDetails.getUsername();
+        String ipAddress = request.getRemoteAddr();
 
         //GrantedAuthority 객체를 Collection으로 변환
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
@@ -137,14 +145,25 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         response.addCookie(createCookie("refresh", refreshJwt)); //응답 쿠키에 refresh 키로 refreshJwt 값 설정
         response.setStatus(HttpStatus.OK.value()); //응답 코드 200 반환
 
+        response.setContentType("application/json");
+        response.getWriter().write("{\"message\": \"Login successful\"}");
+
+        log.info("Successful login by user: {} from IP: {}", username, ipAddress);
 
     }
 
     //로그인 실패시 실행하는 메소드
     @Override
-    protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) {
+    protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException {
         //로그인 실패시 401 응답 코드 반환
-        response.setStatus(401);
+        response.setStatus(HttpStatus.UNAUTHORIZED.value());
+        response.setContentType("application/json");
+        response.getWriter().write("{\"message\": \"Unauthorized\"}");
+
+        String ipAddress = request.getRemoteAddr();
+        // Log the failed login attempt
+        log.info("Failed login attempt from IP: {}", ipAddress);
+
     }
 
     //Cookie 생성 메소드

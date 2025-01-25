@@ -22,9 +22,9 @@ public class TokenValidationController {
     @PostMapping("/validate-token")
     public ResponseEntity<?> validateToken(@RequestHeader("access") String accessToken) {
 
-        //토큰이 없거나 만료되었다면 UNAUTHORIZED 반환
+        //토큰이 없거나 만료되었다면 NOT_ACCEPTABLE 406 반환
         if (accessToken == null || !jwtUtil.isExpired(accessToken)) {
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
         }
 
         //토큰의 role이 USER나 ADMIN이 아니라면 FORBIDDEN 반환
@@ -40,15 +40,15 @@ public class TokenValidationController {
     @PostMapping("/validate-admin-token")
     public ResponseEntity<?> validateAdminToken(@RequestHeader("access") String accessToken) {
 
-        //토큰이 없거나 만료되었다면 UNAUTHORIZED 반환
-        if (accessToken == null || !jwtUtil.isExpired(accessToken)) {
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        //토큰이 없거나 만료되었다면 NOT_ACCEPTABLE 406 반환
+        if (accessToken == null || jwtUtil.isExpired(accessToken)) {
+            return new ResponseEntity<>("access token error", HttpStatus.NOT_ACCEPTABLE);
         }
 
         //토큰의 role이 ADMIN이 아니라면 FORBIDDEN 반환
         String role = jwtUtil.getRole(accessToken);
         if (!role.equals("ROLE_ADMIN")) {
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>("token role error", HttpStatus.FORBIDDEN);
         }
 
         return new ResponseEntity<>(HttpStatus.OK);

@@ -7,7 +7,9 @@ import com.Kang.SpringBoot_Jpa.dto.UserDTO;
 import com.Kang.SpringBoot_Jpa.entity.UserEntity;
 import com.Kang.SpringBoot_Jpa.exception.AccountLoginException;
 import com.Kang.SpringBoot_Jpa.service.AccountService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.catalina.User;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,20 +19,23 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/account")
+@Slf4j
 public class AccountController {
 
     //계정 관련 컨트롤러
     private final AccountService accountService;
 
-    //login View Get 메서드
     @GetMapping("/login")
-    public String login() {
+    public String login(HttpServletRequest request) {
+        String ipAddress = request.getRemoteAddr();
+        log.info("Login page accessed by IP: {}", ipAddress);
         return "/account/login";
     }
 
-    //signup View Get 메서드
     @GetMapping("/signup")
-    public String signup() {
+    public String signup(HttpServletRequest request) {
+        String ipAddress = request.getRemoteAddr();
+        log.info("Signup page accessed by IP: {}", ipAddress);
         return "/account/signup";
     }
 

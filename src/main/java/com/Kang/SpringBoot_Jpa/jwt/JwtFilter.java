@@ -41,14 +41,14 @@ public class JwtFilter extends OncePerRequestFilter {
         }
 
         // 토큰이 만료되었다면 다음 필터로 넘기지 않음
-        if (!jwtUtil.isExpired(accessToken))
+        if (jwtUtil.isExpired(accessToken))
         {
             //response body
             PrintWriter writer = response.getWriter();
             writer.print("access token expired");
 
-            //response status code
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            //response status code 406
+            response.setStatus(HttpServletResponse.SC_NOT_ACCEPTABLE);
             return;
         }
 
@@ -63,7 +63,7 @@ public class JwtFilter extends OncePerRequestFilter {
             writer.print("invalid access token");
 
             //response status code
-            response.setStatus(HttpServletResponse.SC_NOT_ACCEPTABLE);
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return;
         }
 

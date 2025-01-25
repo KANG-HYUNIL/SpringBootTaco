@@ -10,6 +10,7 @@ import com.Kang.SpringBoot_Jpa.repository.UserRepository;
 import com.Kang.SpringBoot_Jpa.utils.InputValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
@@ -21,6 +22,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class AccountService {
 
     private final UserRepository userRepository; //UserRepository DI
@@ -69,8 +71,10 @@ public class AccountService {
             UserEntity userEntity = UserConverter.toEntity(userDTO);
             //UserEntity 저장
             userRepository.save(userEntity);
+            log.info("Saved user :{}", userDTO);
         } catch (DataAccessException e)
         {
+            log.error("Error saving user: {}. UserDTO: {}", e.getMessage(), userDTO, e);
             //저장 과정 중 에러 발생 시에 false
             throw new RuntimeException(e);
         }

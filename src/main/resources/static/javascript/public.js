@@ -63,10 +63,12 @@ document.addEventListener("DOMContentLoaded", function() {
 
         //로그인 상태에 따라 네비게이션 바 업데이트
         const userName = localStorage.getItem('userName');
+        console.log(userName);
         const navBar = document.getElementById('navBar');
 
         //로그인 상태라면 사용자의 이름 표시
-        if (userName) {
+        if (userName)
+        {
             navBar.innerHTML = `
                 <span class="text-sm font-medium text-gray-900">안녕하세요, ${userName} 님</span>
                 <button onclick="navigateToLogout()" class="!rounded-button bg-custom text-white px-4 py-2 text-sm font-medium hover:bg-custom/90">
@@ -75,7 +77,8 @@ document.addEventListener("DOMContentLoaded", function() {
             `;
         }
         //로그인 상태가 아니라면 로그인/회원가입 버튼 표시
-        else {
+        else
+        {
             navBar.innerHTML = `
                 <button onclick="navigateToLogin()" class="!rounded-button bg-custom text-white px-4 py-2 text-sm font-medium hover:bg-custom/90">
                     로그인/회원가입
@@ -84,7 +87,7 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     }
 
-    updateNavBar();
+    //updateNavBar();
 
     // HTML에서 사용할 수 있도록 함수 내보내기
     window.navigateToHome = navigateToHome;
@@ -95,4 +98,6 @@ document.addEventListener("DOMContentLoaded", function() {
     window.navigateToLogin = navigateToLogin;
     window.navigateToSignUp = navigateToSignUp;
     window.navigateToLogout = navigateToLogout;
+
+    updateNavBar();
 });

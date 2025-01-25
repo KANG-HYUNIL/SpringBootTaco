@@ -52,14 +52,13 @@ public class JwtUtil {
 
     //토큰 만료 여부 확인
     public Boolean isExpired(String token) {
-        //토큰의 만료 시간이 현재 시간보다 이전이면 true 반환,
-        //이미 만료되서 에러 발생 시에는 false 반환
+        //
         try{
             return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().getExpiration().before(new Date());
         }
         catch(ExpiredJwtException e)
         {
-            return false;
+            return true;
         }
 
     }

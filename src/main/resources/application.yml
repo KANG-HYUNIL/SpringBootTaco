@@ -6,6 +6,10 @@ spring:
   application:
     name: springboot_jpa
 
+  logging:
+    level:
+        com.kang: DEBUG
+
   #favicon 사용 안함 설정
   mvc:
     favicon:

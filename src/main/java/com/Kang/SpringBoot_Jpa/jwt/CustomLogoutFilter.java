@@ -39,7 +39,8 @@ public class CustomLogoutFilter extends GenericFilterBean {
         String requestUri = request.getRequestURI();
 
         //logout으로 끝나는 경로가 아닐 경우에
-        if (!requestUri.matches("^\\/logout$")) {
+        if (!requestUri.matches("/logout"))
+        {
 
             //다음 Filter로 넘기기
             filterChain.doFilter(request, response);
@@ -75,7 +76,7 @@ public class CustomLogoutFilter extends GenericFilterBean {
         }
 
         //이미 만료된 토큰이라면
-        if (!jwtUtil.isExpired(refresh))
+        if (jwtUtil.isExpired(refresh))
         {
             //response status code
             //다음 Filter로 넘기지 않고 응답

@@ -70,18 +70,22 @@ document.addEventListener("DOMContentLoaded", function() {
 
         const url = '/file/preUpload';
 
+        console.log(formData); // FormData 출력
+
         fetch(url, {
             method: 'POST',
-            body: formData,
-            headers: {
-              'Content-Type': 'multipart/form-data',
-            }
+            body: formData
         })
         .then(response => {
-            if (response.ok) {
+            if (response.ok)
+            {
                 return response.json();
-            } else {
-                throw new Error('파일 업로드 실패');
+            }
+             else
+             {
+                return response.text().then(text => {
+                    throw new Error(`파일 업로드 실패: ${response.status} ${response.statusText} - ${text}`);
+                });
             }
         })
         .then(data => {
@@ -89,8 +93,9 @@ document.addEventListener("DOMContentLoaded", function() {
                     // 파일 경로와 이름을 숨겨진 입력 요소에 저장
                     document.getElementById('uploadedFilePath').value = data.filePath;
                     document.getElementById('uploadedFileName').value = data.fileName;
-                    // 파일 이름을 라벨에 추가
-                    fileNameLabel.textContent = `${thumbnailImageStr} ${file.name}`;
+                    // 파일 이름과 경로를 라벨에 추가
+                    const thumbnailImageStr = '파일 경로 및 이름:';
+                    fileNameLabel.textContent = `${thumbnailImageStr} ${file.webkitRelativePath} / ${data.fileName}`;
                 })
         .catch(error => {
             showErrorMessage(error.message);
@@ -157,10 +162,7 @@ document.addEventListener("DOMContentLoaded", function() {
             //파일 업로드 처리
             fetch(url, {
                 method: 'POST',
-                body: formData,
-                headers: {
-                  'Content-Type': 'multipart/form-data',
-                }
+                body: formData
             })
             .then(response => {
                 if (response.ok)
@@ -169,7 +171,9 @@ document.addEventListener("DOMContentLoaded", function() {
                 }
                 else
                 {
-                    throw new Error('파일 업로드 실패');
+                    return response.text().then(text => {
+                        throw new Error(`파일 업로드 실패: ${text}`);
+                    });
                 }
             })
             .then(data => {

@@ -3,11 +3,14 @@ document.addEventListener('DOMContentLoaded', () => {
     //사용자의 access token 가져오기
     const accessToken = localStorage.getItem('access');
 
+    console.log(accessToken);
+
     //access Token이 존재하지 않다면, login 페이지로 바로 이동
-    if (!accessToken) {
+    if (!accessToken)
+    {
         //admin 페이지로 이동하기 위한 플래그 설정
         localStorage.setItem('redirectToAdmin', 'true');
-        window.location.href = '/login';
+        window.location.href = '/account/login';
         return;
     }
 
@@ -24,11 +27,13 @@ document.addEventListener('DOMContentLoaded', () => {
     })
     .then(response => {
         //token 인증 성공 시 pass
-        if (response.ok) {
+        if (response.ok)
+        {
             return;
         }
         //406 응답 시에는 refresh token을 통해 재발급
-        else if (response.status === 406) {
+        else if (response.status === 406)
+        {
             //refresh token 가져오기 fixme
             //const refreshToken = localStorage.getItem('refresh');
 
@@ -44,41 +49,40 @@ document.addEventListener('DOMContentLoaded', () => {
             })
             .then(response => {
                     //200번 정상 응답 시에 accessToken과 refreshToken을 받아서 처리
-                    if (response.ok) {
+                    if (response.ok)
+                    {
+                        console.log("access reissue");
+                        const accessToken = response.headers.get('access');
+                        localStorage.setItem('access', accessToken);
+
+                    }
+                    else
+                    {
+                        // 에러 응답 시 에러 메시지를 보여줌
                         return response.json().then(data => {
-                            const accessToken = response.headers.get('access'); // 헤더에서 access token을 가져옴
-                            //const refreshToken = getCookie('refresh'); // 쿠키에서 refresh token을 가져옴
-
-                            // 토큰을 로컬 스토리지에 저장
-                            //refresh token은 쿠키로 자동 저장
-                            localStorage.setItem('accessToken', accessToken);
-                            //localStorage.setItem('refreshToken', refreshToken);
-
-                            // token 재발급 성공 후 return
-                            return;
+                            alert(response.status + data.message + " refresh err");
+                            throw new Error('refresh token error');
                         });
-                    } else {
-                        // 에러 응답 시 Error throw
-                        throw new Error('Token reissue failed');
                     }
                 })
         }
         // 그 이외에는 token이 비정상적인 상태. error 처리
-        else {
-            throw new Error('Invalid token');
+        else
+        {
+            // 에러 응답 시 에러 메시지를 보여줌
+            return response.json().then(data => {
+                alert(response.status + data.message  + " access err");
+                throw new Error('access token error');
+            });
         }
     })
     //error 처리
     .catch(error => {
         //admin 페이지로 이동하기 위한 플래그 설정
         localStorage.setItem('redirectToAdmin', 'true');
+        alert('error' + error);
         console.error('Error:', error);
-        window.location.href = '/login';
+        window.location.href = '/account/login';
     });
 });
 
-function getCookie(name) {
-    const value = `; ${document.cookie}`;
-    const parts = value.split(`; ${name}=`);
-    if (parts.length === 2) return parts.pop().split(';').shift();
-}

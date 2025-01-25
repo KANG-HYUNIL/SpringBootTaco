@@ -1,5 +1,6 @@
 package com.Kang.SpringBoot_Jpa.exception;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -8,12 +9,14 @@ import org.springframework.web.context.request.WebRequest;
 
 //모든 예외를 처리하는 핸들러
 @ControllerAdvice
+@Slf4j
 public class GlobalExceptionHandler {
 
     //여기에 작성되지 않은 모든 Exception을 처리하는 핸들러
     @ExceptionHandler(Exception.class)
     public ResponseEntity<?> handleGlobalException(Exception e, WebRequest request)
     {
+        log.error("An unexpected error occurred: {}", e.getMessage());
         return new ResponseEntity<>("An unexpected error occurred: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 

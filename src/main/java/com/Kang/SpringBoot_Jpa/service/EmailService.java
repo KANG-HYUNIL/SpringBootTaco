@@ -1,6 +1,7 @@
 package com.Kang.SpringBoot_Jpa.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -9,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
+@Slf4j
 public class EmailService {
 
 
@@ -25,11 +27,14 @@ public class EmailService {
     {
         SimpleMailMessage emailForm = createEmailForm(toEmail, title, text); //발신할 이메일 데이터 세팅
 
-        try {
+        try
+        {
             //JavaMailSender 객체를 통해 이메일 발신
             javaMailSender.send(emailForm);
+
         } catch (RuntimeException e) {
 
+            log.error("Error sending email to {}: {}", toEmail, e.getMessage(), e);
             //RuntimeException 발생 시 예외 처리
             //fixme
             throw new RuntimeException(e);

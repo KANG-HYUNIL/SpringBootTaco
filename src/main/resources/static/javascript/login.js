@@ -47,21 +47,36 @@ document.getElementById('loginForm').addEventListener('submit', function(event) 
                     },
                     body: JSON.stringify({ id: username })
                 })
-                .then(response => response.json())
-                .then(userData => {
-                    // 사용자 이름을 로컬 스토리지에 저장
-                    localStorage.setItem('userName', userData.name);
+                .then(response => {
+                    if (response.ok)
+                    {
+                        return response.json().then(data => {
+                            // 사용자 이름을 로컬 스토리지에 저장
+                            localStorage.setItem('userName', data.name);
+
+                            // 로그인 성공 후 리다이렉트 또는 다른 작업 수행
+                            const redirectToAdmin = localStorage.getItem('redirectToAdmin');
+                            if (redirectToAdmin === 'true') {
+                                localStorage.removeItem('redirectToAdmin');
+                                window.location.href = '/admin';
+                            } else {
+                                window.location.href = '/';
+                            }
+                        });
+                    }
+                    else
+                    {
+                        return response.json().then(data => {
+                            handleLoginError(response.status, data.message);
+                        });
+                    }
+                })
+                //서버와의 통신 중 오류 발생 시
+                .catch(error => {
+                    console.error('Error:', error);
+                    handleLoginError(500, '서버와의 통신 중 오류가 발생했습니다.' + error);
                 });
 
-
-                // 로그인 성공 후 리다이렉트 또는 다른 작업 수행
-                const redirectToAdmin = localStorage.getItem('redirectToAdmin');
-                if (redirectToAdmin === 'true') {
-                    localStorage.removeItem('redirectToAdmin');
-                    window.location.href = '/admin';
-                } else {
-                    window.location.href = '/';
-                }
             });
         }
         else {
@@ -74,7 +89,7 @@ document.getElementById('loginForm').addEventListener('submit', function(event) 
     //서버와의 통신 중 오류 발생 시
     .catch(error => {
         console.error('Error:', error);
-        handleLoginError(500, '서버와의 통신 중 오류가 발생했습니다.');
+        handleLoginError(500, '서버와의 통신 중 오류가 발생했습니다.' + error);
     });
 });
 
@@ -84,14 +99,22 @@ function getCookie(name) {
     if (parts.length === 2) return parts.pop().split(';').shift();
 }
 
-function handleLoginError(status, message) {
-    let errorMessage = '로그인에 실패했습니다.';
+function handleLoginError(status, errorMessage) {
+    let defaultMessage = '로그인에 실패했습니다. : ';
+    let textMessage = '';
     if (status === 400) {
-        errorMessage = '잘못된 요청입니다. 입력값을 확인하세요.';
+        textMessage = '잘못된 요청입니다. 입력값을 확인하세요. ';
+
     } else if (status === 401) {
-        errorMessage = '아이디 또는 비밀번호가 잘못되었습니다.';
+        textMessage = '아이디 또는 비밀번호가 잘못되었습니다. ';
+
     } else if (status === 500) {
-        errorMessage = '서버 오류가 발생했습니다. 잠시 후 다시 시도하세요.';
+        textMessage = '서버 오류가 발생했습니다. 잠시 후 다시 시도하세요. ';
+
     }
-    alert(errorMessage);
+    else {
+        textMessage = status
+    }
+    console.error(errorMessage);
+    alert(defaultMessage + textMessage);
 }

@@ -1,4 +1,4 @@
-동아리 홍보 페이지 + 게시판 Dush 프로젝트
+동아리 홍보 페이지 + 게시판 프로젝트
 
 기능 단위로 분류한다. 각 기능 단위로 사용하는 DTO, Entity(Document), API 양식, 프론트에서 보내야 하는 요청 양식, 각 요청에 대한 응답 구성으로 설명.
 
@@ -9,7 +9,15 @@
 - MongoDB Community 8.0.4
 - Mysql 8.0
 - Redis 3.0.504 //비밀번호 foobared?
-- 그 외 프론트..
+- 그 외 프론트는 순수 js 채용
+
+이 프로젝트는 빠른 완성을 위해 프론트와 백을 구분하지 않고 하나의 서버에서 처리, 순수 js 만을 사용한다.
+그렇기에 프론트엔드의 js 코드가 다소 비효율적(느린 속도), 다소 하드코딩된 부분도 존재한다.
+또한 프론트엔드의 뷰 부분은 모두 Creatie 의 자동생성으로 얻은 코드를 사용한다. 이후 디자인 변경 및 
+프론트엔드 최적화 작업을 진행할 시에 이 부분에 유의가 필요하다. 
+
+프론트엔드에서 호출할 가능성이 있는 가능한 모든 API 및 양식, 그에 대한 상황별 응답을 하단에 기재해놓았으나,
+이 문서는 완벽하지 않을 수 있다. 모호하거나 부족한 부분이 있다면 서버 코드의 Controller 부분을 확인해봐라.
 
 _______________________________________________________
 
@@ -553,6 +561,8 @@ public class SessionDTO {
 
     //thumbnail, term, title 가 외관 페이지에 나타날 것이고, content는 세부 페이지에 진입 시 사용
 
+    private String id;
+    
     private String thumbnail; //썸네일에 들어갈 이미지가 저장된 경로를 보관할 멤버
 
     private String term; //3기, 4기 할 때의 기수를 보관할 멤버. 귀찮으니 String으로
@@ -597,6 +607,8 @@ public class ProjectDTO {
 
     //thumbnail, term, team, title 가 외관 페이지에 나타날 것이고, content는 세부 페이지에 진입 시 사용
 
+    private String id;
+    
     private String thumbnail; //썸네일에 들어갈 이미지가 저장된 경로를 보관할 멤버
 
     private String term; //3기, 4기 할 때의 기수를 보관할 멤버. 귀찮으니 String으로
@@ -638,8 +650,69 @@ public class ProjectDocument {
 ```
 
 굳이 Session 과 Project를 분리한 이유는, 나중에 이 둘이 나타내는 정보의 방향성이 달라질 수 있기에 추후 관리 용이성을 위해서 분리.
+* 주의 * 
+현재 html 뷰에서 게시물 작성 시 Toast TUI 를 채용하고 있다. 이 Toast TUI 및 시간의 제약으로 인해, 동영상은 유튜브 링크를 통해서 유튜브 동영상만을
+올릴 수 있는 상태임. 또한 Toast TUI 사용을 위해 외부와 연결된 스크립트에서 정의된 클래스를 사용하고 있다.
+Toast TUI 와 관련된 js 코드들은 모두 html 의 script 내에 작성되어 있다. 이후 수정 시 주의가 필요
 
 
+이 프로젝트는 빠른 작동을 위해 프론트와 백을 구분하지 않고 하나의 서버에서 처리, 순수 js 만을 사용한다.
+그렇기 때문에 React 에서는 분리 작성이 가능한 것이, 여기서는 그러지 못한다.
+
+
+관련 API 양식
+
+Session 게시물 작성 API /admin/writeSession
+```java
+기대하는 프론트 요청 양식
+body :{
+    thumbnail : "string",
+    term : "string",
+    title : "string",
+    content : "string",
+    attachmentFilePaths : ["string1", "string2", ...]
+    }
+
+기대되는 백엔드 응답 코드
+
+
+정상적 발급 성공 시 :
+        200번 상태 코드 반환
+        
+발급 실패 시 :
+        상황에 따른 상태 코드 및 응답 처리 구현하고 채워놓음.
+    
+    
+    
+```
+
+Project 게시물 작성 API /admin/writeProject
+```java
+기대하는 프론트 요청 양식
+body :{
+    thumbnail : "string",
+    term : "string",
+    title : "string",
+    content : "string",
+    attachmentFilePaths : ["string1", "string2", ...],
+    team : "string"
+    }
+
+
+정상적 발급 성공 시 :
+        200번 상태 코드 반환
+
+발급 실패 시 :
+        상황에 따른 상태 코드 및 응답 처리 구현하고 채워놓음.
+    
+```
+
+
+
+### 2.1 Application 페이지 CRUD
+Application 내용 추가해야 함.
+
+관련 DTO 및 Entity(Document) 들
 __________________________________________
 
 ## 3. 파일(이미지 및 동영상) 업로드 및 다운로드
@@ -668,10 +741,6 @@ public class DisplayedFileDTO {
 ```
 
 
-//
-//
-
-//
 
 
 
@@ -704,7 +773,7 @@ public class DisplayedFileDTO {
 ```
 
 
-게시물 본문에 있는 이미지 가져오기
+게시물 본문에 있는 이미지 가져오기(사용 안함)
 /file/downloadImg (GET)
 
 ```java
@@ -728,37 +797,6 @@ body : {
         500 상태 코드 반환
 
 
-* 프론트에서의 이미지 요청에 대한 응답 처리 방법
-fetch('/file/downloadImg', {
-    method: 'POST',
-            headers: {
-        'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-            fileName: 'example.jpg',
-            filePath: 'C:/realTest/example.jpg'
-  })
-})
-        .then(response => {
-    if (response.ok) {
-        return response.blob();
-    } else {
-        throw new Error('File not found');
-    }
-})
-        .then(blob => {
-    const url = URL.createObjectURL(blob);
-    const img = document.createElement('img');
-    img.src = url;
-    document.body.appendChild(img);
-})
-        .catch(error => {
-        console.error('Error:', error);
-  });
-
-
-
-
 메서드 원문
 
 @GetMapping("/downloadImg")
@@ -778,7 +816,7 @@ public ResponseEntity<Resource> getImg(@RequestBody DisplayedFileDTO displayedFi
 ```
 
 
-게시물 본문에 있는 동영상 가져오기
+게시물 본문에 있는 동영상 가져오기(사용 안함)
 /file/downloadVideo (GET)
 
 ```java
@@ -802,36 +840,6 @@ body : {
         500 상태 코드 반환
 
 
-* 프론트에서의 동영상 요청에 대한 응답 처리 방법
-
-fetch('/file/downloadVideo', {
-    method: 'POST',
-            headers: {
-        'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-            fileName: 'example.mp4',
-            filePath: 'C:/realTest/example.mp4'
-  })
-})
-        .then(response => {
-    if (response.ok) {
-        return response.blob();
-    } else {
-        throw new Error('File not found');
-    }
-})
-        .then(blob => {
-    const url = URL.createObjectURL(blob);
-    const video = document.createElement('video');
-    video.src = url;
-    video.controls = true;
-    document.body.appendChild(video);
-})
-        .catch(error => {
-        console.error('Error:', error);
-  });
-
 
 메서드 원문
 
@@ -851,6 +859,107 @@ public ResponseEntity<Resource> getVideo(@RequestBody DisplayedFileDTO displayed
 
 
 ```
+
+
+서버에서 파일(이미지, 문서 등)을 가져오는 메서드
+/file/downloadFile(GET)
+    
+
+```java
+기대되는 프론트 응답 양식
+
+
+기대되는 백엔드 응답
+
+    정상 파일 반환 시 :
+            200 상태 코드 반환
+    동영상 파일 반환
+    
+    파일이 존재하지 않을 시 :
+            404 상태 코드 반환
+    
+    그 외의 알 수 없는 예외 발생 시 :
+            500 상태 코드 반환
+
+
+
+```
+
+
+## 4. 페이지 이동 
+
+각 View들 이동을 위한 API 들 서술. GET 요청에 대해서만 다룬다. 
+크게 3가지 종류로 나눌 수 있다.
+1. 모든 사용자 접근 가능
+2. 로그인 된 사용자만 접근 가능
+3. ADMIN 만 접근 가능
+
+2번, 3번에 해당하는 API 들은 요청을 보낼 시에 header에 "access" 라는 이름으로 access token을 실어서 보내주어야
+하고, 406 응답이 돌아올 시에는 refresh token을 통한 access token 재발급 절차를 시행해야 한다. 
+
+
+1번. 모든 사용자 접근 가능 API 들
+
+메인 페이지 (GET) "/"
+
+로그인 페이지 (GET) "/account/login"
+
+회원가입 페이지 (GET) "/account/signup"
+
+소개 페이지 (GET) "/about"
+
+프로젝트 페이지 (GET) "/project"
+유의 : projectData 라는 이름으로, 각 기수를 Key로 하고 그 기수의 프로젝트들이 담긴 배열이 Value인 Dict가 존재한다. 이를 통해서 동적으로 웹 페이지에 각 기수들의 프로젝트 목록을 나타낼 수 있다.
+```java
+@GetMapping("/project")
+    public String project(Model model)
+    {
+        Map<String, List<ProjectDTO>> projectData = mainService.getProjectGroupByTerm();
+        model.addAttribute("projectData", projectData);
+        return "main/project";
+    }
+```
+
+세션 페이지 (GET) "/session"
+유의 : sessionData 라는 이름으로, 각 기수를 Key로 하고 그 기수의 세션들이 담긴 배열이 Value인 Dict가 존재한다. 이를 통해서 동적으로 웹 페이지에 각 기수들의 세션 목록을 나타낼 수 있다.
+```java
+@GetMapping("/session")
+    public String session(Model model)
+    {
+        Map<String, List<SessionDTO>> sessionData = mainService.getSessionGroupByTerm();
+        model.addAttribute("sessionData", sessionData);
+        return "main/session";
+    }
+```
+
+FAQ 페이지 (GET) "faq"
+
+Application 페이지 (GET) "/application"
+유의 : applicationData 라는 이름으로, 데이터가 담길 예정.
+
+
+2번. 로그인 된 일반 사용자만 접근 가능
+
+아직 만들지는 않았음, 추후에도 없을 수 있음
+
+
+3번. 관리자만 접근 가능
+
+관리자 페이지 (GET) "/admin/"
+
+관리자 프로젝트 페이지 (GET) "/admin/project"
+유의 : 1번의 프로젝트 페이지와 동일하게, projectData 라는 이름으로 데이터가 존재. 
+
+관리자 프로젝트 작성 페이지 (GET) "/admin/project/write"
+
+관리자 세션 페이지 (GET) "/admin/session"
+유의 : 1번의 세션 페이지와 동일하게, sessionData 라는 이름으로 데이터가 존재.
+
+관리자 세션 작성 페이지 (GET) "admin/session/write"
+
+
+아마 이 아래에는 Application 관련 추가 될듯
+
 
 
 
