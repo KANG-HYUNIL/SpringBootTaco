@@ -23,6 +23,7 @@ public class DocumentConverter {
         sessionDocument.setThumbnail(sessionDTO.getThumbnail());
         sessionDocument.setTitle((sessionDTO.getTitle()));
         sessionDocument.setContent(sessionDTO.getContent());
+        sessionDocument.setAttachmentFilePaths(sessionDTO.getAttachmentFilePaths());
 
         return sessionDocument;
     }
@@ -37,6 +38,7 @@ public class DocumentConverter {
         sessionDTO.setThumbnail(sessionDocument.getThumbnail());
         sessionDTO.setTitle(sessionDocument.getTitle());
         sessionDTO.setContent(sessionDocument.getContent());
+        sessionDTO.setAttachmentFilePaths(sessionDocument.getAttachmentFilePaths());
 
         return sessionDTO;
     }
@@ -56,6 +58,7 @@ public class DocumentConverter {
         projectDocument.setTeam(projectDTO.getTeam());
         projectDocument.setTitle(projectDTO.getTitle());
         projectDocument.setContent(projectDTO.getContent());
+        projectDocument.setAttachmentFilePaths(projectDTO.getAttachmentFilePaths());
 
         return projectDocument;
     }
@@ -71,6 +74,7 @@ public class DocumentConverter {
         projectDTO.setTeam(projectDocument.getTeam());
         projectDTO.setTitle(projectDocument.getTitle());
         projectDTO.setContent(projectDocument.getContent());
+        projectDTO.setAttachmentFilePaths(projectDocument.getAttachmentFilePaths());
 
         return projectDTO;
     }

@@ -95,7 +95,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     document.getElementById('uploadedFileName').value = data.fileName;
                     // 파일 이름과 경로를 라벨에 추가
                     const thumbnailImageStr = '파일 경로 및 이름:';
-                    fileNameLabel.textContent = `${thumbnailImageStr} ${file.webkitRelativePath} / ${data.fileName}`;
+                    fileNameLabel.textContent = `${thumbnailImageStr} ${file.webkitRelativePath} / ${file.name}`;
                 })
         .catch(error => {
             showErrorMessage(error.message);

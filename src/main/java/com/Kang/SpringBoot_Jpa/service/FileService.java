@@ -33,15 +33,10 @@ public class FileService {
 
         try {
             fileName = multipartFile.getOriginalFilename();
-            String fileExtension = "";
 
-            // 파일 확장자 추출
-            if (fileName != null && fileName.contains(".")) {
-                fileExtension = fileName.substring(fileName.lastIndexOf("."));
-            }
-
-            //UUID
-            String uniqueFileName = UUID.randomUUID().toString() + fileExtension; //UUID로 파일 이름 변경
+            // UUID
+            String uniqueId = UUID.randomUUID().toString();
+            String uniqueFileName = uniqueId + "_" + fileName; // UUID와 원본 파일 이름 결합
 
             //파일 미리 저장 경로 설정
             String filePath = PRESTORAGE + uniqueFileName;
@@ -55,7 +50,7 @@ public class FileService {
             multipartFile.transferTo(new File(filePath)); //파일 저장
 
             DisplayedFileDTO displayedFileDTO = new DisplayedFileDTO(); //DTO 객체 생성
-            displayedFileDTO.setFileName(fileName); //파일 이름 설정
+            displayedFileDTO.setFileName(uniqueFileName); //파일 이름 설정
             displayedFileDTO.setFilePath(filePath); //파일 경로 설정
 
             log.info("File pre-upload successful: FileName={}, FilePath={}", fileName, filePath);

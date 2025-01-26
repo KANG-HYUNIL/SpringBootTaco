@@ -18,6 +18,7 @@
   <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css" />
 
   <link rel="stylesheet" th:href="@{/css/iframeTUI.css}" />
+  <link rel="icon" href="data:;base64,iVBORw0KGgo=">
 </head>
 
 
@@ -47,7 +48,7 @@
 
 <main class="pt-16 mb-20">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
-    <h1 class="text-2xl font-bold text-gray-900 mb-4 text-center">Project 게시글 작성</h1>
+    <h1 id="pageTitle" class="text-2xl font-bold text-gray-900 mb-4 text-center">Project 게시글 작성</h1>
     <div class="flex justify-end items-center mt-8 max-w-6xl mx-auto">
 
       <button class="!rounded-button bg-custom text-white px-8 py-4 text-sm font-medium hover:bg-custom/90 submit-project-button">Project 제출</button>
@@ -216,66 +217,69 @@
               });
 
               // Function to send request with token handling
-                async function sendRequest(url, data) {
-                  const accessToken = localStorage.getItem('access');
-                  try {
-                    let response = await fetch(url, {
+              async function sendRequest(url, data) {
+                const accessToken = localStorage.getItem('access');
+                try {
+                  let response = await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                      'Content-Type': 'application/json',
+                      'access': accessToken
+                    },
+                    body: JSON.stringify(data),
+                    credentials: 'include'
+                  });
+
+                  if (response.status === 406)
+                  {
+                    await reissueToken();
+                    response = await fetch(url, {
                       method: 'POST',
                       headers: {
                         'Content-Type': 'application/json',
-                        'access': accessToken
+                        'access': localStorage.getItem('access')
                       },
                       body: JSON.stringify(data),
                       credentials: 'include'
                     });
-
-                    if (response.status === 406) {
-                      await reissueToken();
-                      response = await fetch(url, {
-                        method: 'POST',
-                        headers: {
-                          'Content-Type': 'application/json',
-                          'access': localStorage.getItem('access')
-                        },
-                        body: JSON.stringify(data),
-                        credentials: 'include'
-                      });
-                    }
-
-                    if (!response.ok)
-                    {
-                      throw new Error('Request failed');
-                    }
                   }
-                  catch (error) {
-                    console.error('Error:', error);
+                  if (!response.ok)
+                  {
+                      const errorData = await response.json();
+                      throw new Error(`Request failed with status ${response.status}: ${errorData.message}`);
                   }
-                }
 
-              // Function to reissue token
-
-              // Function to reissue token
-              async function reissueToken() {
-                const reissueURL = '/reissue';
-                try {
-                  const response = await fetch(reissueURL, {
-                    method: 'POST',
-                    headers: {
-                      'Content-Type': 'application/json'
-                    },
-                    credentials: 'include'
-                  });
-
-                  if (response.ok) {
-                    const accessToken = response.headers.get('access');
-                    localStorage.setItem('access', accessToken);
-                  } else {
-                    throw new Error('Token reissue failed');
-                  }
+                  return response;
                 }
                 catch (error) {
                   console.error('Error:', error);
+                  throw error;
                 }
+              }
+
+              // Function to reissue token
+              async function reissueToken() {
+                  const reissueURL = '/reissue';
+                  try {
+                      const response = await fetch(reissueURL, {
+                          method: 'POST',
+                          headers: {
+                              'Content-Type': 'application/json'
+                          },
+                          credentials: 'include'
+                      });
+
+                      if (response.ok) {
+                          const accessToken = response.headers.get('access');
+                          localStorage.setItem('access', accessToken);
+                      } else {
+                          const errorData = await response.json();
+                          throw new Error(`Token reissue failed with status ${response.status}: ${errorData.message}`);
+                      }
+                  } catch (error) {
+                      console.error('Error:', error);
+                      throw error;
+                  }
               }
 
 
@@ -289,14 +293,21 @@
                   const thumbnail = document.getElementById('uploadedFilePath').value;
                   const attachmentFilePaths = Array.from(document.querySelectorAll('#attachmentFileList .file-item')).map(item => item.dataset.filePath);
 
-                  if (!title || !term || !team || !content.trim() || thumbnail)
+                  if (!title || !term || !team || !content.trim() || !thumbnail)
                   {
                     alert('모든 필드를 채워주세요.');
                     return;
                   }
 
+                  const isConfirmed = confirm('Are you sure you want to submit this project?');
+                  if (!isConfirmed)
+                  {
+                      return; // Exit the function if the user cancels
+                  }
+
                     //projectDTO 생성
                   const projectDTO = {
+                    id : projectId,
                     title,
                     term,
                     team,
@@ -305,43 +316,101 @@
                     attachmentFilePaths
                   };
 
-                  const url = '/admin/writeProject'; //Project 작성 API
+                  //URL 설정
+                  const url = projectId ? '/admin/fixProject' : '/admin/writeProject';
 
-                  await sendRequest(url, projectDTO);
-                }
+                  try {
+                      const response = await sendRequest(url, projectDTO);
 
-                // Function to send session data
-                async function submitSession() {
-                    //게시물의 데이터 수집
-                  const title = document.getElementById('sessionTitle').value;
-                  const term = document.getElementById('sessionTerm').value;
-                  const content = editor.getMarkdown();
-                  const thumbnail = document.getElementById('uploadedFilePath').value;
-                  const attachmentFilePaths = Array.from(document.querySelectorAll('#attachmentFileList .file-item')).map(item => item.dataset.filePath);
+                      if (!response.ok) {
+                          const errorData = await response.json();
+                          throw new Error(`Request failed with status ${response.status}: ${errorData.message}`);
+                      }
 
-                  if (!title || !term || !content.trim() || thumbnail)
-                  {
-                    alert('모든 필드를 채워주세요.');
-                    return;
+                      alert('Project 제출 성공');
+                      navigateToAdminProject();
                   }
-
-                    //SessionDTO 생성
-                  const sessionDTO = {
-                    title,
-                    term,
-                    content,
-                    thumbnail,
-                    attachmentFilePaths
-                  };
-
-                    const url = '/admin/writeSession'
-
-                  await sendRequest(url, sessionDTO);
+                  catch (error) {
+                      alert(`Error: ${error.message}`);
+                      console.error('Error submitting project:', error);
+                  }
                 }
+
+
+
+                let projectId = null;
+
+                // Check if projectId exists in localStorage
+                const storedProjectId = localStorage.getItem('projectId');
+                if (storedProjectId) {
+                  projectId = storedProjectId;
+                  localStorage.removeItem('projectId');
+
+                  // Fetch project data by ID
+                  const url = '/getProjectById';
+
+                  fetch(url, {
+                      method: 'POST',
+                      headers: {
+                          'Content-Type': 'application/json'
+                      },
+                      body: JSON.stringify({ id: projectId }),
+                      credentials: 'include'
+                  })
+                  .then(response => {
+                      if (!response.ok) {
+                          throw new Error('Failed to fetch project data');
+                      }
+                      return response.json();
+                  })
+                  .then(projectData => {
+                      // Populate HTML elements with project data
+                      document.getElementById('projectTitle').value = projectData.title;
+                      document.getElementById('projectTerm').value = projectData.term;
+                      document.getElementById('projectTeam').value = projectData.team;
+                      document.getElementById('uploadedFilePath').value = projectData.thumbnail;
+                      const fileName = projectData.thumbnail.split('/').pop();
+                      document.getElementById('uploadedFileName').value = fileName;
+                      document.getElementById('fileNameLabel').textContent = `파일 이름: ${fileName.split('_').slice(1).join('_')}`;
+                      editor.insertText(projectData.content);
+
+                      // Populate attachment files
+                      const attachmentFileList = document.getElementById('attachmentFileList');
+                      projectData.attachmentFilePaths.forEach(filePath => {
+                          const fileName = filePath.split('/').pop();
+                          const fileItem = document.createElement('div');
+                          fileItem.classList.add('file-item', 'flex', 'items-center', 'mt-2');
+                          fileItem.dataset.filePath = filePath;
+                          fileItem.dataset.fileName = fileName;
+
+                          const fileLabel = document.createElement('span');
+                          fileLabel.textContent = fileName.split('_').slice(1).join('_');
+                          fileLabel.classList.add('text-sm', 'font-medium', 'text-gray-700');
+
+                          const deleteButton = document.createElement('button');
+                          deleteButton.innerHTML = '&times;';
+                          deleteButton.classList.add('text-red-500', 'ml-2');
+                          deleteButton.onclick = () => {
+                              attachmentFileList.removeChild(fileItem);
+                          };
+
+                          fileItem.appendChild(fileLabel);
+                          fileItem.appendChild(deleteButton);
+                          attachmentFileList.appendChild(fileItem);
+                      });
+
+                      // Change page title
+                      document.getElementById('pageTitle').textContent = 'Project 게시글 수정';
+                  })
+                  .catch(error => {
+                      console.error('Error fetching project data:', error);
+                  });
+              }
+
 
                 // Attach event listeners to the submit buttons
                   document.querySelector('.submit-project-button').addEventListener('click', submitProject);
-                  //document.querySelector('.submit-session-button').addEventListener('click', submitSession);
+
             });
           </script>
 

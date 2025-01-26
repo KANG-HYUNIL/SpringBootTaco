@@ -7,6 +7,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -42,17 +44,43 @@ public class MainController {
     public String session(HttpServletRequest request, Model model) {
         String ipAddress = request.getRemoteAddr();
         log.info("Session page accessed by IP: {}", ipAddress);
-        Map<String, List<SessionDTO>> sessionData = mainService.getSessionGroupByTerm();
-        model.addAttribute("sessionData", sessionData);
+
         return "main/session";
     }
+
+    //프로젝트 데이터 전체 반환
+    @GetMapping("/getProjectData")
+    @ResponseBody
+    public Map<String, List<ProjectDTO>> getProjectData() {
+        return mainService.getProjectGroupByTerm();
+    }
+
+    //세션 데이터 전체 반환
+    @GetMapping("/getSessionData")
+    @ResponseBody
+    public Map<String, List<SessionDTO>> getSessionData() {
+        return mainService.getSessionGroupByTerm();
+    }
+
+    @GetMapping("/getProjectById")
+    @ResponseBody
+    public ResponseEntity<ProjectDTO> getProjectById(ProjectDTO projectDTO) {
+        ProjectDTO project = mainService.getProjectById(projectDTO);
+        return new ResponseEntity<>(project, HttpStatus.OK);
+    }
+
+    @GetMapping("/getSessionById")
+    @ResponseBody
+    public ResponseEntity<SessionDTO> getSessionById(SessionDTO sessionDTO) {
+        SessionDTO session = mainService.getSessionById(sessionDTO);
+        return new ResponseEntity<>(session, HttpStatus.OK);
+    }
+
 
     @GetMapping("/project")
     public String project(HttpServletRequest request, Model model) {
         String ipAddress = request.getRemoteAddr();
         log.info("Project page accessed by IP: {}", ipAddress);
-        Map<String, List<ProjectDTO>> projectData = mainService.getProjectGroupByTerm();
-        model.addAttribute("projectData", projectData);
         return "main/project";
     }
 
@@ -68,32 +96,5 @@ public class MainController {
 
 
 
-//    @PostMapping("/save") //Post 요청 처리 메서드와 URL 매핑
-//    public String save()
-//    {
-//        return "";
-//    }
-//
-//    @RequestMapping("/board") //HTTP 메서드(4가지 모두) 요청 처리 메서드와 URL 매핑
-//    public String board()
-//    {
-//        return "board";
-//    }
-//
-//
-//    @GetMapping("/board/{id}") //경로 변수를 사용한 URL 매핑
-//    //PathVariable는 URL 경로에 변수를 넣어주는 것이다.
-//    public String boardDetail(@PathVariable("id") int id)
-//    {
-//        return "boardDetail";
-//    }
-
-//    @GetMapping("/login") //Get 요청 처리 메서드와 URL 매핑
-        //RequestParam은 URL에 있는 쿼리 스트링을 가져오는 것이다.
-        //defaultValue는 값이 없을 때 기본값을 설정해주는 것이다.
-        //required는 필수 여부를 설정해주는 것이다.
-//    public String login(@RequestParam(defaultValue = "error", required = false) String error, @RequestParam(defaultValue = "logout", required = false) String logout) {
-//        return "login";
-//    }
 
 }

@@ -27,7 +27,7 @@ import java.util.Map;
 public class AdminController {
 
     private final AdminService adminService;
-    private final MainService mainService;
+
 
     //admin 페이지 넘겨주는 메소드
     @GetMapping("/")
@@ -42,9 +42,6 @@ public class AdminController {
         String ipAddress = request.getRemoteAddr();
         log.info("Admin project page accessed by IP: {}", ipAddress);
 
-        //project 불러오는 코드 필요
-        Map<String, List<ProjectDTO>> projectData = mainService.getProjectGroupByTerm();
-        model.addAttribute("projectData", projectData);
         return "/admin/adminProject";
     }
 
@@ -53,9 +50,6 @@ public class AdminController {
         String ipAddress = request.getRemoteAddr();
         log.info("Admin session page accessed by IP: {}", ipAddress);
 
-        //session 불러오는 코드 필요.
-        Map<String, List<SessionDTO>> sessionData = mainService.getSessionGroupByTerm();
-        model.addAttribute("sessionData", sessionData);
         return "/admin/adminSession";
     }
 
@@ -73,8 +67,19 @@ public class AdminController {
         return "/admin/adminWriteSession";
     }
 
-    //본문 게시물 작성 요청 메서드
+    @GetMapping("/session/fix")
+    public String getFixSession(HttpServletRequest request) {
+        String ipAddress = request.getRemoteAddr();
+        log.info("Admin fix session page accessed by IP: {}", ipAddress);
+        return "/admin/adminWriteSession";
+    }
 
+    @GetMapping("/project/fix")
+    public String getFixProject(HttpServletRequest request) {
+        String ipAddress = request.getRemoteAddr();
+        log.info("Admin fix project page accessed by IP: {}", ipAddress);
+        return "/admin/adminWriteProject";
+    }
 
 
     //본문 게시물 수정 요청 메서드
@@ -83,8 +88,7 @@ public class AdminController {
     //Session 게시물 작성 요청 메서드
     @PostMapping("/writeSession")
     @ResponseBody
-    public ResponseEntity<?> writeSession(@RequestBody SessionDTO sessionDTO)
-    {
+    public ResponseEntity<?> writeSession(@RequestBody SessionDTO sessionDTO) {
 
         adminService.writeSession(sessionDTO);
 
@@ -94,10 +98,18 @@ public class AdminController {
     //Session 게시물 수정 요청 메서드
     @PostMapping("/fixSession")
     @ResponseBody
-    public ResponseEntity<?> fixSession(@RequestBody SessionDTO sessionDTO)
-    {
+    public ResponseEntity<?> fixSession(@RequestBody SessionDTO sessionDTO) {
         adminService.fixSession(sessionDTO);
-        return null;
+        return new ResponseEntity<>("Session Fix Complete", HttpStatus.OK);
+    }
+
+    //Session 게시물 삭제 요청 메서드
+    @PostMapping("/deleteSession")
+    @ResponseBody
+    public ResponseEntity<?> deleteSession(@RequestBody SessionDTO sessionDTO)
+    {
+        adminService.deleteSession(sessionDTO);
+        return new ResponseEntity<>("Session Delete Complete", HttpStatus.OK);
     }
 
     //Project 게시물 작성 요청 메서드
@@ -115,7 +127,16 @@ public class AdminController {
     public ResponseEntity<?> fixProject(@RequestBody ProjectDTO projectDTO)
     {
         adminService.fixProject(projectDTO);
-        return null;
+        return new ResponseEntity<>("Project Fix Complete", HttpStatus.OK);
+    }
+
+    //Project 게시물 삭제 요청 메서드
+    @PostMapping("/deleteProject")
+    @ResponseBody
+    public ResponseEntity<?> deleteProject(@RequestBody ProjectDTO projectDTO)
+    {
+        adminService.deleteProject(projectDTO);
+        return new ResponseEntity<>("Project Delete Complete", HttpStatus.OK);
     }
 
 

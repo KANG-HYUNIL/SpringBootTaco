@@ -95,14 +95,6 @@ document.addEventListener("DOMContentLoaded", function() {
     //refresh token 통한 access token 재발급
     function handleTokenRefresh(originalURL)
     {
-        const refreshToken = localStorage.getItem('refresh');
-
-        if (!refreshToken)
-        {
-            console.error("Refresh token not found.");
-            redirectToLogin();
-            return Promise.reject("No refresh token found");
-        }
 
         const url = '/reissue';
 

@@ -662,7 +662,24 @@ Toast TUI 와 관련된 js 코드들은 모두 html 의 script 내에 작성되�
 
 관련 API 양식
 
-Session 게시물 작성 API /admin/writeSession
+전체 Session 게시물 데이터 획득 API "/getProjectData" 
+```java
+
+기대되는 프론트 요청 양식
+        없음
+
+기대되는 백엔드 응답 코드
+
+정상적 조회 성공 시 :
+        200 상태 코드 반환
+        Map<String, List<ProjectDTO>> 반환(기수 별로 묶인 ProjectDTO 리스트를 가진 Map)
+
+에러 발생 시 :
+        500 상태 코드 반환
+```
+
+
+Session 게시물 작성 API /admin/writeSession (POST)
 ```java
 기대하는 프론트 요청 양식
 body :{
@@ -686,7 +703,64 @@ body :{
     
 ```
 
-Project 게시물 작성 API /admin/writeProject
+Session 게시물 삭제 API "/admin/deleteSession" (POST)
+```java
+기대되는 프론트 요청 양식
+body : {    
+    id : "string"
+}
+
+기대되는 백엔드 응답 코드
+
+정상적 발급 성공 시 :
+        200번 상태 코드 반환
+
+발급 실패 시 :
+        상황에 따른 상태 코드 및 응답 처리 구현하고 채워놓음.        
+
+
+```
+
+Session 게시물 수정 API "/admin/fixSession" (POST)
+```java
+기대되는 프론트 요청 양식
+body : {
+    id : "string",
+    thumbnail : "string",
+    term : "string",
+    title : "string",
+    content : "string",
+    attachmentFilePaths : ["string1", "string2", ...]
+}        
+
+기대되는 백엔드 응답 코드
+        
+정상적 수정 성공 시 :
+        200번 상태 코드 반환
+        
+수정 실패 시 :
+        상황에 따른 상태 코드 및 응답 처리 구현하고 채워놓음.
+
+```
+
+
+전체 Project 게시물 데이터 획득 API "/getProjectData" 
+```java
+
+기대되는 프론트 요청 양식
+        없음
+
+기대되는 백엔드 응답 코드
+
+정상적 조회 성공 시 :
+        200 상태 코드 반환
+        Map<String, List<SessionDTO>> 반환(기수 별로 묶인 SessionDTO 리스트를 가진 Map)
+
+에러 발생 시 :
+        500 상태 코드 반환
+```
+
+Project 게시물 작성 API /admin/writeProject (POST)
 ```java
 기대하는 프론트 요청 양식
 body :{
@@ -707,7 +781,45 @@ body :{
     
 ```
 
+Project 게시물 삭제 API "/admin/deleteProject" (POST)
+```java
+기대되는 프론트 요청 양식
+body : {    
+    id : "string"
+}
 
+기대되는 백엔드 응답 코드
+
+정상적 발급 성공 시 :
+        200번 상태 코드 반환
+
+발급 실패 시 :
+        상황에 따른 상태 코드 및 응답 처리 구현하고 채워놓음.        
+
+```
+
+Project 게시물 수정 API "/admin/fixProject" (POST)
+```java
+기대되는 프론트 요청 양식
+body : {
+    id : "string",
+    thumbnail : "string",
+    term : "string",
+    title : "string",
+    content : "string",
+    team : "string",
+    attachmentFilePaths : ["string1", "string2", ...]
+}        
+
+기대되는 백엔드 응답 코드
+        
+정상적 수정 성공 시 :
+        200번 상태 코드 반환
+        
+수정 실패 시 :
+        상황에 따른 상태 코드 및 응답 처리 구현하고 채워놓음.
+
+```
 
 ### 2.1 Application 페이지 CRUD
 Application 내용 추가해야 함.
@@ -909,28 +1021,8 @@ public ResponseEntity<Resource> getVideo(@RequestBody DisplayedFileDTO displayed
 소개 페이지 (GET) "/about"
 
 프로젝트 페이지 (GET) "/project"
-유의 : projectData 라는 이름으로, 각 기수를 Key로 하고 그 기수의 프로젝트들이 담긴 배열이 Value인 Dict가 존재한다. 이를 통해서 동적으로 웹 페이지에 각 기수들의 프로젝트 목록을 나타낼 수 있다.
-```java
-@GetMapping("/project")
-    public String project(Model model)
-    {
-        Map<String, List<ProjectDTO>> projectData = mainService.getProjectGroupByTerm();
-        model.addAttribute("projectData", projectData);
-        return "main/project";
-    }
-```
 
 세션 페이지 (GET) "/session"
-유의 : sessionData 라는 이름으로, 각 기수를 Key로 하고 그 기수의 세션들이 담긴 배열이 Value인 Dict가 존재한다. 이를 통해서 동적으로 웹 페이지에 각 기수들의 세션 목록을 나타낼 수 있다.
-```java
-@GetMapping("/session")
-    public String session(Model model)
-    {
-        Map<String, List<SessionDTO>> sessionData = mainService.getSessionGroupByTerm();
-        model.addAttribute("sessionData", sessionData);
-        return "main/session";
-    }
-```
 
 FAQ 페이지 (GET) "faq"
 
@@ -945,17 +1037,18 @@ Application 페이지 (GET) "/application"
 
 3번. 관리자만 접근 가능
 
-관리자 페이지 (GET) "/admin/"
-
+관리자 페이지 (GET) "/admin/"  
 관리자 프로젝트 페이지 (GET) "/admin/project"
-유의 : 1번의 프로젝트 페이지와 동일하게, projectData 라는 이름으로 데이터가 존재. 
 
 관리자 프로젝트 작성 페이지 (GET) "/admin/project/write"
 
+관리자 프로젝트 수정 페이지 (GET) "/admin/project/fix" **이 경로에 해당하는 요청은 token이 필요하지 않음
+
 관리자 세션 페이지 (GET) "/admin/session"
-유의 : 1번의 세션 페이지와 동일하게, sessionData 라는 이름으로 데이터가 존재.
 
 관리자 세션 작성 페이지 (GET) "admin/session/write"
+
+관리자 세션 수정 페이지 (GET) "admin/session/fix" **이 경로에 해당하는 요청은 token이 필요하지 않음
 
 
 아마 이 아래에는 Application 관련 추가 될듯

@@ -52,6 +52,24 @@ public class MainService {
 
     }
 
+    //특정 ID의 Session 데이터 가져오기
+    public SessionDTO getSessionById(SessionDTO sessionDTO)
+    {
+        //SessionDocument로부터 ID로 데이터 가져오기
+        SessionDocument result = sessionRepository.findById(sessionDTO.getId()).orElseThrow();
 
+        //SessionDTO로 변환하여 반환
+        return DocumentConverter.toSessionDTO(result);
+    }
+
+    //특정 ID의 Project 데이터 가져오기
+    public ProjectDTO getProjectById(ProjectDTO projectDTO)
+    {
+        //ProjectDocument로부터 ID로 데이터 가져오기
+        ProjectDocument result = projectRepository.findById(projectDTO.getId()).orElseThrow();
+
+        //ProjectDTO로 변환하여 반환
+        return DocumentConverter.toProjectDTO(result);
+    }
 
 }
