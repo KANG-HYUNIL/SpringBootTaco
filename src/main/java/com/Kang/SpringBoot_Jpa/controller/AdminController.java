@@ -1,8 +1,7 @@
 package com.Kang.SpringBoot_Jpa.controller;
 
-import com.Kang.SpringBoot_Jpa.dto.DisplayedFileDTO;
-import com.Kang.SpringBoot_Jpa.dto.ProjectDTO;
-import com.Kang.SpringBoot_Jpa.dto.SessionDTO;
+import com.Kang.SpringBoot_Jpa.dto.*;
+import com.Kang.SpringBoot_Jpa.exception.DuplicateDataException;
 import com.Kang.SpringBoot_Jpa.service.AdminService;
 import com.Kang.SpringBoot_Jpa.service.MainService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -88,55 +87,90 @@ public class AdminController {
     //Session 게시물 작성 요청 메서드
     @PostMapping("/writeSession")
     @ResponseBody
-    public ResponseEntity<?> writeSession(@RequestBody SessionDTO sessionDTO) {
-
-        adminService.writeSession(sessionDTO);
-
+    public ResponseEntity<?> writeSession(@RequestBody SessionDTO sessionDTO, HttpServletRequest request) {
+        String accessToken = request.getHeader("access");
+        adminService.writeSession(sessionDTO, accessToken);
         return new ResponseEntity<>("Session Upload Complete", HttpStatus.OK);
     }
 
-    //Session 게시물 수정 요청 메서드
     @PostMapping("/fixSession")
     @ResponseBody
-    public ResponseEntity<?> fixSession(@RequestBody SessionDTO sessionDTO) {
-        adminService.fixSession(sessionDTO);
+    public ResponseEntity<?> fixSession(@RequestBody SessionDTO sessionDTO, HttpServletRequest request) {
+        String accessToken = request.getHeader("access");
+        adminService.fixSession(sessionDTO, accessToken);
         return new ResponseEntity<>("Session Fix Complete", HttpStatus.OK);
     }
 
-    //Session 게시물 삭제 요청 메서드
     @PostMapping("/deleteSession")
     @ResponseBody
-    public ResponseEntity<?> deleteSession(@RequestBody SessionDTO sessionDTO)
-    {
-        adminService.deleteSession(sessionDTO);
+    public ResponseEntity<?> deleteSession(@RequestBody SessionDTO sessionDTO, HttpServletRequest request) {
+        String accessToken = request.getHeader("access");
+        adminService.deleteSession(sessionDTO, accessToken);
         return new ResponseEntity<>("Session Delete Complete", HttpStatus.OK);
     }
 
-    //Project 게시물 작성 요청 메서드
     @PostMapping("/writeProject")
     @ResponseBody
-    public ResponseEntity<?> writeProject(@RequestBody ProjectDTO projectDTO)
-    {
-        adminService.writeProject(projectDTO);
+    public ResponseEntity<?> writeProject(@RequestBody ProjectDTO projectDTO, HttpServletRequest request) {
+        String accessToken = request.getHeader("access");
+        adminService.writeProject(projectDTO, accessToken);
         return new ResponseEntity<>("Project Upload Complete", HttpStatus.OK);
     }
 
-    //Project 게시물 수정 요청 메서드
     @PostMapping("/fixProject")
     @ResponseBody
-    public ResponseEntity<?> fixProject(@RequestBody ProjectDTO projectDTO)
-    {
-        adminService.fixProject(projectDTO);
+    public ResponseEntity<?> fixProject(@RequestBody ProjectDTO projectDTO, HttpServletRequest request) {
+        String accessToken = request.getHeader("access");
+        adminService.fixProject(projectDTO, accessToken);
         return new ResponseEntity<>("Project Fix Complete", HttpStatus.OK);
     }
 
-    //Project 게시물 삭제 요청 메서드
     @PostMapping("/deleteProject")
     @ResponseBody
-    public ResponseEntity<?> deleteProject(@RequestBody ProjectDTO projectDTO)
-    {
-        adminService.deleteProject(projectDTO);
+    public ResponseEntity<?> deleteProject(@RequestBody ProjectDTO projectDTO, HttpServletRequest request) {
+        String accessToken = request.getHeader("access");
+        adminService.deleteProject(projectDTO, accessToken);
         return new ResponseEntity<>("Project Delete Complete", HttpStatus.OK);
+    }
+
+    @PostMapping("/setRoleUser")
+    @ResponseBody
+    public ResponseEntity<?> setRoleUser(@RequestBody UserDTO userDTO, HttpServletRequest request) {
+        String accessToken = request.getHeader("access");
+        try {
+            adminService.setRoleUser(userDTO, accessToken);
+            return new ResponseEntity<>("Role set to ROLE_USER", HttpStatus.OK);
+        } catch (DuplicateDataException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
+        }
+    }
+
+    @PostMapping("/setRoleAdmin")
+    @ResponseBody
+    public ResponseEntity<?> setRoleAdmin(@RequestBody UserDTO userDTO, HttpServletRequest request) {
+        String accessToken = request.getHeader("access");
+        try {
+            adminService.setRoleAdmin(userDTO, accessToken);
+            return new ResponseEntity<>("Role set to ROLE_ADMIN", HttpStatus.OK);
+        } catch (DuplicateDataException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
+        }
+    }
+
+    @PostMapping("/writeApplication")
+    @ResponseBody
+    public ResponseEntity<?> writeApplication(@RequestBody ApplicationDTO applicationDTO, HttpServletRequest request) {
+        String accessToken = request.getHeader("access");
+        adminService.writeApplication(applicationDTO, accessToken);
+        return new ResponseEntity<>("Application Upload Complete", HttpStatus.OK);
+    }
+
+    @PostMapping("/deleteApplication")
+    @ResponseBody
+    public ResponseEntity<?> deleteApplication(@RequestBody ApplicationDTO applicationDTO, HttpServletRequest request) {
+        String accessToken = request.getHeader("access");
+        adminService.deleteApplication(applicationDTO, accessToken);
+        return new ResponseEntity<>("Application Delete Complete", HttpStatus.OK);
     }
 
 

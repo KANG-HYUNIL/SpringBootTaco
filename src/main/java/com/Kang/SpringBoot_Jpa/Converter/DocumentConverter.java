@@ -1,10 +1,15 @@
 package com.Kang.SpringBoot_Jpa.Converter;
 
+import com.Kang.SpringBoot_Jpa.document.ApplicationDocument;
 import com.Kang.SpringBoot_Jpa.document.ProjectDocument;
 import com.Kang.SpringBoot_Jpa.document.SessionDocument;
+import com.Kang.SpringBoot_Jpa.dto.ApplicationDTO;
 import com.Kang.SpringBoot_Jpa.dto.ProjectDTO;
 import com.Kang.SpringBoot_Jpa.dto.SessionDTO;
+import com.Kang.SpringBoot_Jpa.dto.SubmitterDTO;
 import org.springframework.security.core.parameters.P;
+
+import java.util.stream.Collectors;
 
 //Document 와 DTO 변경 메서드 관리 클래스
 public class DocumentConverter {
@@ -77,6 +82,48 @@ public class DocumentConverter {
         projectDTO.setAttachmentFilePaths(projectDocument.getAttachmentFilePaths());
 
         return projectDTO;
+    }
+
+    // ApplicationDTO to ApplicationDocument
+    public static ApplicationDocument toApplicationDoc(ApplicationDTO applicationDTO) {
+        ApplicationDocument applicationDocument = new ApplicationDocument();
+        applicationDocument.setId(applicationDTO.getId());
+        applicationDocument.setTitle(applicationDTO.getTitle());
+        applicationDocument.setStartTime(applicationDTO.getStartTime());
+        applicationDocument.setEndTime(applicationDTO.getEndTime());
+        applicationDocument.setContent(applicationDTO.getContent());
+        applicationDocument.setAttachmentFilePaths(applicationDTO.getAttachmentFilePaths());
+        applicationDocument.setSubmitters(applicationDTO.getSubmitters().stream()
+                .map(submitterDTO -> {
+                    ApplicationDocument.Submitter submitter = new ApplicationDocument.Submitter();
+                    submitter.setId(submitterDTO.getId());
+                    submitter.setName(submitterDTO.getName());
+                    submitter.setSubmittedFilePath(submitterDTO.getSubmittedFilePath());
+                    return submitter;
+                })
+                .collect(Collectors.toList()));
+        return applicationDocument;
+    }
+
+    // ApplicationDocument to ApplicationDTO
+    public static ApplicationDTO toApplicationDTO(ApplicationDocument applicationDocument) {
+        ApplicationDTO applicationDTO = new ApplicationDTO();
+        applicationDTO.setId(applicationDocument.getId());
+        applicationDTO.setTitle(applicationDocument.getTitle());
+        applicationDTO.setStartTime(applicationDocument.getStartTime());
+        applicationDTO.setEndTime(applicationDocument.getEndTime());
+        applicationDTO.setContent(applicationDocument.getContent());
+        applicationDTO.setAttachmentFilePaths(applicationDocument.getAttachmentFilePaths());
+        applicationDTO.setSubmitters(applicationDocument.getSubmitters().stream()
+                .map(submitter -> {
+                    SubmitterDTO submitterDTO = new SubmitterDTO();
+                    submitterDTO.setId(submitter.getId());
+                    submitterDTO.setName(submitter.getName());
+                    submitterDTO.setSubmittedFilePath(submitter.getSubmittedFilePath());
+                    return submitterDTO;
+                })
+                .collect(Collectors.toList()));
+        return applicationDTO;
     }
 
 

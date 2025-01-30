@@ -84,7 +84,9 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
             if (inputStream.available() > 0) {
                 String messageBody = StreamUtils.copyToString(inputStream, StandardCharsets.UTF_8);
                 loginDTO = objectMapper.readValue(messageBody, LoginDTO.class);
-            } else {
+            }
+            else
+            {
                 throw new RuntimeException("No content to map due to end-of-input");
             }
         }

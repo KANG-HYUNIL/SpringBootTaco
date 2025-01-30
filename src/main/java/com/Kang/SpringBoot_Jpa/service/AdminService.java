@@ -1,13 +1,18 @@
 package com.Kang.SpringBoot_Jpa.service;
 
 import com.Kang.SpringBoot_Jpa.Converter.DocumentConverter;
+import com.Kang.SpringBoot_Jpa.document.ApplicationDocument;
 import com.Kang.SpringBoot_Jpa.document.ProjectDocument;
 import com.Kang.SpringBoot_Jpa.document.SessionDocument;
-import com.Kang.SpringBoot_Jpa.dto.DisplayedFileDTO;
-import com.Kang.SpringBoot_Jpa.dto.ProjectDTO;
-import com.Kang.SpringBoot_Jpa.dto.SessionDTO;
+import com.Kang.SpringBoot_Jpa.dto.*;
+import com.Kang.SpringBoot_Jpa.entity.UserEntity;
+import com.Kang.SpringBoot_Jpa.exception.DuplicateDataException;
+import com.Kang.SpringBoot_Jpa.exception.NoDataException;
+import com.Kang.SpringBoot_Jpa.jwt.JwtUtil;
+import com.Kang.SpringBoot_Jpa.mongorepo.ApplicationRepository;
 import com.Kang.SpringBoot_Jpa.mongorepo.ProjectRepository;
 import com.Kang.SpringBoot_Jpa.mongorepo.SessionRepository;
+import com.Kang.SpringBoot_Jpa.repository.UserRepository;
 import jakarta.mail.Session;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
@@ -19,6 +24,7 @@ import org.springframework.util.StringUtils;
 
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -35,12 +41,24 @@ public class AdminService {
     private final SessionRepository sessionRepository;
 
     private final ProjectRepository projectRepository;
+    private final ApplicationRepository applicationRepository;
 
-    public AdminService(FileService fileService, SessionRepository sessionRepository, ProjectRepository projectRepository)
+    private final UserRepository userRepository;
+    private final JwtUtil jwtUtil;
+
+    public AdminService(FileService fileService,
+                        SessionRepository sessionRepository,
+                        ProjectRepository projectRepository,
+                        UserRepository userRepository,
+                        JwtUtil jwtUtil,
+                        ApplicationRepository applicationRepository)
     {
         this.fileService = fileService;
         this.sessionRepository = sessionRepository;
         this.projectRepository = projectRepository;
+        this.userRepository = userRepository;
+        this.jwtUtil = jwtUtil;
+        this.applicationRepository = applicationRepository;
     }
 
 
@@ -52,7 +70,8 @@ public class AdminService {
 
 
     //Session 페이지 작성 메서드
-    public void writeSession(SessionDTO sessionDTO) {
+    public void writeSession(SessionDTO sessionDTO, String accessToken) {
+        String username = jwtUtil.getUsername(accessToken);
         try {
             SessionDTO newSessionDTO = new SessionDTO();
             newSessionDTO.setThumbnail(processThumbnail(sessionDTO.getThumbnail()));
@@ -63,17 +82,16 @@ public class AdminService {
 
             SessionDocument sessionDocument = DocumentConverter.toSessionDoc(newSessionDTO);
             sessionRepository.save(sessionDocument);
-            log.info("Successfully saved session: Title={}", sessionDocument.getTitle());
-        }
-        catch (Exception e)
-        {
-            log.error("Error saving session: Title={}", sessionDTO.getTitle(), e);
+            log.info("Successfully saved session: Title={}, id={}", sessionDocument.getTitle(), username);
+        } catch (Exception e) {
+            log.error("Error saving session: Title={}, id={}", sessionDTO.getTitle(), username, e);
             throw new RuntimeException(e);
         }
     }
 
     //Session 페이지 수정 메서드
-    public void fixSession(SessionDTO sessionDTO) {
+    public void fixSession(SessionDTO sessionDTO, String accessToken) {
+        String username = jwtUtil.getUsername(accessToken);
         try {
             SessionDocument existingSession = sessionRepository.findById(sessionDTO.getId())
                     .orElseThrow(() -> new IllegalArgumentException("Session not found"));
@@ -85,34 +103,31 @@ public class AdminService {
             existingSession.setAttachmentFilePaths(processAttachments(sessionDTO.getAttachmentFilePaths()));
 
             sessionRepository.save(existingSession);
-            log.info("Successfully updated session: Title={}", existingSession.getTitle());
-        }
-        catch (Exception e)
-        {
-            log.error("Error updating session: Title={}", sessionDTO.getTitle(), e);
+            log.info("Successfully updated session: Title={}, id={}", existingSession.getTitle(), username);
+        } catch (Exception e) {
+            log.error("Error updating session: Title={}, id={}", sessionDTO.getTitle(), username, e);
             throw new RuntimeException(e);
         }
     }
 
     //Session 삭제 메서드
-    public void deleteSession(SessionDTO sessionDTO)
-    {
+    public void deleteSession(SessionDTO sessionDTO, String accessToken) {
+        String username = jwtUtil.getUsername(accessToken);
         try {
             SessionDocument existingSession = sessionRepository.findById(sessionDTO.getId())
                     .orElseThrow(() -> new IllegalArgumentException("Session not found"));
 
             sessionRepository.delete(existingSession);
-            log.info("Successfully deleted session: Title={}", existingSession.getTitle());
-        }
-        catch (Exception e)
-        {
-            log.error("Error deleting session: Title={}", sessionDTO.getTitle(), e);
+            log.info("Successfully deleted session: Title={}, id={}", existingSession.getTitle(), username);
+        } catch (Exception e) {
+            log.error("Error deleting session: Title={}, id={}", sessionDTO.getTitle(), username, e);
             throw new RuntimeException(e);
         }
     }
 
     //Project 페이지 작성 메서드
-    public void writeProject(ProjectDTO projectDTO) {
+    public void writeProject(ProjectDTO projectDTO, String accessToken) {
+        String username = jwtUtil.getUsername(accessToken);
         try {
             ProjectDTO newProjectDTO = new ProjectDTO();
             newProjectDTO.setThumbnail(processThumbnail(projectDTO.getThumbnail()));
@@ -124,55 +139,87 @@ public class AdminService {
 
             ProjectDocument projectDocument = DocumentConverter.toProjectDoc(newProjectDTO);
             projectRepository.save(projectDocument);
-            log.info("Successfully saved project: Title={}", projectDocument.getTitle());
-        }
-        catch (Exception e)
-        {
-            log.error("Error writing project: Title={}", projectDTO.getTitle(), e);
+            log.info("Successfully saved project: Title={}, id={}", projectDocument.getTitle(), username);
+        } catch (Exception e) {
+            log.error("Error writing project: Title={}, id={}", projectDTO.getTitle(), username, e);
             throw new RuntimeException(e);
         }
     }
 
 
     //Project 페이지 수정 메서드
-    public void fixProject(ProjectDTO projectDTO) {
+    public void fixProject(ProjectDTO projectDTO, String accessToken) {
+        String username = jwtUtil.getUsername(accessToken);
         try {
             ProjectDocument existingProject = projectRepository.findById(projectDTO.getId())
                     .orElseThrow(() -> new IllegalArgumentException("Project not found"));
 
-            existingProject.setTitle(projectDTO.getTitle()); //제목 설정
-            existingProject.setTerm(projectDTO.getTerm()); //기수 설정
-            existingProject.setTeam(projectDTO.getTeam()); //팀 설정
-            existingProject.setThumbnail(processThumbnail(projectDTO.getThumbnail())); //썸네일 이미지 설정
-            existingProject.setContent(processContent(projectDTO.getContent())); //본문 설정
+            existingProject.setTitle(projectDTO.getTitle());
+            existingProject.setTerm(projectDTO.getTerm());
+            existingProject.setTeam(projectDTO.getTeam());
+            existingProject.setThumbnail(processThumbnail(projectDTO.getThumbnail()));
+            existingProject.setContent(processContent(projectDTO.getContent()));
             existingProject.setAttachmentFilePaths(processAttachments(projectDTO.getAttachmentFilePaths()));
 
             projectRepository.save(existingProject);
-            log.info("Successfully updated project: Title={}", existingProject.getTitle());
-        }
-        catch (Exception e)
-        {
-            log.error("Error updating project: Title={}", projectDTO.getTitle(), e);
+            log.info("Successfully updated project: Title={}, id={}", existingProject.getTitle(), username);
+        } catch (Exception e) {
+            log.error("Error updating project: Title={}, id={}", projectDTO.getTitle(), username, e);
             throw new RuntimeException(e);
         }
     }
 
     //Project 삭제 메서드
-    public void deleteProject(ProjectDTO projectDTO)
-    {
+    public void deleteProject(ProjectDTO projectDTO, String accessToken) {
+        String username = jwtUtil.getUsername(accessToken);
         try {
             ProjectDocument existingProject = projectRepository.findById(projectDTO.getId())
                     .orElseThrow(() -> new IllegalArgumentException("Project not found"));
 
             projectRepository.delete(existingProject);
-            log.info("Successfully deleted project: Title={}", existingProject.getTitle());
-        }
-        catch (Exception e)
-        {
-            log.error("Error deleting project: Title={}", projectDTO.getTitle(), e);
+            log.info("Successfully deleted project: Title={}, id={}", existingProject.getTitle(), username);
+        } catch (Exception e) {
+            log.error("Error deleting project: Title={}, id={}", projectDTO.getTitle(), username, e);
             throw new RuntimeException(e);
         }
     }
+
+    //Application 작성 메서드
+    public void writeApplication(ApplicationDTO applicationDTO, String accessToken) {
+        String username = jwtUtil.getUsername(accessToken);
+        try {
+            ApplicationDTO newApplicationDTO = new ApplicationDTO();
+            newApplicationDTO.setTitle(applicationDTO.getTitle());
+            newApplicationDTO.setStartTime(applicationDTO.getStartTime());
+            newApplicationDTO.setEndTime(applicationDTO.getEndTime());
+            newApplicationDTO.setContent(processContent(applicationDTO.getContent()));
+            newApplicationDTO.setAttachmentFilePaths(processAttachments(applicationDTO.getAttachmentFilePaths()));
+            newApplicationDTO.setSubmitters(Collections.emptyList());
+
+            ApplicationDocument applicationDocument = DocumentConverter.toApplicationDoc(newApplicationDTO);
+            applicationRepository.save(applicationDocument);
+            log.info("Successfully saved application: Title={}, id={}", applicationDocument.getTitle(), username);
+        } catch (Exception e) {
+            log.error("Error saving application: Title={}, id={}", applicationDTO.getTitle(), username, e);
+            throw new RuntimeException(e);
+        }
+    }
+
+    //Application 삭제 메서드
+    public void deleteApplication(ApplicationDTO applicationDTO, String accessToken) {
+        String username = jwtUtil.getUsername(accessToken);
+        try {
+            ApplicationDocument existingApplication = applicationRepository.findById(applicationDTO.getId())
+                    .orElseThrow(() -> new IllegalArgumentException("Application not found"));
+
+            applicationRepository.delete(existingApplication);
+            log.info("Successfully deleted application: Title={}, id={}", existingApplication.getTitle(), username);
+        } catch (Exception e) {
+            log.error("Error deleting application: Title={}, id={}", applicationDTO.getTitle(), username, e);
+            throw new RuntimeException(e);
+        }
+    }
+
 
     //썸네일 이미지 업로드 및 경로 설정 메서드
     private String processThumbnail(String thumbnail)
@@ -224,6 +271,40 @@ public class AdminService {
             log.info("Successfully uploaded attachment: {} to {}", prePath, fileDTO.getFilePath());
         }
         return newAttachmentFilePaths; //새로운 첨부 파일 경로 리스트 반환
+    }
+
+    //ROLE_USER 설정 메서드
+    public void setRoleUser(UserDTO userDTO, String accessToken) {
+        String username = jwtUtil.getUsername(accessToken);
+        UserEntity userEntity = userRepository.findById(userDTO.getId())
+                .orElseThrow(() -> new NoDataException("User not found"));
+
+        String roleUser = "ROLE_USER";
+
+        if (roleUser.equals(userEntity.getRole())) {
+            throw new DuplicateDataException("User already has ROLE_USER");
+        }
+
+        userEntity.setRole(roleUser);
+        userRepository.save(userEntity);
+        log.info("Successfully set role to ROLE_USER for user: {}, id={}", userEntity.getId(), username);
+    }
+
+    //ROLE_ADMIN 설정 메서드
+    public void setRoleAdmin(UserDTO userDTO, String accessToken) {
+        String username = jwtUtil.getUsername(accessToken);
+        UserEntity userEntity = userRepository.findById(userDTO.getId())
+                .orElseThrow(() -> new NoDataException("User not found"));
+
+        String roleAdmin = "ROLE_ADMIN";
+
+        if (roleAdmin.equals(userEntity.getRole())) {
+            throw new DuplicateDataException("User already has ROLE_ADMIN");
+        }
+
+        userEntity.setRole(roleAdmin);
+        userRepository.save(userEntity);
+        log.info("Successfully set role to ROLE_ADMIN for user: {}, id={}", userEntity.getId(), username);
     }
 
 }

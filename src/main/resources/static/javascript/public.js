@@ -30,7 +30,7 @@ document.addEventListener("DOMContentLoaded", function() {
     //로그아웃 메서드
     function navigateToLogout() {
         //로그아웃 시에는 refreshToken을 서버로 보내서 redis에서 제거할 수 있게 함
-        const refreshToken = localStorage.getItem('refresh');
+        //const refreshToken = localStorage.getItem('refresh');
 
         //로그아웃 요청을 보낼 URL
         const url = '/logout';
@@ -45,16 +45,14 @@ document.addEventListener("DOMContentLoaded", function() {
             credentials: 'include' // 쿠키를 포함하여 요청
         })
         .then(response => {
-            if (response.ok) {
 
-                //로그아웃 성공 시 로컬 스토리지에서 토큰 제거
-                localStorage.removeItem('access');
-                //localStorage.removeItem('refresh');
-                localStorage.removeItem('userName');
-                window.location.href = '/'; //로그아웃 후 홈으로 이동
-            } else {
-                console.error('Logout failed');
-            }
+
+            //로그아웃 성공 시 로컬 스토리지에서 토큰 제거
+            localStorage.removeItem('access');
+            //localStorage.removeItem('refresh');
+            localStorage.removeItem('userName');
+            window.location.href = '/'; //로그아웃 후 홈으로 이동
+
         });
     }
 

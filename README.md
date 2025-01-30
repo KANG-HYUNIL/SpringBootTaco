@@ -21,8 +21,8 @@
 
 _______________________________________________________
 
-## 1. 계정 관련 기능들
-로그인, 회원가입, 이메일 인증, 아이디 및 비밀번호 찾기
+## 1. 계정 및 일반 사용자 기능들
+로그인, 회원가입, 이메일 인증, 아이디 및 비밀번호 찾기, Application 게시물에 제출하기 등
 
 ### 1.1 회원가입 및 계정 정보 찾기
 
@@ -357,7 +357,8 @@ Id 검색 실패 시 :
 관련 DTO 및 Entity(구조)
 
 Jwt 2중 Access, Refresh 토큰 구조를 채용함
-
+"/admin" 으로 시작하는 모든 경로에 대한 요청은 Jwt 2중 토큰 인증을 요구함
+("/admin/", "/admin/session/fix", "/admin/project/fix" 는 제외)
 
 모든 Access Token 발급은 "access" 라는 이름의Response Header에 담아짐
 
@@ -456,7 +457,7 @@ credentials: 'include'
 
 ```
 
-### 1.5 아이디 및 비밀번호 찾기 
+### 1.5 계정 정보 찾기 
 
 관련 DTO 및 Entity들
 
@@ -489,7 +490,6 @@ body : {
 
 ```
 
-
 사용자 name를 토대로 사용자의 정보 찾기 API /account/getUserByName (POST)
 
 ```java
@@ -515,23 +515,24 @@ body : {
 
 ```
 
+
+
+
 _______________________________________________________
 
-## 2.관리자 용 백페이지 
+## 2.관리자 용 백페이지 및 게시물들 관리
 
-회원 관리, 관리자 등록 및 삭제, 홍보 페이지 내용 CRUD, 게시판 관리, 
+회원 관리, 관리자 등록 및 삭제, 게시물 페이지 내용 CRUD, 게시판 관리, 
 
 모든 관리자 용 백페이지는 "/admin"으로 시작한다
 
 관리자 계정은 UserEntity의 role이 "ROLE_ADMIN" 이며, role이 다르면 관리자 용 백페이지에 접근 불가.
 
-### 2.1 홍보 페이지 내용 CRUD
 
-홍보 에서는 크게 3개의 단락을.  동아리 소개 / 세션 / 프로젝트 소개  이렇게.
+게시물 에서는 크게 3개의 단락을.   세션 / 프로젝트 / 신청서  이렇게.
 
-동아리 소개 페이지는 내부에서 파트가 또 나뉘지는 않고, 긴 글(이미지와 동영상이 첨가된)이 작섣될 것임.
 ___
-세션 페이지는 우선 동아리 기수 별로 나눌 수 있어야 한다(콤보 박스 같은 걸로 프론트에서 처리?)
+세션 페이지는 우선 동아리 기수 별로 나눌 수 있어야 한다
 기수 내의 션에는 진행한 세션에 대한 내용이 작성될 것인데, 
 
 우선 겉면에 "*썸네일, 기수, 제목(세션 x)*"
@@ -548,8 +549,28 @@ ______
 
 이렇게 작성되지 싶다.
 
-프로젝트의 본문으로 들어가면 겉면의 내용이 가장 위에 나타나있고, 그 아래에 세션의 내용(글과 이미지, 영상)
+프로젝트의 본문으로 들어가면 겉면의 내용이 가장 위에 나타나있고, 그 아래에 프로젝트의 내용(글과 이미지, 영상)
 
+__________
+
+신청서 페이지는 관리자가 올린 동아리 입부 신청 게시물을 확인할 수 있어야 한다.
+일반적으로는 각 기수 별로 하나씩 나올 듯?
+겉면에 "*제목, 시작 시간, 마감 시간*"
+
+
+_________
+
+굳이 Session 과 Project를 분리한 이유는, 나중에 이 둘이 나타내는 정보의 방향성이 달라질 수 있기에 추후 관리 용이성을 위해서 분리.
+* 주의 *
+  현재 html 뷰에서 게시물(Session, Project, Application) 작성 시 Toast TUI 를 채용하고 있다. 이 Toast TUI 및 시간의 제약으로 인해, 동영상은 유튜브 링크를 통해서 유튜브 동영상만을
+  올릴 수 있는 상태임. 또한 Toast TUI 사용을 위해 외부와 연결된 스크립트에서 정의된 클래스를 사용하고 있다.
+  Toast TUI 와 관련된 js 코드들은 모두 html 의 script 내에 작성되어 있다. 이후 수정 시 주의가 필요
+
+
+이 프로젝트는 빠른 작동을 위해 프론트와 백을 구분하지 않고 하나의 서버에서 처리, 순수 js 만을 사용한다.
+그렇기 때문에 React 에서는 분리 작성이 가능한 것이, 여기서는 그러지 못한다.
+
+### 2.1 Session 페이지 내용 CRUD
 
 관련 DTO 및 Entity(Document) 들
 
@@ -599,85 +620,7 @@ public class SessionDocument {
 ```
 
 
-Project 게시물 DTO
-```java
-public class ProjectDTO {
-
-    //Project 게시물 정보를 중간에서 관리할 DTO 클래스
-
-    //thumbnail, term, team, title 가 외관 페이지에 나타날 것이고, content는 세부 페이지에 진입 시 사용
-
-    private String id;
-    
-    private String thumbnail; //썸네일에 들어갈 이미지가 저장된 경로를 보관할 멤버
-
-    private String term; //3기, 4기 할 때의 기수를 보관할 멤버. 귀찮으니 String으로
-
-    private String team; //팀의 이름
-
-    private String title; //프로젝트의 제목
-
-    private String content; //프로젝트의 내용
-
-    private List<String> attachmentFilePaths; //첨부파일 경로들
-
-}
-```
-
-
-Project 게시물 Document
-```java
-@Document(collection = "projectData")
-@Data
-public class ProjectDocument {
-
-    @Id
-    private String id; //PK
-
-    private String thumbnail; //썸네일
-
-    private String term; // 기수 (3기, 4기)
-
-    private String team; // 팀 이름
-
-    private String title; //제목
-
-    private String content; //본문 내용
-
-    private List<String> attachmentFilePaths; //첨부 파일 경로들
-
-}
-```
-
-굳이 Session 과 Project를 분리한 이유는, 나중에 이 둘이 나타내는 정보의 방향성이 달라질 수 있기에 추후 관리 용이성을 위해서 분리.
-* 주의 * 
-현재 html 뷰에서 게시물 작성 시 Toast TUI 를 채용하고 있다. 이 Toast TUI 및 시간의 제약으로 인해, 동영상은 유튜브 링크를 통해서 유튜브 동영상만을
-올릴 수 있는 상태임. 또한 Toast TUI 사용을 위해 외부와 연결된 스크립트에서 정의된 클래스를 사용하고 있다.
-Toast TUI 와 관련된 js 코드들은 모두 html 의 script 내에 작성되어 있다. 이후 수정 시 주의가 필요
-
-
-이 프로젝트는 빠른 작동을 위해 프론트와 백을 구분하지 않고 하나의 서버에서 처리, 순수 js 만을 사용한다.
-그렇기 때문에 React 에서는 분리 작성이 가능한 것이, 여기서는 그러지 못한다.
-
-
-관련 API 양식
-
-전체 Session 게시물 데이터 획득 API "/getProjectData" 
-```java
-
-기대되는 프론트 요청 양식
-        없음
-
-기대되는 백엔드 응답 코드
-
-정상적 조회 성공 시 :
-        200 상태 코드 반환
-        Map<String, List<ProjectDTO>> 반환(기수 별로 묶인 ProjectDTO 리스트를 가진 Map)
-
-에러 발생 시 :
-        500 상태 코드 반환
-```
-
+관련 API 들
 
 Session 게시물 작성 API /admin/writeSession (POST)
 ```java
@@ -744,7 +687,7 @@ body : {
 ```
 
 
-전체 Project 게시물 데이터 획득 API "/getProjectData" 
+전체 Session 게시물 데이터 획득 API "/getSessionData"
 ```java
 
 기대되는 프론트 요청 양식
@@ -755,6 +698,79 @@ body : {
 정상적 조회 성공 시 :
         200 상태 코드 반환
         Map<String, List<SessionDTO>> 반환(기수 별로 묶인 SessionDTO 리스트를 가진 Map)
+
+에러 발생 시 :
+        500 상태 코드 반환
+```
+
+
+
+### 2.2 Project 페이지 내용 CRUD
+
+Project 게시물 DTO
+```java
+public class ProjectDTO {
+
+    //Project 게시물 정보를 중간에서 관리할 DTO 클래스
+
+    //thumbnail, term, team, title 가 외관 페이지에 나타날 것이고, content는 세부 페이지에 진입 시 사용
+
+    private String id;
+    
+    private String thumbnail; //썸네일에 들어갈 이미지가 저장된 경로를 보관할 멤버
+
+    private String term; //3기, 4기 할 때의 기수를 보관할 멤버. 귀찮으니 String으로
+
+    private String team; //팀의 이름
+
+    private String title; //프로젝트의 제목
+
+    private String content; //프로젝트의 내용
+
+    private List<String> attachmentFilePaths; //첨부파일 경로들
+
+}
+```
+
+
+Project 게시물 Document
+```java
+@Document(collection = "projectData")
+@Data
+public class ProjectDocument {
+
+    @Id
+    private String id; //PK
+
+    private String thumbnail; //썸네일
+
+    private String term; // 기수 (3기, 4기)
+
+    private String team; // 팀 이름
+
+    private String title; //제목
+
+    private String content; //본문 내용
+
+    private List<String> attachmentFilePaths; //첨부 파일 경로들
+
+}
+```
+
+
+관련 API 양식
+
+전체 Project 게시물 데이터 획득 API   "/getProjectData" (GET)
+```java
+
+기대되는 프론트 요청 양식
+        없음
+
+기대되는 백엔드 응답 코드
+
+정상적 조회 성공 시 :
+        200 상태 코드 반환
+        Map<String, List<ProjectDTO>> 반환(기수 별로 묶인 ProjectDTO 리스트를 가진 Map)
 
 에러 발생 시 :
         500 상태 코드 반환
@@ -821,10 +837,191 @@ body : {
 
 ```
 
-### 2.1 Application 페이지 CRUD
+### 2.3 Application 페이지 CRUD
 Application 내용 추가해야 함.
 
 관련 DTO 및 Entity(Document) 들
+
+Aplication DTO
+```java
+public class ApplicationDTO {
+
+    private String id;
+    private String title;
+    private LocalDateTime startTime;
+    private LocalDateTime endTime;
+    private String content;
+    private List<String> attachmentFilePaths;
+    private List<SubmitterDTO> submitters;
+
+}
+```
+
+Submitter DTO
+```java
+public class SubmitterDTO {
+    private String id;
+    private String name;
+    private String submittedFilePath;
+}
+```
+
+Application Summary DTO
+```java
+public class ApplicationSummaryDTO {
+
+    private String id;
+    private String title;
+    private LocalDateTime startTime;
+    private LocalDateTime endTime;
+
+
+}
+```
+
+Application Document
+```java
+
+@Document(collection = "applicationData")
+@Data
+public class ApplicationDocument {
+
+    @Id
+    private String id;
+    private String title;
+    private LocalDateTime startTime;
+    private LocalDateTime endTime;
+    private String content;
+    private List<String> attachmentFilePaths;
+    private List<Submitter> submitters;
+
+    @Data
+    public static class Submitter {
+        private String id;
+        private String name;
+        private String submittedFilePath;
+    }
+
+}
+```
+
+관련 API 들 
+
+전체 Application 데이터 가져오기 API "/getApplicationData" (GET)
+* content, attachmentFilePaths, submitters 는 전달하지 않음.
+```java
+
+기대되는 프론트 요청 양식
+        없음
+
+기대되는 백엔드 응답 코드
+
+정상적 조회 성공 시 :
+        200 상태 코드 반환
+        List<ApplicationSummaryDTO> 반환
+
+에러 발생 시 :
+        500 상태 코드 반환
+```
+
+Application 게시물 삭제 API "/admin/deleteApplication" (POST)
+```java
+기대되는 프론트 요청 양식
+body : {    
+    id : "string"
+}
+
+기대되는 백엔드 응답 코드
+
+정상적 발급 성공 시 :
+        200번 상태 코드 반환
+
+발급 실패 시 :
+        상황에 따른 상태 코드 및 응답 처리 구현하고 채워놓음.        
+
+```
+
+Application 게시물 작성 API /admin/writeApplication (POST)
+```java
+기대하는 프론트 요청 양식 (Application 작성 시에 submitter는 비워둠, 제출자가 없으니까)
+body :{
+    title : "string",
+    content : "string",
+    attachmentFilePaths : ["string1", "string2", ...],
+    startTime : "LocalDateTime",
+    endTime : "LocalDateTime"
+
+    }
+
+
+정상적 발급 성공 시 :
+        200번 상태 코드 반환
+
+발급 실패 시 :
+        상황에 따른 상태 코드 및 응답 처리 구현하고 채워놓음.
+    
+```
+
+### 2.4 계정 권한 조정
+
+이 아래의 API는 사용자의 권한을 변경하는 API로, 관리자만이 사용 가능하다
+관리자 전용 기능은 Jwt 2중 토큰 인증을 요구받는다. 관련 내용은 1.4 부분을 참고.
+
+사용자의 role을 ROLE_USER로 변경하는 API /admin/setRoleUser (POST)
+
+```java
+기대되는 프론트 요청 양식
+
+body : {
+    id : "String"
+    }
+
+
+기대되는 백엔드 응답 코드
+
+정상적인 사용자 권한 변경 시 :
+        200 상태 코드 반환
+
+사용자 권한 중복(이미 ROLE_USER) 시 :
+        409 상태 코드 반환
+
+사용자 id 탐색 실패 시 :
+        404 상태 코드 반환
+
+그 외의 알 수 없는 예외 발생 시 :
+        500 상태 코드 반환
+
+```
+
+
+사용자의 role을 ROLE_ADMIN 으로 변경하는 API /admin/setRoleAdmin (POST)
+
+```java
+기대되는 프론트 요청 양식
+
+body : {
+    id : "String"
+    }
+
+
+기대되는 백엔드 응답 코드
+
+정상적인 사용자 권한 변경 시 :
+        200 상태 코드 반환
+
+사용자 권한 중복(이미 ROLE_ADMIN) 시 :
+        409 상태 코드 반환
+
+사용자 id 탐색 실패 시 :
+        404 상태 코드 반환
+
+그 외의 알 수 없는 예외 발생 시 :
+        500 상태 코드 반환
+
+```
+
+
+
 __________________________________________
 
 ## 3. 파일(이미지 및 동영상) 업로드 및 다운로드
@@ -1027,12 +1224,10 @@ public ResponseEntity<Resource> getVideo(@RequestBody DisplayedFileDTO displayed
 FAQ 페이지 (GET) "faq"
 
 Application 페이지 (GET) "/application"
-유의 : applicationData 라는 이름으로, 데이터가 담길 예정.
+
 
 
 2번. 로그인 된 일반 사용자만 접근 가능
-
-아직 만들지는 않았음, 추후에도 없을 수 있음
 
 
 3번. 관리자만 접근 가능

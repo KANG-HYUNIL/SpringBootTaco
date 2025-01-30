@@ -9,10 +9,12 @@ import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.filter.GenericFilterBean;
 
 import java.io.IOException;
 
+@Slf4j
 public class CustomLogoutFilter extends GenericFilterBean {
 
     private final JwtUtil jwtUtil;
@@ -37,11 +39,12 @@ public class CustomLogoutFilter extends GenericFilterBean {
         //path and method verify
         //URI 경로 가져오기?
         String requestUri = request.getRequestURI();
+        //log.info("Request URI: {}", requestUri);
 
         //logout으로 끝나는 경로가 아닐 경우에
-        if (!requestUri.matches("/logout"))
+        if (!requestUri.endsWith("/logout"))
         {
-
+            //log.info("Not Logout Path");
             //다음 Filter로 넘기기
             filterChain.doFilter(request, response);
             return;
@@ -52,6 +55,7 @@ public class CustomLogoutFilter extends GenericFilterBean {
         //POST 요청이 아니라면
         if (!requestMethod.equals("POST")) {
 
+            //log.info("Not POST Method");
             //다음 Filter로 넘기기
             filterChain.doFilter(request, response);
             return;
@@ -71,7 +75,7 @@ public class CustomLogoutFilter extends GenericFilterBean {
         //refresh null check
         if (refresh == null) {
 
-            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            response.setStatus(HttpServletResponse.SC_OK);
             return;
         }
 
@@ -80,7 +84,13 @@ public class CustomLogoutFilter extends GenericFilterBean {
         {
             //response status code
             //다음 Filter로 넘기지 않고 응답
-            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            //Refresh 토큰 Cookie 값 0
+            Cookie cookie = new Cookie("refresh", null);
+            cookie.setMaxAge(0);
+            cookie.setPath("/");
+
+            response.addCookie(cookie);
+            response.setStatus(HttpServletResponse.SC_OK);
             return;
         }
 
@@ -93,7 +103,13 @@ public class CustomLogoutFilter extends GenericFilterBean {
 
             //response status code
             //다음 Filter로 넘기지 않고 응답
-            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            //Refresh 토큰 Cookie 값 0
+            Cookie cookie = new Cookie("refresh", null);
+            cookie.setMaxAge(0);
+            cookie.setPath("/");
+
+            response.addCookie(cookie);
+            response.setStatus(HttpServletResponse.SC_OK);
             return;
         }
 
@@ -101,11 +117,18 @@ public class CustomLogoutFilter extends GenericFilterBean {
         String username = jwtUtil.getUsername(refresh);
         boolean isExist = redisService.checkExistsValue(refreshString + username);
         if (!isExist) {
-            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            //Refresh 토큰 Cookie 값 0
+            Cookie cookie = new Cookie("refresh", null);
+            cookie.setMaxAge(0);
+            cookie.setPath("/");
+
+            response.addCookie(cookie);
+            response.setStatus(HttpServletResponse.SC_OK);
             return;
         }
 
-        //로그아웃 진행
+        //로그아웃 진행, refresh token이 존재하며, 유효하고, redis에도 존재한다면 로그아웃 진행
+        //
         //Refresh 토큰 DB에서 제거
         redisService.deleteValues(refreshString + username);
 

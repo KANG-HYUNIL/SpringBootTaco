@@ -31,6 +31,7 @@ public class SecurityConfig {
     //Qualifier 어노테이션을 통해 구분하여 사용해야 함
 
     private final String loginURL = "/login"; //로그인 URL
+    private final String logoutURL = "/logout"; //로그아웃 URL
 
     //AuthenticationManager가 인자로 받을 AuthenticationConfiguraion 객체 생성자 주입
     //스프링 시큐리티에서 인증을 설정하는 클래스
@@ -103,11 +104,15 @@ public class SecurityConfig {
         //fixme
         LoginFilter loginFilter = new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil, redisService);
         JwtFilter jwtFiler = new JwtFilter(jwtUtil);
+        //CustomLogoutFilter customLogoutFilter = new CustomLogoutFilter(jwtUtil, redisService);
+
 
         loginFilter.setFilterProcessesUrl(loginURL); //특정 경로의 로그인 요청에 대해서만 처리하도록 수정 가능
+        //customLogoutFilter.setFilterProcessesUrl(logoutURL); //특정 경로의 로그아웃 요청에 대해서만 처리하도록 수정 가능
+
         http.addFilterBefore(jwtFiler, LoginFilter.class);
         http.addFilterAt(loginFilter, UsernamePasswordAuthenticationFilter.class);
-        http.addFilterBefore(new CustomLogoutFilter(jwtUtil, redisService), LoginFilter.class);
+        http.addFilterBefore(new CustomLogoutFilter(jwtUtil, redisService), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }

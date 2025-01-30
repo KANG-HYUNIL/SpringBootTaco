@@ -47,5 +47,23 @@
     </div>
 </nav>
 
+<main class="pt-16 mb-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
+        <div class="flex justify-between items-center mt-8 max-w-6xl mx-auto">
+            <div>
+                <input id="searchById" type="text" placeholder="Search by ID" class="p-2 border border-gray-300 rounded-md shadow-sm focus:border-custom focus:ring-custom">
+                <button onclick="searchById()" class="!rounded-button bg-custom text-white px-4 py-2 text-sm font-medium hover:bg-custom/90">Search by ID</button>
+            </div>
+            <div>
+                <input id="searchByName" type="text" placeholder="Search by Name" class="p-2 border border-gray-300 rounded-md shadow-sm focus:border-custom focus:ring-custom">
+                <button onclick="searchByName()" class="!rounded-button bg-custom text-white px-4 py-2 text-sm font-medium hover:bg-custom/90">Search by Name</button>
+            </div>
+        </div>
+        <div id="userInfoContainer" class="mt-12 max-w-6xl mx-auto">
+            <!-- User information will be dynamically inserted here -->
+        </div>
+    </div>
+</main>
+
 </body>
 </html>

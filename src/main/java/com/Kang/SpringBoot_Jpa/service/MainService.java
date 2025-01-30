@@ -1,10 +1,14 @@
 package com.Kang.SpringBoot_Jpa.service;
 
 import com.Kang.SpringBoot_Jpa.Converter.DocumentConverter;
+import com.Kang.SpringBoot_Jpa.document.ApplicationDocument;
 import com.Kang.SpringBoot_Jpa.document.ProjectDocument;
 import com.Kang.SpringBoot_Jpa.document.SessionDocument;
+import com.Kang.SpringBoot_Jpa.dto.ApplicationDTO;
+import com.Kang.SpringBoot_Jpa.dto.ApplicationSummaryDTO;
 import com.Kang.SpringBoot_Jpa.dto.ProjectDTO;
 import com.Kang.SpringBoot_Jpa.dto.SessionDTO;
+import com.Kang.SpringBoot_Jpa.mongorepo.ApplicationRepository;
 import com.Kang.SpringBoot_Jpa.mongorepo.ProjectRepository;
 import com.Kang.SpringBoot_Jpa.mongorepo.SessionRepository;
 import jakarta.mail.Session;
@@ -21,6 +25,7 @@ public class MainService {
 
     private final ProjectRepository projectRepository;
     private final SessionRepository sessionRepository;
+    private final ApplicationRepository applicationRepository;
 
 
     //모든 Session 게시물 데이터 가지고 와서 Term 으로 묶어 반환하는 메서드
@@ -70,6 +75,20 @@ public class MainService {
 
         //ProjectDTO로 변환하여 반환
         return DocumentConverter.toProjectDTO(result);
+    }
+
+    public List<ApplicationSummaryDTO> getAllApplications() {
+        List<ApplicationDocument> applicationDocuments = applicationRepository.findAll();
+        return applicationDocuments.stream()
+                .map(document -> {
+                    ApplicationSummaryDTO dto = new ApplicationSummaryDTO();
+                    dto.setId(document.getId());
+                    dto.setTitle(document.getTitle());
+                    dto.setStartTime(document.getStartTime());
+                    dto.setEndTime(document.getEndTime());
+                    return dto;
+                })
+                .collect(Collectors.toList());
     }
 
 }

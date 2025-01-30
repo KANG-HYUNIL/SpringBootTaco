@@ -1,5 +1,7 @@
 package com.Kang.SpringBoot_Jpa.controller;
 
+import com.Kang.SpringBoot_Jpa.dto.ApplicationDTO;
+import com.Kang.SpringBoot_Jpa.dto.ApplicationSummaryDTO;
 import com.Kang.SpringBoot_Jpa.dto.ProjectDTO;
 import com.Kang.SpringBoot_Jpa.dto.SessionDTO;
 import com.Kang.SpringBoot_Jpa.service.MainService;
@@ -93,7 +95,22 @@ public class MainController {
 
 
     //Application 페이지
+    @GetMapping("/application")
+    public String application(HttpServletRequest request, Model model) {
+        String ipAddress = request.getRemoteAddr();
+        log.info("Application page accessed by IP: {}", ipAddress);
+        return "main/application";
+    }
 
+    //Application 전체 데이터 반환
+    @GetMapping("/getApplicationData")
+    @ResponseBody
+    public ResponseEntity<List<ApplicationSummaryDTO>> getApplicationData() {
+        List<ApplicationSummaryDTO> applications = mainService.getAllApplications();
+        return new ResponseEntity<>(applications, HttpStatus.OK);
+    }
+
+    //Application 게시물에 제출하는 메서드, 로그인 한 사용자만 사용 가능하기에 access token 필요
 
 
 
