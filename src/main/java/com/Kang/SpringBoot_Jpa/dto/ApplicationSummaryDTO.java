@@ -3,6 +3,7 @@ package com.Kang.SpringBoot_Jpa.dto;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 @Data
 @Getter
@@ -14,8 +15,8 @@ public class ApplicationSummaryDTO {
 
     private String id;
     private String title;
-    private LocalDateTime startTime;
-    private LocalDateTime endTime;
+    private ZonedDateTime startTime;
+    private ZonedDateTime endTime;
 
 
 }

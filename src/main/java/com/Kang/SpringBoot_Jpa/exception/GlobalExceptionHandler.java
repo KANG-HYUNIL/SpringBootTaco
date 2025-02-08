@@ -44,4 +44,9 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(SubmissionDeadlineException.class)
+    public ResponseEntity<?> handleSubmissionDeadlineException(SubmissionDeadlineException e, WebRequest request) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
 }

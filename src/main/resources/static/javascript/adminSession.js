@@ -1,5 +1,7 @@
 document.addEventListener('DOMContentLoaded', async function () {
 
+    const termSelect = document.getElementById('termSelect');
+    const sessionContainer = document.getElementById('sessionContainer');
 
     // 전체 SessionData를 가져오는 메서드
     async function fetchSessionData() {
@@ -17,7 +19,6 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     // option을 설정하는 메서드
     function setOptions(sessionData) {
-        const termSelect = document.getElementById('termSelect');
         const terms = Object.keys(sessionData);
         terms.forEach(term => {
             const option = document.createElement('option');
@@ -28,13 +29,12 @@ document.addEventListener('DOMContentLoaded', async function () {
 
         // Automatically select the last option
         if (terms.length > 0) {
-            termSelect.selectedIndex = terms.length - 1;
+            termSelect.selectedIndex = 0;
         }
     }
 
     // html 요소를 생성하는 메서드
     function setSessionElements(sessionData) {
-        const sessionContainer = document.getElementById('sessionContainer');
 
         Object.keys(sessionData).forEach(term => {
             sessionData[term].forEach(session => {
@@ -80,7 +80,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 });
 
                 // Add event listener to the modify button
-                const modifyButton = projectElement.querySelector('.modify-button');
+                const modifyButton = sessionElement.querySelector('.modify-button');
                 modifyButton.addEventListener('click', function() {
                     if (confirm('Session 수정?')) {
                         const sessionId = projectElement.querySelector('.session-id').textContent;
@@ -88,6 +88,13 @@ document.addEventListener('DOMContentLoaded', async function () {
                         location.href = '/admin/session/fix';
                     }
                 });
+
+                sessionElement.querySelector('.dropdown button').addEventListener('click', function(event) {
+                    event.stopPropagation();
+                    const dropdownContent = this.nextElementSibling;
+                    dropdownContent.classList.toggle('hidden');
+                });
+
             });
         });
     }
@@ -121,33 +128,30 @@ document.addEventListener('DOMContentLoaded', async function () {
         document.body.appendChild(popup);
     }
 
-
-    // select의 선택 항목이 변경될 때 화면에 나��나는 요소를 변경하는 메서드
-    function addSelectEventListener() {
-        const termSelect = document.getElementById('termSelect');
-        const sessionContainer = document.getElementById('sessionContainer');
-
-        // Function to display sessions based on the selected term
-        function displaySessions(term) {
-            const sessionElements = sessionContainer.children;
-            for (let sessionElement of sessionElements) {
-
-                if (sessionElement.dataset.term === term || term === "")
-                {
-                    sessionElement.classList.remove('hidden');
-                }
-                else
-                {
-                    sessionElement.classList.add('hidden');
-                }
+    // select의 선택 항목이 변경될 때 화면에 나타나는 요소를 변경하는 메서드
+    // Function to display sessions based on the selected term
+    function displaySessions(term) {
+        const sessionElements = sessionContainer.children;
+        for (let sessionElement of sessionElements) {
+            if (sessionElement.dataset.term === term || term === "") {
+                sessionElement.classList.remove('hidden');
+            } else {
+                sessionElement.classList.add('hidden');
             }
         }
+    }
 
+    // select의 선택 항목이 변경될 때 화면에 나타나는 요소를 변경하는 메서드
+    function addSelectEventListener() {
         // Event listener for term selection
         termSelect.addEventListener('change', function () {
             const selectedTerm = termSelect.value;
             displaySessions(selectedTerm);
         });
+
+        // Automatically select the first option and display sessions
+        termSelect.selectedIndex = 0;
+        displaySessions(termSelect.value);
     }
 
     // Session 삭제 요청 메서드
@@ -232,6 +236,15 @@ document.addEventListener('DOMContentLoaded', async function () {
     const sessionData = await fetchSessionData();
     setOptions(sessionData);
     setSessionElements(sessionData);
-    addSelectEventListener(sessionData);
+    addSelectEventListener();
+
+    // Function to close popup
+    window.closePopup = function() {
+        const popup = document.querySelector('.fixed.inset-0');
+        if (popup)
+        {
+            popup.remove();
+        }
+    };
 
 });

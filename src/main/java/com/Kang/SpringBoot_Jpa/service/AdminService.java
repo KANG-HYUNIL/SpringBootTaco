@@ -220,6 +220,29 @@ public class AdminService {
         }
     }
 
+    public void fixApplication(ApplicationDTO applicationDTO, String accessToken) {
+        String username = jwtUtil.getUsername(accessToken);
+        try
+        {
+            ApplicationDocument existingApplication = applicationRepository.findById(applicationDTO.getId())
+                    .orElseThrow(() -> new IllegalArgumentException("Application not found"));
+
+            existingApplication.setTitle(applicationDTO.getTitle());
+            existingApplication.setStartTime(applicationDTO.getStartTime());
+            existingApplication.setEndTime(applicationDTO.getEndTime());
+            existingApplication.setContent(processContent(applicationDTO.getContent()));
+            existingApplication.setAttachmentFilePaths(processAttachments(applicationDTO.getAttachmentFilePaths()));
+
+            applicationRepository.save(existingApplication);
+            log.info("Successfully updated application: Title={}, id={}", existingApplication.getTitle(), username);
+        }
+        catch (Exception e)
+        {
+            log.error("Error updating application: Title={}, id={}", applicationDTO.getTitle(), username, e);
+            throw new RuntimeException(e);
+        }
+    }
+
 
     //썸네일 이미지 업로드 및 경로 설정 메서드
     private String processThumbnail(String thumbnail)

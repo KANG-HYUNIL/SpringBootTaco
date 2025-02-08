@@ -271,6 +271,11 @@ document.addEventListener("DOMContentLoaded", function() {
                     window.location.href = '/application';
                 });
             }
+            else if (response.status === 400)
+            {
+               alert('Submission deadline has passed or not yet started.');
+            }
+
             else
             {
                 return response.json().then(data => {

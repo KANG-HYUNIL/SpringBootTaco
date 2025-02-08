@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.w3.org/1999/xhtml">
-<<head>
+<head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>TEST - IT 동아리</title>
@@ -295,7 +295,7 @@
                                 //게시물의 데이터 수집
                               const title = document.getElementById('sessionTitle').value;
                               const term = document.getElementById('sessionTerm').value;
-                              const content = editor.getMarkdown();
+                              const content = editor.getHTML();
                               const thumbnail = document.getElementById('uploadedFilePath').value;
                               const attachmentFilePaths = Array.from(document.querySelectorAll('#attachmentFileList .file-item')).map(item => item.dataset.filePath);
 
@@ -322,7 +322,7 @@
                               };
 
                                 //url 설정
-                              const url = sessionId ? '/admin/fixSession' : '/admin/writeProject
+                              const url = sessionId ? '/admin/fixSession' : '/admin/writeSession';
 
                               try
                               {
@@ -344,9 +344,9 @@
 
                             let sessionId = null; // Session ID for editing
                             const storedSessionId = localStorage.getItem('sessionId');
-                            if (storedProjectId)
+                            if (storedSessionId)
                             {
-                                sessionId = storedProjectId;
+                                sessionId = storedSessionId;
                                 localStorage.removeItem('sessionId');
 
                                 // Fetch project data by ID
@@ -368,8 +368,8 @@
                                 })
                                 .then(sessionData => {
                                     // Populate HTML elements with sessionData
-                                    document.getElementById('projectTitle').value = sessionData.title;
-                                    document.getElementById('projectTerm').value = sessionData.term;
+                                    document.getElementById('sessionTitle').value = sessionData.title;
+                                    document.getElementById('sessionTerm').value = sessionData.term;
 
                                     document.getElementById('uploadedFilePath').value = sessionData.thumbnail;
                                     const fileName = sessionData.thumbnail.split('/').pop().split('_').slice(1).join('_');

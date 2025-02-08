@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', async function () {
+
     const termSelect = document.getElementById('termSelect');
     const sessionContainer = document.getElementById('sessionContainer');
 
@@ -28,7 +29,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
         // Automatically select the last option
         if (terms.length > 0) {
-            termSelect.selectedIndex = terms.length - 1;
+            termSelect.selectedIndex = 0;
         }
     }
 
@@ -65,6 +66,35 @@ document.addEventListener('DOMContentLoaded', async function () {
         });
     }
 
+    // Function to display sessions based on the selected term
+    function displaySessions(term) {
+        const sessionElements = sessionContainer.children;
+        for (let sessionElement of sessionElements) {
+            if (sessionElement.dataset.term === term || term === "") {
+                sessionElement.classList.remove('hidden');
+            } else {
+                sessionElement.classList.add('hidden');
+            }
+        }
+    }
+
+    // select의 선택 항목이 변경될 때 화면에 나타나는 요소를 변경하는 메서드
+    function addSelectEventListener() {
+
+
+        // Event listener for term selection
+        termSelect.addEventListener('change', function () {
+            const selectedTerm = termSelect.value;
+            displaySessions(selectedTerm);
+        });
+
+        // Automatically select the last option
+
+        termSelect.selectedIndex = 0;
+        displaySessions(termSelect.value);
+    }
+
+
     // Function to show popup with session details
     function showPopup(session) {
         const popup = document.createElement('div');
@@ -93,26 +123,21 @@ document.addEventListener('DOMContentLoaded', async function () {
         document.body.appendChild(popup);
     }
 
-    // Function to display sessions based on the selected term
-    function displaySessions(term) {
-        const sessionElements = sessionContainer.children;
-        for (let sessionElement of sessionElements) {
-            if (sessionElement.dataset.term === term || term === "") {
-                sessionElement.classList.remove('hidden');
-            } else {
-                sessionElement.classList.add('hidden');
-            }
-        }
-    }
 
-    // Event listener for term selection
-    termSelect.addEventListener('change', function () {
-        const selectedTerm = termSelect.value;
-        displaySessions(selectedTerm);
-    });
 
     // Fetch data and initialize the page
     const sessionData = await fetchSessionData();
     setOptions(sessionData);
     setSessionElements(sessionData);
+    addSelectEventListener();
+
+    // Function to close popup
+    window.closePopup = function() {
+        const popup = document.querySelector('.fixed.inset-0');
+        if (popup)
+        {
+            popup.remove();
+        }
+    };
+
 });

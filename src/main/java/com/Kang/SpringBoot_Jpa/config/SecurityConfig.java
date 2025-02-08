@@ -90,7 +90,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests((auth) -> auth
 
                         //.requestMatchers("").authenticated() //특정 경로에서 권한 요구. fixme
-                        .requestMatchers("/admin/", "/admin/session/fix", "/admin/project/fix").permitAll() // Allow access to the admin main page for all users
+                        .requestMatchers("/admin/", "/admin/session/fix", "/admin/project/fix", "/admin/application/fix").permitAll() // Allow access to the admin main page for all users
                         .requestMatchers("/admin/**").hasRole("ADMIN") // Restrict other admin-related requests to users with ROLE_ADMIN
                         .requestMatchers("/application/submit").hasRole("USER")
                         .anyRequest().permitAll()); // Allow access to all other requests

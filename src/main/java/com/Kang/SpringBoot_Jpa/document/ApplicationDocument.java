@@ -5,6 +5,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.List;
 
 @Document(collection = "applicationData")
@@ -14,8 +15,8 @@ public class ApplicationDocument {
     @Id
     private String id;
     private String title;
-    private LocalDateTime startTime;
-    private LocalDateTime endTime;
+    private ZonedDateTime startTime;
+    private ZonedDateTime endTime;
     private String content;
     private List<String> attachmentFilePaths;
     private List<Submitter> submitters;

@@ -7,6 +7,7 @@ import com.Kang.SpringBoot_Jpa.document.SessionDocument;
 import com.Kang.SpringBoot_Jpa.dto.*;
 import com.Kang.SpringBoot_Jpa.entity.UserEntity;
 import com.Kang.SpringBoot_Jpa.exception.NoDataException;
+import com.Kang.SpringBoot_Jpa.exception.SubmissionDeadlineException;
 import com.Kang.SpringBoot_Jpa.jwt.JwtUtil;
 import com.Kang.SpringBoot_Jpa.mongorepo.ApplicationRepository;
 import com.Kang.SpringBoot_Jpa.mongorepo.ProjectRepository;
@@ -16,6 +17,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -130,7 +134,13 @@ public class MainService {
 
         //제출 기한이 올바른지 검증 필요, 가져온 게시물에서 시작 및 종료 기간을 획득하고, 서버의 현재 시간과 비교해 처리(시간대 차이는 어떻게 하지?
         //통일된 시간대로 치환해서 비교 로직을 수행해야 할 듯. 그럼 더 나아가서 애초에 시간 데이터 표시가 시간대도 같이 표시하게끔
+        ZonedDateTime now = ZonedDateTime.now(ZoneId.of("UTC"));
+        ZonedDateTime startTime = applicationDocument.getStartTime();
+        ZonedDateTime endTime = applicationDocument.getEndTime();
 
+        if (now.isBefore(startTime) || now.isAfter(endTime)) {
+            throw new SubmissionDeadlineException("Submission is not within the allowed time frame");
+        }
 
         //게시물의 제출자 목록 처리 로직
         List<ApplicationDocument.Submitter> submitters = applicationDocument.getSubmitters();

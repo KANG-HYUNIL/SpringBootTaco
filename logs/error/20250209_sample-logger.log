@@ -1,0 +1,11 @@
+2025-02-09 01:40:30.393 [ERROR] [http-nio-8080-exec-3] [c.K.S.e.GlobalExceptionHandler] - An unexpected error occurred: No static resource favicon.ico.
+2025-02-09 01:40:36.906 [ERROR] [http-nio-8080-exec-8] [c.K.S.e.GlobalExceptionHandler] - An unexpected error occurred: No static resource favicon.ico.
+2025-02-09 01:42:34.967 [ERROR] [http-nio-8080-exec-6] [c.K.S.e.GlobalExceptionHandler] - An unexpected error occurred: No static resource favicon.ico.
+2025-02-09 01:42:39.796 [ERROR] [http-nio-8080-exec-7] [c.K.S.e.GlobalExceptionHandler] - An unexpected error occurred: No static resource favicon.ico.
+2025-02-09 01:50:30.257 [ERROR] [http-nio-8080-exec-6] [c.K.S.e.GlobalExceptionHandler] - An unexpected error occurred: No static resource favicon.ico.
+2025-02-09 02:20:24.344 [ERROR] [http-nio-8080-exec-2] [c.K.S.e.GlobalExceptionHandler] - An unexpected error occurred: No static resource favicon.ico.
+2025-02-09 02:20:28.566 [ERROR] [http-nio-8080-exec-5] [c.K.S.e.GlobalExceptionHandler] - An unexpected error occurred: No static resource favicon.ico.
+2025-02-09 02:26:09.385 [ERROR] [http-nio-8080-exec-4] [c.K.S.e.GlobalExceptionHandler] - An unexpected error occurred: No static resource favicon.ico.
+2025-02-09 02:56:39.106 [ERROR] [http-nio-8080-exec-3] [c.K.S.e.GlobalExceptionHandler] - An unexpected error occurred: No static resource admin/application.
+2025-02-09 02:56:58.992 [ERROR] [http-nio-8080-exec-5] [c.K.S.e.GlobalExceptionHandler] - An unexpected error occurred: No static resource admin/application.
+2025-02-09 03:02:48.793 [ERROR] [http-nio-8080-exec-5] [c.K.S.e.GlobalExceptionHandler] - An unexpected error occurred: No static resource admin/application.

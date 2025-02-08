@@ -80,30 +80,18 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     // select의 선택 항목이 변경될 때 화면에 나타나는 요소를 변경하는 메서드
     function addSelectEventListener() {
-        const termSelect = document.getElementById('termSelect');
         const projectContainer = document.getElementById('projectContainer');
-
-        // Function to display projects based on the selected term
-        function displayProjects(term)
-        {
-            const projectElements = projectContainer.children;
-            for (let projectElement of projectElements)
-            {
-                if (projectElement.dataset.term === term || term === "") {
-                    projectElement.classList.remove('hidden');
-                }
-                else
-                {
-                    projectElement.classList.add('hidden');
-                }
-            }
-        }
 
         // Event listener for term selection
         termSelect.addEventListener('change', function () {
             const selectedTerm = termSelect.value;
             displayProjects(selectedTerm);
         });
+
+        // Automatically select the last option
+
+        termSelect.selectedIndex = 0;
+        displayProjects(termSelect.value);
     }
 
     // Function to show popup with project details
@@ -136,15 +124,20 @@ document.addEventListener('DOMContentLoaded', async function () {
     }
 
 
-    // Event listener for term selection
-    termSelect.addEventListener('change', function () {
-        const selectedTerm = termSelect.value;
-        displayProjects(selectedTerm);
-    });
 
     // Fetch data and initialize the page
     const projectData = await fetchProjectData();
     setOptions(projectData);
     setProjectElements(projectData);
-    addSelectEventListener(projectData);
+    addSelectEventListener();
+
+    // Function to close popup
+    window.closePopup = function() {
+        const popup = document.querySelector('.fixed.inset-0');
+        if (popup)
+        {
+            popup.remove();
+        }
+    };
+
 });

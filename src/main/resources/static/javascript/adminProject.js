@@ -92,6 +92,12 @@ document.addEventListener("DOMContentLoaded", async function() {
                     }
                 });
 
+                projectElement.querySelector('.dropdown button').addEventListener('click', function(event) {
+                    event.stopPropagation();
+                    const dropdownContent = this.nextElementSibling;
+                    dropdownContent.classList.toggle('hidden');
+                });
+
             });
 
         });
@@ -245,7 +251,7 @@ document.addEventListener("DOMContentLoaded", async function() {
     const projectData = await fetchProjectData();
     setOptions(projectData);
     setProjectElements(projectData);
-    addSelectEventListener(projectData);
+    addSelectEventListener();
 
     // Function to close popup
     window.closePopup = function() {

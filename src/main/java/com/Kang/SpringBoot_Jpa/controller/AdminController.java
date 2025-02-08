@@ -52,6 +52,14 @@ public class AdminController {
         return "/admin/adminSession";
     }
 
+    @GetMapping("/application")
+    public String getApplication(HttpServletRequest request, Model model) {
+        String ipAddress = request.getRemoteAddr();
+        log.info("Admin application page accessed by IP: {}", ipAddress);
+
+        return "/admin/adminApplication";
+    }
+
     @GetMapping("/project/write")
     public String getWriteProject(HttpServletRequest request, Model model) {
         String ipAddress = request.getRemoteAddr();
@@ -198,8 +206,7 @@ public class AdminController {
     @ResponseBody
     public ResponseEntity<?> fixApplication(@RequestBody ApplicationDTO applicationDTO, HttpServletRequest request) {
         String accessToken = request.getHeader("access");
-        //fixme
-        adminService.deleteApplication(applicationDTO, accessToken);
+        adminService.fixApplication(applicationDTO, accessToken);
         return new ResponseEntity<>("Application Fix Complete", HttpStatus.OK);
     }
 

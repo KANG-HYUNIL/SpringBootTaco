@@ -1,5 +1,15 @@
 document.addEventListener("DOMContentLoaded", function() {
-    const applicationId = localStorage.getItem('applicationId');
+
+    let applicationId = null;
+
+    const storedApplicationId = localStorage.getItem('applicationId');
+
+    if (storedApplicationId)
+    {
+        applicationId = storedApplicationId;
+        localStorage.removeItem('applicationId');
+    }
+
 
     function fetchApplicationData() {
         const url = `/getApplicationById?id=${applicationId}`;
@@ -87,6 +97,105 @@ document.addEventListener("DOMContentLoaded", function() {
 
             submitterList.appendChild(row);
         });
+    }
+
+    function editApplication() {
+        if (!applicationId)
+        {
+            alert('Application ID not found.');
+            return;
+        }
+
+        localStorage.setItem('applicationId', applicationId);
+        window.location.href = '/admin/application/fix';
+    }
+    const applicationId = localStorage.getItem('applicationId');
+
+    async function deleteApplication() {
+        if (!applicationId)
+        {
+            alert('Application ID not found.');
+            return;
+        }
+
+        const isConfirmed = confirm('Are you sure you want to delete this application?');
+        if (!isConfirmed)
+        {
+            return;
+        }
+
+        const url = '/admin/deleteApplication';
+        const accessToken = localStorage.getItem('access');
+        const applicationDTO = { id: applicationId };
+
+        try {
+            let response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'access': accessToken
+                },
+                body: JSON.stringify(applicationDTO),
+                credentials: 'include'
+            });
+
+            if (response.status === 406)
+            {
+                await handleTokenRefresh();
+                response = await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'access': localStorage.getItem('access')
+                    },
+                    body: JSON.stringify(applicationDTO),
+                    credentials: 'include'
+                });
+            }
+
+            if (response.ok)
+            {
+                alert('Application deleted successfully.');
+                window.location.href = '/admin/application';
+            }
+            else
+            {
+                const errorData = await response.json();
+                throw new Error(`Failed to delete application: ${response.status} ${errorData.message}`);
+            }
+        }
+        catch (error)
+        {
+            console.error('Error deleting application:', error);
+        }
+    }
+
+    // refresh token 통한 access token 재발급
+    async function handleTokenRefresh() {
+        const url = '/reissue';
+
+        try {
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                credentials: 'include'
+            });
+
+            if (response.ok)
+            {
+                const newAccessToken = response.headers.get('access');
+                localStorage.setItem('access', newAccessToken);
+            }
+            else
+            {
+                const errorData = await response.json();
+                throw new Error(`Failed to refresh token: ${response.status} ${errorData.message}`);
+            }
+        } catch (error) {
+            console.error('Error refreshing token:', error);
+        }
     }
 
     fetchApplicationData();
