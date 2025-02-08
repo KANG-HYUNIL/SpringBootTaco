@@ -369,7 +369,7 @@
                       document.getElementById('projectTerm').value = projectData.term;
                       document.getElementById('projectTeam').value = projectData.team;
                       document.getElementById('uploadedFilePath').value = projectData.thumbnail;
-                      const fileName = projectData.thumbnail.split('/').pop();
+                      const fileName = projectData.thumbnail.split('/').pop().split('_').slice(1).join('_');
                       document.getElementById('uploadedFileName').value = fileName;
                       document.getElementById('fileNameLabel').textContent = `파일 이름: ${fileName.split('_').slice(1).join('_')}`;
                       editor.insertText(projectData.content);

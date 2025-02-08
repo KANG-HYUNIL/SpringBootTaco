@@ -3,6 +3,12 @@ server:
   8080
 
 spring:
+  http:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+
   application:
     name: springboot_jpa
 

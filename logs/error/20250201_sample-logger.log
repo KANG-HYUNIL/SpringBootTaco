@@ -1,0 +1,3 @@
+2025-02-01 02:16:15.818 [ERROR] [http-nio-8080-exec-3] [c.K.S.e.GlobalExceptionHandler] - An unexpected error occurred: No static resource favicon.ico.
+2025-02-01 02:21:32.948 [ERROR] [http-nio-8080-exec-2] [c.K.S.e.GlobalExceptionHandler] - An unexpected error occurred: No static resource favicon.ico.
+2025-02-01 02:23:39.343 [ERROR] [http-nio-8080-exec-9] [c.K.S.e.GlobalExceptionHandler] - An unexpected error occurred: No static resource favicon.ico.

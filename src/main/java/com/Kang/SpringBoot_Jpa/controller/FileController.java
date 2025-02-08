@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.util.UriUtils;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -69,21 +70,17 @@ public class FileController {
     @GetMapping("/downloadFile")
     public ResponseEntity<Resource> downloadFile(@RequestParam String filePath) {
         try {
-
             Resource resource = fileService.getFile(filePath);
 
             if (resource.exists() || resource.isReadable()) {
+                String encodedFileName = UriUtils.encode(resource.getFilename(), "UTF-8");
                 return ResponseEntity.ok()
-                        .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
+                        .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename*=UTF-8''" + encodedFileName)
                         .body(resource);
-            }
-            else
-            {
+            } else {
                 throw new RuntimeException("File not found or not readable");
             }
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }

@@ -372,7 +372,7 @@
                                     document.getElementById('projectTerm').value = sessionData.term;
 
                                     document.getElementById('uploadedFilePath').value = sessionData.thumbnail;
-                                    const fileName = sessionData.thumbnail.split('/').pop();
+                                    const fileName = sessionData.thumbnail.split('/').pop().split('_').slice(1).join('_');
                                     document.getElementById('uploadedFileName').value = fileName;
                                     document.getElementById('fileNameLabel').textContent = `파일 이름: ${fileName.split('_').slice(1).join('_')}`;
                                     editor.insertText(sessionData.content);

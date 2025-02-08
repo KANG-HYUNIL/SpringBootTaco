@@ -1,9 +1,6 @@
 package com.Kang.SpringBoot_Jpa.controller;
 
-import com.Kang.SpringBoot_Jpa.dto.ApplicationDTO;
-import com.Kang.SpringBoot_Jpa.dto.ApplicationSummaryDTO;
-import com.Kang.SpringBoot_Jpa.dto.ProjectDTO;
-import com.Kang.SpringBoot_Jpa.dto.SessionDTO;
+import com.Kang.SpringBoot_Jpa.dto.*;
 import com.Kang.SpringBoot_Jpa.service.MainService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
@@ -50,6 +47,8 @@ public class MainController {
         return "main/session";
     }
 
+
+
     //프로젝트 데이터 전체 반환
     @GetMapping("/getProjectData")
     @ResponseBody
@@ -64,6 +63,7 @@ public class MainController {
         return mainService.getSessionGroupByTerm();
     }
 
+    //개별 Project 데이터 반환
     @GetMapping("/getProjectById")
     @ResponseBody
     public ResponseEntity<ProjectDTO> getProjectById(ProjectDTO projectDTO) {
@@ -71,6 +71,7 @@ public class MainController {
         return new ResponseEntity<>(project, HttpStatus.OK);
     }
 
+    //개별 Session 데이터 반환
     @GetMapping("/getSessionById")
     @ResponseBody
     public ResponseEntity<SessionDTO> getSessionById(SessionDTO sessionDTO) {
@@ -110,8 +111,32 @@ public class MainController {
         return new ResponseEntity<>(applications, HttpStatus.OK);
     }
 
-    //Application 게시물에 제출하는 메서드, 로그인 한 사용자만 사용 가능하기에 access token 필요
+    //Application 게시물 본문 요청 메서드
+    @GetMapping("/application/content")
+    public String getApplicationSubmit(@RequestParam("id") String id, HttpServletRequest request) {
+        String ipAddress = request.getRemoteAddr();
+        log.info("Application Content page ID: {} accessed by IP: {}", id, ipAddress);
+        return "main/applicationSubmit";
+    }
 
+    //개별 Application 데이터 반환
+    @GetMapping("/getApplicationById")
+    @ResponseBody
+    public ResponseEntity<ApplicationDTO> getApplicationById(ApplicationDTO applicationDTO) {
+        ApplicationDTO application = mainService.getApplicationById(applicationDTO.getId());
+        return new ResponseEntity<>(application, HttpStatus.OK);
+    }
 
+    //Application 게시물 제출 메서드
+    @PostMapping("/application/submit")
+    @ResponseBody
+    public ResponseEntity<?> submitApplication(
+            @RequestParam("id") String applicationId,
+            @RequestHeader("access") String accessToken,
+            @RequestBody SubmitterDTO submitterDTO) {
+
+        mainService.submitApplication(applicationId, accessToken, submitterDTO);
+        return new ResponseEntity<>("Application submission complete", HttpStatus.OK);
+    }
 
 }

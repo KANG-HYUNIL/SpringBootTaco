@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>TEST - IT 동아리</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+    <link href="https://ai-public.creatie.ai/gen_page/tailwind-custom.css" rel="stylesheet"/>
+    <script src="https://cdn.tailwindcss.com/3.4.5?plugins=forms@0.5.7,typography@0.5.13,aspect-ratio@0.4.2,container-queries@0.1.1"></script>
+    <script src="https://ai-public.creatie.ai/gen_page/tailwind-config.min.js" data-color="#000000" data-border-radius="small"></script>
+    <style>.dropdown-content { display: none; } .dropdown button:focus + .dropdown-content, .dropdown-content:hover { display: block; } .dropdown-content:not(:hover):not(:focus-within) { display: none; }</style>
+    <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
+    <script type="text/javascript" th:src="@{/javascript/adminWrite.js}" defer></script>
+    <script type="text/javascript" th:src="@{/javascript/adminPublic.js}" defer></script>
+
+    <!-- TUI 에디터 CSS CDN -->
+    <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css" />
+
+    <link rel="stylesheet" th:href="@{/css/iframeTUI.css}" />
+    <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+</head>
+
+
+<body class="font-[&#39;Noto_Sans_KR&#39;] bg-gray-50">
+<nav class="fixed top-0 left-0 right-0 bg-white shadow-sm z-50">
+    <div class="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between h-16">
+            <div class="flex items-center">
+                <a href="#" class="flex-shrink-0">
+                    <span class="text-2xl font-bold text-custom">TEST ADMIN</span>
+                </a>
+            </div>
+            <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
+                <a href="#" onclick="navigateToAdminHome()" class="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700">AdminMain</a>
+                <a href="#" onclick="navigateToAdminSession()" class="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700">AdminSession</a>
+                <a href="#" onclick="navigateToAdminProject()" class="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700">AdminProject</a>
+                <a href="#" onclick="navigateToAdminApplication()" class="inline-flex items-center px-1 pt-1 border-b-2 border-custom text-sm font-medium text-gray-900">AdminApplication</a>
+            </div>
+            <div id="navBar" class="hidden sm:ml-6 sm:flex sm:items-center">
+                <button class="!rounded-button bg-custom text-white px-4 py-2 text-sm font-medium hover:bg-custom/90">
+                    로그인/회원가입
+                </button>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<main class="pt-16 mb-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
+        <h1 id="pageTitle" class="text-2xl font-bold text-gray-900 mb-4 text-center">Application 게시글 작성</h1>
+        <div class="flex justify-end items-center mt-8 max-w-6xl mx-auto">
+
+            <button class="!rounded-button bg-custom text-white px-8 py-4 text-sm font-medium hover:bg-custom/90 submit-application-button">Application 제출</button>
+        </div>
+        <div class="mt-12 flex justify-center max-w-6xl mx-auto">
+            <div class="bg-white p-8 rounded-lg shadow-lg w-[150%]">
+                <div class="space-y-6">
+                    <div class="grid grid-cols-2 gap-6">
+                        <div class="col-span-2">
+                            <label class="block text-sm font-medium text-gray-700">제목</label>
+                            <input type="text" id="applicationTitle" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-custom focus:ring-custom"/>
+                        </div>
+                        <div class="col-span-1">
+                            <label class="block text-sm font-medium text-gray-700">모집 시작</label>
+                            <div class="grid grid-cols-3 gap-2">
+                                <div>
+                                    <select id="startYear" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-custom focus:ring-custom">
+                                        <!-- Options for year -->
+                                    </select>
+                                    <span class="text-sm text-gray-500">년</span>
+                                </div>
+                                <div>
+                                    <select id="startMonth" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-custom focus:ring-custom">
+                                        <!-- Options for month -->
+                                    </select>
+                                    <span class="text-sm text-gray-500">월</span>
+                                </div>
+                                <div>
+                                    <select id="startDay" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-custom focus:ring-custom">
+                                        <!-- Options for day -->
+                                    </select>
+                                    <span class="text-sm text-gray-500">일</span>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-2 mt-2">
+                                <div>
+                                    <select id="startHour" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-custom focus:ring-custom">
+                                        <!-- Options for hour -->
+                                    </select>
+                                    <span class="text-sm text-gray-500">시</span>
+                                </div>
+                                <div>
+                                    <select id="startMinute" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-custom focus:ring-custom">
+                                        <!-- Options for minute -->
+                                    </select>
+                                    <span class="text-sm text-gray-500">분</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-span-1">
+                            <label class="block text-sm font-medium text-gray-700">모집 마감</label>
+                            <div class="grid grid-cols-3 gap-2">
+                                <div>
+                                    <select id="endYear" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-custom focus:ring-custom">
+                                        <!-- Options for year -->
+                                    </select>
+                                    <span class="text-sm text-gray-500">년</span>
+                                </div>
+                                <div>
+                                    <select id="endMonth" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-custom focus:ring-custom">
+                                        <!-- Options for month -->
+                                    </select>
+                                    <span class="text-sm text-gray-500">월</span>
+                                </div>
+                                <div>
+                                    <select id="endDay" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-custom focus:ring-custom">
+                                        <!-- Options for day -->
+                                    </select>
+                                    <span class="text-sm text-gray-500">일</span>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-2 mt-2">
+                                <div>
+                                    <select id="endHour" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-custom focus:ring-custom">
+                                        <!-- Options for hour -->
+                                    </select>
+                                    <span class="text-sm text-gray-500">시</span>
+                                </div>
+                                <div>
+                                    <select id="endMinute" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-custom focus:ring-custom">
+                                        <!-- Options for minute -->
+                                    </select>
+                                    <span class="text-sm text-gray-500">분</span>
+                                </div>
+                            </div>
+                        </div>
+
+                    <!-- 에디터를 적용할 요소 (컨테이너) -->
+                    <div id="editor"></div>
+
+                    <script>
+                        document.addEventListener("DOMContentLoaded", function() {
+                          //toastui 생성 및 기본 설정
+                          const editor = new toastui.Editor({
+                            el: document.querySelector('#editor'),
+                            height: '1000px',
+                            initialEditType: 'markdown',
+                            initialValue: '내용을 입력해 주세요.',
+                            previewStyle: 'vertical',
+                            customHTMLRenderer: {
+                              htmlBlock: {
+                                iframe(node) {
+                                  return [
+                                    {
+                                      type: 'openTag',
+                                      tagName: 'iframe',
+                                      outerNewLine: true,
+                                      attributes: node.attrs,
+                                    },
+                                    { type: 'html', content: node.childrenHTML ?? '' },
+                                    { type: 'closeTag', tagName: 'iframe', outerNewLine: true },
+                                  ];
+                                },
+                                div(node) {
+                                  return [
+                                    { type: 'openTag', tagName: 'div', outerNewLine: true, attributes: node.attrs },
+                                    { type: 'html', content: node.childrenHTML ?? '' },
+                                    { type: 'closeTag', tagName: 'div', outerNewLine: true },
+                                  ];
+                                },
+                              },
+                              htmlInline: {
+                                big(node, { entering }) {
+                                  return entering
+                                    ? { type: 'openTag', tagName: 'big', attributes: node.attrs }
+                                    : { type: 'closeTag', tagName: 'big' };
+                                },
+                              },
+                            },
+                          });
+
+                          // Add YouTube command
+                          //유튜브 링크를 통한 동영상 삽입 기능 추가
+                          editor.addCommand('markdown', 'addYoutube', () => {
+                            //툴바 아이템 클릭 시 나올 문구
+                            let url = prompt('추가할 youtube 영상의 주소창 url을 담아주세요!');
+                            if (!url) return false;
+
+                             //유튜브 문자열 파싱 정규식
+                            const match = url.match(/(?:https?:\/\/)?(?:www\.)?youtube\.com\/watch\?v=([^&]+)/);
+                            const videoId = match ? match[1] : '';
+
+                            if (!videoId) {
+                              alert('유효한 YouTube URL을 입력해 주세요.');
+                              return false;
+                            }
+                            //div 생성
+                            let str = `
+                              <div class="video-container">
+                                <iframe src="https://www.youtube.com/embed/${videoId}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                              </div>
+                            `;
+
+                            // Remove unnecessary whitespace and newlines
+                            str = str.replace(/\s+/g, ' ').trim();
+
+                            editor.insertText(str);
+                            return true;
+                          });
+
+                          // Add YouTube toolbar item
+                          //커스텀 툴바 아이템 생성
+                          const youtubeLogo = '/icons/youtubeIcon.jpg'; // 아이콘 이미지
+                          editor.insertToolbarItem(
+                            { groupIndex: 3, itemIndex: 3 },
+                            {
+                              name: 'youtube',
+                              tooltip: 'youtube',
+                              className: 'toastui-editor-toolbar-icons',
+                              style: { backgroundImage: `url(${youtubeLogo})`, backgroundSize: '25px', color: 'red' },
+                              command: 'addYoutube'
+                            }
+                          );
+
+                          // Remove existing addImageBlobHook and add a new one
+                          //이미지 추가 기능 조정
+                          editor.removeHook('addImageBlobHook');
+                          editor.addHook('addImageBlobHook', async (file, callback) => {
+                            const formData = new FormData();
+                            formData.append('multipartFile', file);
+
+                            //이미지 서버 예비 저장 API
+                            const imageURL = '/file/preUpload';
+
+                            //요청 전달
+                            try {
+                              const response = await fetch(imageURL,
+                              {
+                                method: 'POST',
+                                body: formData
+
+                              });
+
+                              //결과 체크
+                              if (!response.ok)
+                              {
+                                throw new Error('파일 업로드 실패');
+                              }
+
+                              //데이터 가져오고 에디터에 반영
+                              const data = await response.json();
+                              const filePath = data.filePath;
+                              const imageUrl = `/file/downloadImg?filePath=${encodeURIComponent(filePath)}`;
+                              callback(imageUrl, 'image alt attribute');
+                              editor.eventEmitter.emit('closePopup'); //팝업창 닫기
+                            }
+                            catch (error)
+                            {
+                              console.error('업로드 실패:', error);
+                            }
+                          });
+
+                          // Function to send request with token handling
+                          async function sendRequest(url, data) {
+                            const accessToken = localStorage.getItem('access');
+                            try {
+                              let response = await fetch(url, {
+                                method: 'POST',
+                                headers: {
+                                  'Content-Type': 'application/json',
+                                  'access': accessToken
+                                },
+                                body: JSON.stringify(data),
+                                credentials: 'include'
+                              });
+
+                              if (response.status === 406)
+                              {
+                                await reissueToken();
+                                response = await fetch(url, {
+                                  method: 'POST',
+                                  headers: {
+                                    'Content-Type': 'application/json',
+                                    'access': localStorage.getItem('access')
+                                  },
+                                  body: JSON.stringify(data),
+                                  credentials: 'include'
+                                });
+                              }
+                              if (!response.ok)
+                              {
+                                  const errorData = await response.json();
+                                  throw new Error(`Request failed with status ${response.status}: ${errorData.message}`);
+                              }
+
+                              return response;
+                            }
+                            catch (error) {
+                              console.error('Error:', error);
+                              throw error;
+                            }
+                          }
+
+                          // Function to reissue token
+                          async function reissueToken() {
+                              const reissueURL = '/reissue';
+                              try {
+                                  const response = await fetch(reissueURL, {
+                                      method: 'POST',
+                                      headers: {
+                                          'Content-Type': 'application/json'
+                                      },
+                                      credentials: 'include'
+                                  });
+
+                                  if (response.ok) {
+                                      const accessToken = response.headers.get('access');
+                                      localStorage.setItem('access', accessToken);
+                                  } else {
+                                      const errorData = await response.json();
+                                      throw new Error(`Token reissue failed with status ${response.status}: ${errorData.message}`);
+                                  }
+                              } catch (error) {
+                                  console.error('Error:', error);
+                                  throw error;
+                              }
+                          }
+
+
+                          // Populate select options for year, month, day, hour, and minute
+                          function populateSelectOptions() {
+                                const currentYear = new Date().getFullYear();
+                                const years = Array.from({ length: 10 }, (_, i) => currentYear + i);
+                                const months = Array.from({ length: 12 }, (_, i) => i + 1);
+                                const days = Array.from({ length: 31 }, (_, i) => i + 1);
+                                const hours = Array.from({ length: 24 }, (_, i) => i);
+                                const minutes = Array.from({ length: 60 }, (_, i) => i);
+
+                                populateOptions(document.getElementById('startYear'), years);
+                                populateOptions(document.getElementById('startMonth'), months);
+                                populateOptions(document.getElementById('startDay'), days);
+                                populateOptions(document.getElementById('startHour'), hours);
+                                populateOptions(document.getElementById('startMinute'), minutes);
+
+                                populateOptions(document.getElementById('endYear'), years);
+                                populateOptions(document.getElementById('endMonth'), months);
+                                populateOptions(document.getElementById('endDay'), days);
+                                populateOptions(document.getElementById('endHour'), hours);
+                                populateOptions(document.getElementById('endMinute'), minutes);
+                          }
+
+                          function populateOptions(selectElement, options) {
+                                options.forEach(option => {
+                                    const opt = document.createElement('option');
+                                    opt.value = option;
+                                    opt.textContent = option;
+                                    selectElement.appendChild(opt);
+                                });
+                          }
+
+
+
+                          // Function to gather selected values and convert to LocalDateTime
+                          function getSelectedDateTime(prefix) {
+                                const year = document.getElementById(`${prefix}Year`).value;
+                                const month = document.getElementById(`${prefix}Month`).value;
+                                const day = document.getElementById(`${prefix}Day`).value;
+                                const hour = document.getElementById(`${prefix}Hour`).value;
+                                const minute = document.getElementById(`${prefix}Minute`).value;
+
+                                //LocalDateTime 양식에 맞는지, 시간대 정보를 포함하고 있는지 등 분석해서 처리할 수 있어야 함
+                                return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}T${hour.padStart(2, '0')}:${minute.padStart(2, '0')}:00`;
+                          }
+
+                          function setSelectValue(selectId, value) {
+                                const selectElement = document.getElementById(selectId);
+                                selectElement.value = value;
+                          }
+
+                          function setDateTimeSelects(prefix, dateTime) {
+                                const date = new Date(dateTime);
+                                setSelectValue(`${prefix}Year`, date.getFullYear());
+                                setSelectValue(`${prefix}Month`, date.getMonth() + 1);
+                                setSelectValue(`${prefix}Day`, date.getDate());
+                                setSelectValue(`${prefix}Hour`, date.getHours());
+                                setSelectValue(`${prefix}Minute`, date.getMinutes());
+                          }
+
+
+                          // Function to send project data
+                            async function submitApplication() {
+                                //게시물의 데이터 수집 및 DTO 생성
+                              const title = document.getElementById('applicationTitle').value;
+                              const startTime = getSelectedDateTime('start');
+                              const endTime = getSelectedDateTime('end');
+                              const content = editor.getHTML();
+                              const attachmentFilePaths = Array.from(document.querySelectorAll('#attachmentFileList .file-item')).map(item => item.dataset.filePath);
+
+                              if (!title || !startTime || !endTime || !content.trim())
+                              {
+                                alert('모든 필드를 채워주세요.');
+                                return;
+                              }
+
+                              const isConfirmed = confirm('Are you sure you want to submit this Application?');
+                              if (!isConfirmed)
+                              {
+                                  return; // Exit the function if the user cancels
+                              }
+
+                                //projectDTO 생성
+                              const applicationDTO = {
+                                id : applicationId,
+                                title,
+                                startTime,
+                                endTime,
+                                content,
+                                attachmentFilePaths
+                              };
+
+                              //URL 설정
+                              const url = applicationId ? '/admin/fixApplication' : '/admin/writeApplication';
+
+                              try {
+                                  const response = await sendRequest(url, applicationDTO);
+
+                                  if (!response.ok) {
+                                      const errorData = await response.json();
+                                      throw new Error(`Request failed with status ${response.status}: ${errorData.message}`);
+                                  }
+
+                                  alert('Application 제출 성공');
+                                  navigateToAdminApplication();
+                              }
+                              catch (error) {
+                                  alert(`Error: ${error.message}`);
+                                  console.error('Error submitting Application:', error);
+                              }
+                            }
+
+                            // Attach event listeners to the submit buttons
+                            document.querySelector('.submit-application-button').addEventListener('click', submitApplication);
+                            populateSelectOptions();
+
+
+                            //게시물 수정을 위한 접근인지 확인
+                            let applicationId = null;
+
+                            // Check if applicationId exists in localStorage
+                            const storedApplicationId = localStorage.getItem('applicationId');
+                            if (storedApplicationId) {
+                              applicationId = storedApplicationId;
+                              localStorage.removeItem('applicationId');
+
+                              // Fetch project data by ID
+                              const url = '/getApplicationById';
+
+                              fetch(url, {
+                                  method: 'POST',
+                                  headers: {
+                                      'Content-Type': 'application/json'
+                                  },
+                                  body: JSON.stringify({ id: applicationId }),
+                                  credentials: 'include'
+                              })
+                              .then(response => {
+                                  if (!response.ok) {
+                                      throw new Error('Failed to fetch project data');
+                                  }
+                                  return response.json();
+                              })
+                              .then(applicationData => {
+                                  // Populate HTML elements with application data, 게시물 데이터 채우기 fixme
+                                  document.getElementById('applicationTitle').value = applicationData.title;
+                                  setDateTimeSelects('start', applicationData.startTime);
+                                  setDateTimeSelects('end', applicationData.endTime);
+                                  editor.insertText(application.content);
+
+                                  // Populate attachment files
+                                  const attachmentFileList = document.getElementById('attachmentFileList');
+                                  applicationData.attachmentFilePaths.forEach(filePath => {
+
+                                      //첨부파일 목록 div 생성
+                                      const fileName = filePath.split('/').pop();
+                                      const fileItem = document.createElement('div');
+                                      fileItem.classList.add('file-item', 'flex', 'items-center', 'mt-2');
+                                      fileItem.dataset.filePath = filePath;
+                                      fileItem.dataset.fileName = fileName;
+
+                                      const fileLabel = document.createElement('span');
+                                      fileLabel.textContent = fileName.split('_').slice(1).join('_');
+                                      fileLabel.classList.add('text-sm', 'font-medium', 'text-gray-700');
+
+                                        //첨부파일 제거 버튼
+                                      const deleteButton = document.createElement('button');
+                                      deleteButton.innerHTML = '&times;';
+                                      deleteButton.classList.add('text-red-500', 'ml-2');
+                                      deleteButton.onclick = () => {
+                                          attachmentFileList.removeChild(fileItem);
+                                      };
+
+                                      fileItem.appendChild(fileLabel);
+                                      fileItem.appendChild(deleteButton);
+                                      attachmentFileList.appendChild(fileItem);
+                                  });
+
+                                  // Change page title
+                                  document.getElementById('pageTitle').textContent = 'Application 게시글 수정';
+                              })
+                              .catch(error => {
+                                  console.error('Error fetching project data:', error);
+                              });
+                          }
+
+
+
+
+                        });
+                    </script>
+
+
+                    <!--          첨부 파일 html 및 로직 추가 필요-->
+                    <div class="mt-6">
+                        <label class="block text-sm font-medium text-gray-700">첨부 파일</label>
+                        <div class="mt-2 flex items-start space-x-4">
+                            <div id="attachmentDropZone" class="flex justify-center items-center w-64 h-36 px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-lg">
+                                <div class="space-y-1 text-center">
+                                    <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
+                                        <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                                    </svg>
+                                    <p class="text-xs text-gray-500">첨부파일을 드래그하거나 선택하세요</p>
+                                </div>
+                            </div>
+                            <button id="selectAttachmentButton" class="!rounded-button bg-custom text-white px-4 py-2 text-sm font-medium hover:bg-custom/90">첨부 파일 선택</button>
+                        </div>
+
+                        <!-- 첨부 파일 목록을 표시할 div 추가 -->
+                        <div id="attachmentFileList" class="mt-2"></div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+<footer class="bg-gray-900">
+    <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+        <div class="text-center text-gray-400 text-sm">
+            <p>© 2024 TEST IT 동아리. All rights reserved.</p>
+        </div>
+    </div>
+</footer>

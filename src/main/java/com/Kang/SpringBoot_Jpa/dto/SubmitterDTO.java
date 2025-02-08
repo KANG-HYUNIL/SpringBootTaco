@@ -3,6 +3,8 @@ package com.Kang.SpringBoot_Jpa.dto;
 
 import lombok.*;
 
+import java.util.List;
+
 @Data
 @Getter
 @Setter
@@ -12,5 +14,5 @@ import lombok.*;
 public class SubmitterDTO {
     private String id;
     private String name;
-    private String submittedFilePath;
+    private List<String> submittedFilePaths;
 }

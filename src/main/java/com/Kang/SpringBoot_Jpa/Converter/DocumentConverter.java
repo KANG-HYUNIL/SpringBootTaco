@@ -85,6 +85,7 @@ public class DocumentConverter {
     }
 
     // ApplicationDTO to ApplicationDocument
+    // ApplicationDTO to ApplicationDocument
     public static ApplicationDocument toApplicationDoc(ApplicationDTO applicationDTO) {
         ApplicationDocument applicationDocument = new ApplicationDocument();
         applicationDocument.setId(applicationDTO.getId());
@@ -98,7 +99,7 @@ public class DocumentConverter {
                     ApplicationDocument.Submitter submitter = new ApplicationDocument.Submitter();
                     submitter.setId(submitterDTO.getId());
                     submitter.setName(submitterDTO.getName());
-                    submitter.setSubmittedFilePath(submitterDTO.getSubmittedFilePath());
+                    submitter.setSubmittedFilePaths(submitterDTO.getSubmittedFilePaths());
                     return submitter;
                 })
                 .collect(Collectors.toList()));
@@ -119,7 +120,7 @@ public class DocumentConverter {
                     SubmitterDTO submitterDTO = new SubmitterDTO();
                     submitterDTO.setId(submitter.getId());
                     submitterDTO.setName(submitter.getName());
-                    submitterDTO.setSubmittedFilePath(submitter.getSubmittedFilePath());
+                    submitterDTO.setSubmittedFilePaths(submitter.getSubmittedFilePaths());
                     return submitterDTO;
                 })
                 .collect(Collectors.toList()));

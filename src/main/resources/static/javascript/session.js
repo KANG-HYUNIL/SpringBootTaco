@@ -55,8 +55,42 @@ document.addEventListener('DOMContentLoaded', async function () {
                     </div>
                 `;
                 sessionContainer.appendChild(sessionElement);
+
+                // Add event listener to the project element for popup
+                sessionElement.addEventListener('click', function() {
+                    showPopup(session);
+                });
+
             });
         });
+    }
+
+    // Function to show popup with session details
+    function showPopup(session) {
+        const popup = document.createElement('div');
+        popup.className = 'fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50';
+        popup.innerHTML = `
+            <div class="bg-white p-6 rounded-lg shadow-lg max-w-5xl w-full overflow-y-auto max-h-full relative">
+                <button class="absolute top-2 right-2 text-black hover:text-gray-700" onclick="closePopup()">
+                    <i class="fas fa-times fa-2x"></i>
+                </button>
+                <img src="/file/downloadImg?filePath=${encodeURIComponent(session.thumbnail)}" alt="Thumbnail" class="w-full h-auto mb-4"/>
+                <div class="border-t border-gray-300 mt-4 pt-4"></div>
+                <h3 class="text-2xl font-bold mb-4">세션명: ${session.title}</h3>
+                <div class="border-t border-gray-300 mt-4 pt-4"></div>
+                <p class="mb-4">${session.content}</p>
+                <div class="border-t border-gray-300 mt-4 pt-4">
+                    <h4 class="text-lg font-semibold mb-2">첨부 파일 목록:</h4>
+                    <ul>
+                        ${session.attachmentFilePaths.map(filePath => {
+                            const fileName = filePath.split('/').pop().split('_').slice(1).join('_');
+                            return `<li><a href="/file/downloadFile?filePath=${encodeURIComponent(filePath)}" class="text-blue-500 hover:underline">${fileName}</a></li>`;
+                        }).join('')}
+                    </ul>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(popup);
     }
 
     // Function to display sessions based on the selected term

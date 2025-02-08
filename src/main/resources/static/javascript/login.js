@@ -58,7 +58,7 @@ document.getElementById('loginForm').addEventListener('submit', function(event) 
                             const redirectToAdmin = localStorage.getItem('redirectToAdmin');
                             if (redirectToAdmin === 'true') {
                                 localStorage.removeItem('redirectToAdmin');
-                                window.location.href = '/admin';
+                                window.location.href = '/admin/';
                             } else {
                                 window.location.href = '/';
                             }

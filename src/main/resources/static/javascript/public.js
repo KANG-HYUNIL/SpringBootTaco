@@ -19,6 +19,10 @@ document.addEventListener("DOMContentLoaded", function() {
         window.location.href = '/faq';
     }
 
+    function navigateToApplication() {
+        window.location.href = '/application';
+    }
+
     function navigateToLogin() {
         window.location.href = '/account/login';
     }
@@ -63,9 +67,10 @@ document.addEventListener("DOMContentLoaded", function() {
         const userName = localStorage.getItem('userName');
         console.log(userName);
         const navBar = document.getElementById('navBar');
+        const accessToken = localStorage.getItem('access');
 
         //로그인 상태라면 사용자의 이름 표시
-        if (userName)
+        if (userName && accessToken)
         {
             navBar.innerHTML = `
                 <span class="text-sm font-medium text-gray-900">안녕하세요, ${userName} 님</span>
@@ -96,6 +101,6 @@ document.addEventListener("DOMContentLoaded", function() {
     window.navigateToLogin = navigateToLogin;
     window.navigateToSignUp = navigateToSignUp;
     window.navigateToLogout = navigateToLogout;
-
+    window.navigateToApplication = navigateToApplication;
     updateNavBar();
 });

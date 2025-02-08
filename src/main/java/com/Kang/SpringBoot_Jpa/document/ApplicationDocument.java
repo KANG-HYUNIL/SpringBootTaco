@@ -24,7 +24,7 @@ public class ApplicationDocument {
     public static class Submitter {
         private String id;
         private String name;
-        private String submittedFilePath;
+        private List<String> submittedFilePaths;
     }
 
 }

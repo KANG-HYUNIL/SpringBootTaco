@@ -66,6 +66,13 @@ public class AdminController {
         return "/admin/adminWriteSession";
     }
 
+    @GetMapping("/application/write")
+    public String getWriteApplication(HttpServletRequest request) {
+        String ipAddress = request.getRemoteAddr();
+        log.info("Admin write application page accessed by IP: {}", ipAddress);
+        return "/admin/adminWriteApplication";
+    }
+
     @GetMapping("/session/fix")
     public String getFixSession(HttpServletRequest request) {
         String ipAddress = request.getRemoteAddr();
@@ -78,6 +85,20 @@ public class AdminController {
         String ipAddress = request.getRemoteAddr();
         log.info("Admin fix project page accessed by IP: {}", ipAddress);
         return "/admin/adminWriteProject";
+    }
+
+    @GetMapping("/application/fix")
+    public String getFixApplication(HttpServletRequest request) {
+        String ipAddress = request.getRemoteAddr();
+        log.info("Admin fix application page accessed by IP: {}", ipAddress);
+        return "/admin/adminWriteApplication";
+    }
+
+    @GetMapping("/application/content")
+    public String getAdminApplicationSubmit(@RequestParam("id") String id, HttpServletRequest request) {
+        String ipAddress = request.getRemoteAddr();
+        log.info("Admin Application Content page ID: {} accessed by IP: {}", id, ipAddress);
+        return "/admin/adminApplicationSubmit";
     }
 
 
@@ -171,6 +192,15 @@ public class AdminController {
         String accessToken = request.getHeader("access");
         adminService.deleteApplication(applicationDTO, accessToken);
         return new ResponseEntity<>("Application Delete Complete", HttpStatus.OK);
+    }
+
+    @PostMapping("/fixApplication")
+    @ResponseBody
+    public ResponseEntity<?> fixApplication(@RequestBody ApplicationDTO applicationDTO, HttpServletRequest request) {
+        String accessToken = request.getHeader("access");
+        //fixme
+        adminService.deleteApplication(applicationDTO, accessToken);
+        return new ResponseEntity<>("Application Fix Complete", HttpStatus.OK);
     }
 
 

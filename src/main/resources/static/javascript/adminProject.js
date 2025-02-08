@@ -123,6 +123,14 @@ document.addEventListener("DOMContentLoaded", async function() {
             const selectedTerm = termSelect.value;
             displayProjects(selectedTerm);
         });
+
+        // Automatically select the last option
+
+        termSelect.selectedIndex = 0;
+        displayProjects(termSelect.value);
+
+
+
     }
 
     // Project 삭제 요청 메서드
@@ -181,20 +189,21 @@ document.addEventListener("DOMContentLoaded", async function() {
         const popup = document.createElement('div');
         popup.className = 'fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50';
         popup.innerHTML = `
-            <div class="bg-white p-6 rounded-lg shadow-lg max-w-3xl w-full overflow-y-auto max-h-full">
-                <button class="absolute top-2 right-2 text-gray-500 hover:text-gray-700" onclick="closePopup()">
+            <div class="bg-white p-6 rounded-lg shadow-lg max-w-5xl w-full overflow-y-auto max-h-full relative">
+                <button class="absolute top-2 right-2 text-black hover:text-gray-700" onclick="closePopup()">
                     <i class="fas fa-times fa-2x"></i>
                 </button>
                 <img src="/file/downloadImg?filePath=${encodeURIComponent(project.thumbnail)}" alt="Thumbnail" class="w-full h-auto mb-4"/>
-                <p class="text-lg font-semibold mb-2">${project.term}</p>
-                <p class="text-lg font-semibold mb-2">${project.team}</p>
-                <h3 class="text-2xl font-bold mb-4">${project.title}</h3>
+                <div class="border-t border-gray-300 mt-4 pt-4"></div>
+                <p class="text-lg font-semibold mb-2">팀명: ${project.team}</p>
+                <h3 class="text-2xl font-bold mb-4">프로젝트명: ${project.title}</h3>
+                <div class="border-t border-gray-300 mt-4 pt-4"></div>
                 <p class="mb-4">${project.content}</p>
                 <div class="border-t border-gray-300 mt-4 pt-4">
                     <h4 class="text-lg font-semibold mb-2">첨부 파일 목록:</h4>
                     <ul>
                         ${project.attachmentFilePaths.map(filePath => {
-                            const fileName = filePath.split('/').pop();
+                            const fileName = filePath.split('/').pop().split('_').slice(1).join('_');
                             return `<li><a href="/file/downloadFile?filePath=${encodeURIComponent(filePath)}" class="text-blue-500 hover:underline">${fileName}</a></li>`;
                         }).join('')}
                     </ul>

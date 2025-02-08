@@ -43,6 +43,13 @@ document.addEventListener("DOMContentLoaded", function() {
         sendTokenGetURL(url);
     }
 
+    //Admin 신청 게시물 작성 페이지
+    function navigateToAdminWriteApplication()
+    {
+        const url = '/admin/application/write';
+        sendTokenGetURL(url);
+    }
+
     //Admin 페이지 사용 위한 Token 전송 로직
     function sendTokenGetURL(url) {
         // Access Token 가져오기
@@ -208,4 +215,5 @@ document.addEventListener("DOMContentLoaded", function() {
     window.navigateToLogout = navigateToLogout;
     window.navigateToAdminWriteProject = navigateToAdminWriteProject;
     window.navigateToAdminWriteSession = navigateToAdminWriteSession;
+    window.navigateToAdminWriteApplication = navigateToAdminWriteApplication;
 });

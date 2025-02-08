@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Collections;
+
 //Spring boot의 Security filter를 거치지 않는 jwt token 을 처리하는 controller
 @RestController
 public class TokenValidationController {
@@ -33,7 +35,8 @@ public class TokenValidationController {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
 
-        return new ResponseEntity<>(HttpStatus.OK);
+        String username = jwtUtil.getUsername(accessToken);
+        return new ResponseEntity<>(Collections.singletonMap("id", username), HttpStatus.OK);
     }
 
     //jwt token 유효성 검사, ADMIN에게만 허용
@@ -51,6 +54,7 @@ public class TokenValidationController {
             return new ResponseEntity<>("token role error", HttpStatus.FORBIDDEN);
         }
 
-        return new ResponseEntity<>(HttpStatus.OK);
+        String username = jwtUtil.getUsername(accessToken);
+        return new ResponseEntity<>(Collections.singletonMap("id", username), HttpStatus.OK);
     }
 }
