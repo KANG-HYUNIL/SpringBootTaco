@@ -27,7 +27,7 @@ document.getElementById('loginForm').addEventListener('submit', function(event) 
         if (response.ok) {
             return response.json().then(data => {
                 const accessToken = response.headers.get('access'); // 헤더에서 access token을 가져옴
-                //const refreshToken = getCookie('refresh'); // 쿠키에서 refresh token을 가져옴
+
 
                 // 토큰을 로컬 스토리지에 저장
                 //refresh token은 쿠키로 자동 저장
@@ -93,11 +93,6 @@ document.getElementById('loginForm').addEventListener('submit', function(event) 
     });
 });
 
-function getCookie(name) {
-    const value = `; ${document.cookie}`;
-    const parts = value.split(`; ${name}=`);
-    if (parts.length === 2) return parts.pop().split(';').shift();
-}
 
 function handleLoginError(status, errorMessage) {
     let defaultMessage = '로그인에 실패했습니다. : ';
