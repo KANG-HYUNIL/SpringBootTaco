@@ -1,8 +1,9 @@
 import FetchRequestBuilder from "./fetchRequest.js";
+import * as URLS from "./fetchURLStr.js";
 
 export async function fetchProjectData() {
     try {
-        const url = "/api/getProjectData";
+        const url = URLS.API.GetProjectData;
         const fetchRequest = new FetchRequestBuilder()
             .setUrl(url)
             .setMethod("GET")

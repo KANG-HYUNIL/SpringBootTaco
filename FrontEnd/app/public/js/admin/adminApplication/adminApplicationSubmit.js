@@ -1,16 +1,18 @@
-import { fetchApplicationDetails, displayAttachments, displaySubmitters } from "../../utils/applicationUtils.js";
+import { fetchApplicationDetails, displayAttachments, displaySubmitters, formatDateTime } from "../../utils/applicationUtils.js";
 import { accessTokenValidate, fetchWithAccessToken } from "../../utils/tokenHandle.js";
+import * as URLS from "../../utils/fetchURLStr.js";
+
 
 // Extract application id from URL
 const urlParams = new URLSearchParams(window.location.search);
 let applicationId = urlParams.get('id');
 
 function fetchAndDisplayApplicationData() {
-    const url = `/api/getApplicationById?id=${applicationId}`;
+    const url = URLS.API.GetApplicationById;
     fetchApplicationDetails(url, (data) => {
         document.getElementById('applicationTitle').textContent = data.title;
-        document.getElementById('startDate').textContent = data.startTime.split('T')[0];
-        document.getElementById('endDate').textContent = data.endTime.split('T')[0];
+        document.getElementById('startDate').textContent = formatDateTime(data.startTime);
+        document.getElementById('endDate').textContent = formatDateTime(data.endTime);
         document.getElementById('applicationContent').innerHTML = data.content;
         displayAttachments(data.attachmentFilePaths);
         displaySubmitters(data.submitters);
@@ -25,7 +27,7 @@ function editApplication() {
     }
 
     localStorage.setItem('applicationId', applicationId);
-    window.location.href = '/admin/application/fix';
+    window.location.href = URLS.AdminPage.FixApplication;
 }
 
 async function deleteApplication() {
@@ -41,7 +43,7 @@ async function deleteApplication() {
         return;
     }
 
-    const url = '/api/admin/deleteApplication';
+    const url = URLS.API.DeleteApplication;
     const applicationDTO = { id: applicationId };
 
     try {
@@ -50,7 +52,7 @@ async function deleteApplication() {
         if (response.ok) 
         {
             alert('Application deleted successfully.');
-            window.location.href = '/admin/application';
+            window.location.href = URLS.AdminPage.Application;
         } 
         else 
         {

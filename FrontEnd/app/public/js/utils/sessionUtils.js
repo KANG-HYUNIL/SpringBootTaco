@@ -1,8 +1,10 @@
 import FetchRequestBuilder from "./fetchRequest.js";
+import * as URLS from "./fetchURLStr.js";
+
 
 export async function fetchSessionData() {
     try {
-        const url = "/api/getSessionData";
+        const url = URLS.API.GetSessionData;
         const fetchRequest = new FetchRequestBuilder()
             .setUrl(url)
             .setMethod("GET")

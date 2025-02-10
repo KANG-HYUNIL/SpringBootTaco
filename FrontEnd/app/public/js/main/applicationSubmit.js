@@ -1,5 +1,7 @@
-import { fetchApplicationDetails, displayAttachments, displaySubmitters } from "../utils/applicationUtils.js";
+import { fetchApplicationDetails, displayAttachments, displaySubmitters, formatDateTime  } from "../utils/applicationUtils.js";
 import { accessTokenValidate, fetchWithAccessToken } from "../utils/tokenHandle.js";
+import * as URLS from "../utils/fetchURLStr.js";
+
 
 // Extract application id from URL
 const urlParams = new URLSearchParams(window.location.search);
@@ -7,11 +9,11 @@ let applicationId = urlParams.get('id');
 
 // application 게시물의 세부 데이터 가져와 표시하기
 async function fetchAndDisplayApplicationData() {
-    const url = `/api/getApplicationById?id=${applicationId}`;
+    const url = URLS.API.GetApplicationById(applicationId);
     fetchApplicationDetails(url, (data) => {
         document.getElementById('applicationTitle').textContent = data.title;
-        document.getElementById('startDate').textContent = data.startTime.split('T')[0];
-        document.getElementById('endDate').textContent = data.endTime.split('T')[0];
+        document.getElementById('startDate').textContent = formatDateTime(data.startTime);
+        document.getElementById('endDate').textContent = formatDateTime(data.endTime);
         document.getElementById('applicationContent').innerHTML = data.content;
         displayAttachments(data.attachmentFilePaths);
         handleSubmitterList(data.submitters);
@@ -61,7 +63,7 @@ function setSubmitBtn() {
                 submitApplication();
             } else {
                 alert('로그인이 필요합니다.');
-                window.location.href = '/account/login';
+                window.location.href = URLS.UserPage.Login;
             }
         }
     });
@@ -71,7 +73,7 @@ async function submitApplication() {
     const filePaths = Array.from(document.querySelectorAll('#attachmentFileList .file-item'))
         .map(item => item.dataset.filePath);
 
-    const url = `/application/submit?id=${applicationId}`;
+    const url = URLS.API.SubmitApplication(applicationId);
     const body = { filePath: filePaths[0] };
 
     try {
@@ -80,7 +82,7 @@ async function submitApplication() {
         if (response.ok) 
             {
             alert('제출 완료');
-            window.location.href = '/application';
+            window.location.href = URLS.UserPage.Application;
         } 
         else if (response.status === 400) 
         {
@@ -91,7 +93,7 @@ async function submitApplication() {
             const data = await response.json();
             console.error(`${response.status}: ${data.message}`);
             alert('알 수 없는 에러 발생');
-            window.location.href = '/account/login';
+            window.location.href = URLS.UserPage.Application;
         }
     } catch (error) {
         console.error('Error during submission:', error);

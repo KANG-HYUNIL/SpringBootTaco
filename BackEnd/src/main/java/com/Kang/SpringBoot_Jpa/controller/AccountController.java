@@ -25,19 +25,19 @@ public class AccountController {
     //계정 관련 컨트롤러
     private final AccountService accountService;
 
-    @GetMapping("/login")
-    public String login(HttpServletRequest request) {
-        String ipAddress = request.getRemoteAddr();
-        log.info("Login page accessed by IP: {}", ipAddress);
-        return "/account/login";
-    }
-
-    @GetMapping("/signup")
-    public String signup(HttpServletRequest request) {
-        String ipAddress = request.getRemoteAddr();
-        log.info("Signup page accessed by IP: {}", ipAddress);
-        return "/account/signup";
-    }
+//    @GetMapping("/login")
+//    public String login(HttpServletRequest request) {
+//        String ipAddress = request.getRemoteAddr();
+//        log.info("Login page accessed by IP: {}", ipAddress);
+//        return "/account/login";
+//    }
+//
+//    @GetMapping("/signup")
+//    public String signup(HttpServletRequest request) {
+//        String ipAddress = request.getRemoteAddr();
+//        log.info("Signup page accessed by IP: {}", ipAddress);
+//        return "/account/signup";
+//    }
 
     //회원가입 요청 POST 처리 메서드
     @PostMapping("/signup")

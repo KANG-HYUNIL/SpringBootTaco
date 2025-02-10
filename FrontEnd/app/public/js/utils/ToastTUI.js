@@ -1,3 +1,5 @@
+import * as URLS from "./fetchURLStr.js";
+
 export async function initializeToastEditor(editorElementId) {
     // 외부 스크립트가 로드될 때까지 기다리는 함수
     await new Promise((resolve, reject) => {
@@ -90,7 +92,7 @@ export async function initializeToastEditor(editorElementId) {
         const formData = new FormData();
         formData.append('multipartFile', file);
 
-        const imageURL = '/api/file/preUpload';
+        const imageURL = URLS.API.FilePreUpload;
 
         try {
             const response = await fetch(imageURL, {
@@ -104,7 +106,7 @@ export async function initializeToastEditor(editorElementId) {
 
             const data = await response.json();
             const filePath = data.filePath;
-            const imageUrl = `/file/downloadImg?filePath=${encodeURIComponent(filePath)}`;
+            const imageUrl = URLS.API.FileDownloadImg(filePath);
             callback(imageUrl, 'image alt attribute');
             editor.eventEmitter.emit('closePopup');
         } catch (error) {

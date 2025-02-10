@@ -1,11 +1,13 @@
 import FetchRequestBuilder from "../utils/fetchRequest.js";
 import { fetchWithAccessToken } from "../utils/tokenHandle.js";
+import * as URLS from "../utils/fetchURLStr.js";
+
 
 //사용자 id로 검색
 // 사용자 id로 검색
 async function searchById() {
     const id = document.getElementById('searchById').value;
-    const url = '/api/account/getUserById';
+    const url = URLS.API.GetUserById;
     const userDTO = { id: id };
 
     try {
@@ -37,7 +39,7 @@ async function searchById() {
 //사용자 name으로 정보 찾기
 async function searchByName() {
     const name = document.getElementById('searchByName').value;
-    const url = '/api/account/getUserByName';
+    const url = URLS.API.GetUserByName;
     const userDTO = { name: name };
 
     try {
@@ -82,7 +84,7 @@ function displayUserInfo(user) {
 
 // 사용자 role 변경
 async function setRole(userId, role) {
-    const url = role === 'ROLE_ADMIN' ? '/api/admin/setRoleAdmin' : '/api/admin/setRoleUser';
+    const url = role === 'ROLE_ADMIN' ? URLS.API.SetRoleAdmin : URLS.API.SetRoleUser;
     const userDTO = { id: userId };
 
     try {

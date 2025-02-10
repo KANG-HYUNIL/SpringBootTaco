@@ -1,6 +1,7 @@
 import { fetchProjectData, setOptions, displayProjects, addSelectEventListener } from "../../utils/projectUtils.js";
 import { projectElementTemplate, projectPopupTemplate } from "../../../htmlTemplates/admin/adminProjectHTMLTemplates.js"
 import {fetchWithAccessToken} from "../../utils/tokenHandle.js";
+import * as URLS from "../../utils/fetchURLStr.js";
 
 const termSelect = document.getElementById('termSelect');
 const projectContainer = document.getElementById('projectContainer');
@@ -38,7 +39,7 @@ function setProjectElements(projectData) {
                 if (confirm('Project 수정?')) {
                     const projectId = projectElement.querySelector('.project-id').textContent;
                     localStorage.setItem('projectId', projectId);
-                    location.href = '/admin/project/fix';
+                    location.href = URLS.AdminPage.FixProject;
                 }
             });
 
@@ -53,7 +54,7 @@ function setProjectElements(projectData) {
 
 // Project 삭제 요청 메서드
 async function deleteProject(projectId) {
-    const url = '/api/admin/deleteProject';
+    const url = URLS.API.DeleteProject;
     const projectDTO = { id: projectId };
 
     try {

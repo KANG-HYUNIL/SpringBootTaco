@@ -13,9 +13,12 @@ router.get("/about", ctrl.main.about);
 
 router.get("/faq", ctrl.main.faq);
 
+
 router.get("/project", ctrl.main.project);
 
+
 router.get("/session", ctrl.main.session);
+
 
 router.get("/application", ctrl.main.application);
 
@@ -31,17 +34,20 @@ router.get("/account/signup", ctrl.account.signup);
 
 router.get("/admin", ctrl.admin.main);
 
+
 router.get("/admin/project", ctrl.admin.project);
 
 router.get("/admin/project/write", ctrl.admin.projectCreate);
 
 router.get("/admin/project/fix", ctrl.admin.projectFix);
 
+
 router.get("/admin/session", ctrl.admin.session);
 
 router.get("/admin/session/write", ctrl.admin.sessionCreate);
 
 router.get("/admim/session/fix", ctrl.admin.sessionFix);
+
 
 router.get("/admin/application", ctrl.admin.application);
 

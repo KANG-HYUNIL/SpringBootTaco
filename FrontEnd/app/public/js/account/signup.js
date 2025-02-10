@@ -1,10 +1,12 @@
 import FetchRequestBuilder from "../utils/fetchRequest.js";
+import * as URLS from "../utils/fetchURLStr.js";
+
 // signup.js
 
 // 이메일 인증번호 요청을 처리하는 메서드
 async function requestAuthCode(email) {
     
-    const url = '/api/member/email/signup_verification_req';
+    const url = URLS.API.SignUpVerificationReq;
 
     const authRequest = new FetchRequestBuilder()
         .setUrl(url)
@@ -28,7 +30,7 @@ async function requestAuthCode(email) {
 
 // 회원가입 요청을 처리하는 메서드
 async function handleSignup(username, password, name, email, authCode) {
-    const url = '/account/signup';
+    const url = URLS.API.SignUp;
 
     const signupRequest = new FetchRequestBuilder()
         .setUrl(url)
@@ -48,7 +50,7 @@ async function handleSignup(username, password, name, email, authCode) {
     if (response.ok) 
     {
         alert('회원가입이 성공적으로 완료되었습니다.');
-        window.location.href = '/account/login';
+        window.location.href = URLS.UserPage.Login;
     } 
     else 
     {

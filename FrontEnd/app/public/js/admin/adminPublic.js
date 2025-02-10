@@ -1,54 +1,40 @@
 import FetchRequestBuilder from "../utils/fetchRequest.js";
 import {accessTokenValidate} from "../utils/tokenHandle.js";
+import * as URLS from "../utils/fetchURLStr.js";
 
-//Admin 메인 페이지
+// Admin 메인 페이지
 export function navigateToAdminHome() {
-
-    const url = "/admin";
-    window.location.href = url;
+    window.location.href = URLS.AdminPage.Home;
 }
 
-//Admin 프로젝트 페이지
+// Admin 프로젝트 페이지
 export function navigateToAdminProject() {
-
-    const url = '/admin/project';
-    window.location.href = url;
+    window.location.href = URLS.AdminPage.Project;
 }
 
-//Admin 세션 페이지
+// Admin 세션 페이지
 export function navigateToAdminSession() {
-
-    const url = '/admin/session';
-    window.location.href = url;
+    window.location.href = URLS.AdminPage.Session;
 }
 
-//Admin 신청 포멧 페이지
-export function navigateToAdminApplication(){
-
-    const url = '/admin/application';
-    window.location.href = url;
+// Admin 신청 포멧 페이지
+export function navigateToAdminApplication() {
+    window.location.href = URLS.AdminPage.Application;
 }
 
-//Admin 프로젝트 작성 페이지
-function navigateToAdminWriteProject()
-{
-    //alert("project");
-    const url = '/admin/project/write';
-    window.location.href = url;
+// Admin 프로젝트 작성 페이지
+function navigateToAdminWriteProject() {
+    window.location.href = URLS.AdminPage.WriteProject;
 }
 
-//Admin 세션 작성 페이지
-function navigateToAdminWriteSession()
-{
-    const url = '/admin/session/write';
-    window.location.href = url;
+// Admin 세션 작성 페이지
+function navigateToAdminWriteSession() {
+    window.location.href = URLS.AdminPage.WriteSession;
 }
 
-//Admin 신청 게시물 작성 페이지
-function navigateToAdminWriteApplication()
-{
-    const url = '/admin/application/write';
-    window.location.href = url;
+// Admin 신청 게시물 작성 페이지
+function navigateToAdminWriteApplication() {
+    window.location.href = URLS.AdminPage.WriteApplication;
 }
 
 //로그인 페이지로 리다이렉트
@@ -60,7 +46,7 @@ function redirectToLogin() {
 
 async function navigateToLogout() {
 
-    const url = '/api/logout';
+    const url = URLS.API.Logout;
     const fetchRequest = new FetchRequestBuilder()
         .setUrl(url)
         .setMethod("POST")

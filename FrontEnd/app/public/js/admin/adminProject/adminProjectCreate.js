@@ -1,7 +1,8 @@
 import {initializeToastEditor} from "../../utils/ToastTUI.js";
 import { fetchWithAccessToken } from "../../utils/tokenHandle.js";
 import {navigateToAdminProject} from "../adminPublic.js";
-
+import * as URLS from "../../utils/fetchURLStr.js";
+import { populateAttachmentFileList } from "../../utils/fileUtils.js";
 
 document.addEventListener("DOMContentLoaded", async function() {
 
@@ -42,7 +43,7 @@ document.addEventListener("DOMContentLoaded", async function() {
         };
 
         // URL 설정
-        const url = projectId ? '/admin/fixProject' : '/admin/writeProject';
+        const url = projectId ? URLS.API.FixProject : URLS.API.WriteProject;
 
         try {
             const response = await fetchWithAccessToken(url, projectDTO);
@@ -65,7 +66,7 @@ document.addEventListener("DOMContentLoaded", async function() {
 
     // Function to fetch project data by ID
     async function getProjectById(projectId) {
-        const url = '/getProjectById';
+        const url = URLS.API.GetProjectById;
         try {
             const response = await fetchWithAccessToken(url, { id: projectId });
 
@@ -103,28 +104,7 @@ document.addEventListener("DOMContentLoaded", async function() {
 
                 // Populate attachment files
                 const attachmentFileList = document.getElementById('attachmentFileList');
-                projectData.attachmentFilePaths.forEach(filePath => {
-                    const fileName = filePath.split('/').pop();
-                    const fileItem = document.createElement('div');
-                    fileItem.classList.add('file-item', 'flex', 'items-center', 'mt-2');
-                    fileItem.dataset.filePath = filePath;
-                    fileItem.dataset.fileName = fileName;
-
-                    const fileLabel = document.createElement('span');
-                    fileLabel.textContent = fileName.split('_').slice(1).join('_');
-                    fileLabel.classList.add('text-sm', 'font-medium', 'text-gray-700');
-
-                    const deleteButton = document.createElement('button');
-                    deleteButton.innerHTML = '&times;';
-                    deleteButton.classList.add('text-red-500', 'ml-2');
-                    deleteButton.onclick = () => {
-                        attachmentFileList.removeChild(fileItem);
-                    };
-
-                    fileItem.appendChild(fileLabel);
-                    fileItem.appendChild(deleteButton);
-                    attachmentFileList.appendChild(fileItem);
-                });
+                populateAttachmentFileList(attachmentFileList, projectData.attachmentFilePaths);
 
                 // Change page title
                 document.getElementById('pageTitle').textContent = 'Project 게시글 수정';

@@ -28,86 +28,86 @@ public class AdminController {
     private final AdminService adminService;
 
 
-    //admin 페이지 넘겨주는 메소드
-    @GetMapping("/")
-    public String admin(HttpServletRequest request) {
-        String ipAddress = request.getRemoteAddr();
-        log.info("Admin page accessed by IP: {}", ipAddress);
-        return "/admin/admin";
-    }
-
-    @GetMapping("/project")
-    public String getProject(HttpServletRequest request, Model model) {
-        String ipAddress = request.getRemoteAddr();
-        log.info("Admin project page accessed by IP: {}", ipAddress);
-
-        return "/admin/adminProject";
-    }
-
-    @GetMapping("/session")
-    public String getSession(HttpServletRequest request, Model model) {
-        String ipAddress = request.getRemoteAddr();
-        log.info("Admin session page accessed by IP: {}", ipAddress);
-
-        return "/admin/adminSession";
-    }
-
-    @GetMapping("/application")
-    public String getApplication(HttpServletRequest request, Model model) {
-        String ipAddress = request.getRemoteAddr();
-        log.info("Admin application page accessed by IP: {}", ipAddress);
-
-        return "/admin/adminApplication";
-    }
-
-    @GetMapping("/project/write")
-    public String getWriteProject(HttpServletRequest request, Model model) {
-        String ipAddress = request.getRemoteAddr();
-        log.info("Admin write project page accessed by IP: {}", ipAddress);
-        return "/admin/adminWriteProject";
-    }
-
-    @GetMapping("/session/write")
-    public String getWriteSession(HttpServletRequest request) {
-        String ipAddress = request.getRemoteAddr();
-        log.info("Admin write session page accessed by IP: {}", ipAddress);
-        return "/admin/adminWriteSession";
-    }
-
-    @GetMapping("/application/write")
-    public String getWriteApplication(HttpServletRequest request) {
-        String ipAddress = request.getRemoteAddr();
-        log.info("Admin write application page accessed by IP: {}", ipAddress);
-        return "/admin/adminWriteApplication";
-    }
-
-    @GetMapping("/session/fix")
-    public String getFixSession(HttpServletRequest request) {
-        String ipAddress = request.getRemoteAddr();
-        log.info("Admin fix session page accessed by IP: {}", ipAddress);
-        return "/admin/adminWriteSession";
-    }
-
-    @GetMapping("/project/fix")
-    public String getFixProject(HttpServletRequest request) {
-        String ipAddress = request.getRemoteAddr();
-        log.info("Admin fix project page accessed by IP: {}", ipAddress);
-        return "/admin/adminWriteProject";
-    }
-
-    @GetMapping("/application/fix")
-    public String getFixApplication(HttpServletRequest request) {
-        String ipAddress = request.getRemoteAddr();
-        log.info("Admin fix application page accessed by IP: {}", ipAddress);
-        return "/admin/adminWriteApplication";
-    }
-
-    @GetMapping("/application/content")
-    public String getAdminApplicationSubmit(@RequestParam("id") String id, HttpServletRequest request) {
-        String ipAddress = request.getRemoteAddr();
-        log.info("Admin Application Content page ID: {} accessed by IP: {}", id, ipAddress);
-        return "/admin/adminApplicationSubmit";
-    }
+//    //admin 페이지 넘겨주는 메소드
+//    @GetMapping("/")
+//    public String admin(HttpServletRequest request) {
+//        String ipAddress = request.getRemoteAddr();
+//        log.info("Admin page accessed by IP: {}", ipAddress);
+//        return "/admin/admin";
+//    }
+//
+//    @GetMapping("/project")
+//    public String getProject(HttpServletRequest request, Model model) {
+//        String ipAddress = request.getRemoteAddr();
+//        log.info("Admin project page accessed by IP: {}", ipAddress);
+//
+//        return "/admin/adminProject";
+//    }
+//
+//    @GetMapping("/session")
+//    public String getSession(HttpServletRequest request, Model model) {
+//        String ipAddress = request.getRemoteAddr();
+//        log.info("Admin session page accessed by IP: {}", ipAddress);
+//
+//        return "/admin/adminSession";
+//    }
+//
+//    @GetMapping("/application")
+//    public String getApplication(HttpServletRequest request, Model model) {
+//        String ipAddress = request.getRemoteAddr();
+//        log.info("Admin application page accessed by IP: {}", ipAddress);
+//
+//        return "/admin/adminApplication";
+//    }
+//
+//    @GetMapping("/project/write")
+//    public String getWriteProject(HttpServletRequest request, Model model) {
+//        String ipAddress = request.getRemoteAddr();
+//        log.info("Admin write project page accessed by IP: {}", ipAddress);
+//        return "/admin/adminWriteProject";
+//    }
+//
+//    @GetMapping("/session/write")
+//    public String getWriteSession(HttpServletRequest request) {
+//        String ipAddress = request.getRemoteAddr();
+//        log.info("Admin write session page accessed by IP: {}", ipAddress);
+//        return "/admin/adminWriteSession";
+//    }
+//
+//    @GetMapping("/application/write")
+//    public String getWriteApplication(HttpServletRequest request) {
+//        String ipAddress = request.getRemoteAddr();
+//        log.info("Admin write application page accessed by IP: {}", ipAddress);
+//        return "/admin/adminWriteApplication";
+//    }
+//
+//    @GetMapping("/session/fix")
+//    public String getFixSession(HttpServletRequest request) {
+//        String ipAddress = request.getRemoteAddr();
+//        log.info("Admin fix session page accessed by IP: {}", ipAddress);
+//        return "/admin/adminWriteSession";
+//    }
+//
+//    @GetMapping("/project/fix")
+//    public String getFixProject(HttpServletRequest request) {
+//        String ipAddress = request.getRemoteAddr();
+//        log.info("Admin fix project page accessed by IP: {}", ipAddress);
+//        return "/admin/adminWriteProject";
+//    }
+//
+//    @GetMapping("/application/fix")
+//    public String getFixApplication(HttpServletRequest request) {
+//        String ipAddress = request.getRemoteAddr();
+//        log.info("Admin fix application page accessed by IP: {}", ipAddress);
+//        return "/admin/adminWriteApplication";
+//    }
+//
+//    @GetMapping("/application/content")
+//    public String getAdminApplicationSubmit(@RequestParam("id") String id, HttpServletRequest request) {
+//        String ipAddress = request.getRemoteAddr();
+//        log.info("Admin Application Content page ID: {} accessed by IP: {}", id, ipAddress);
+//        return "/admin/adminApplicationSubmit";
+//    }
 
 
     //본문 게시물 수정 요청 메서드

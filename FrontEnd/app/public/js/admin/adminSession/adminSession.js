@@ -1,6 +1,8 @@
 import { fetchSessionData, setOptions, displaySessions, addSelectEventListener } from "../../utils/sessionUtils.js";
 import { sessionElementTemplate, sessionPopupTemplate } from "../../../htmlTemplates/admin/adminSessionHTMLTemplates.js";
 import { fetchWithAccessToken } from "../../utils/tokenHandle.js";
+import * as URLS from "../../utils/fetchURLStr.js"
+
 
 const termSelect = document.getElementById('termSelect');
 const sessionContainer = document.getElementById('sessionContainer');
@@ -37,7 +39,7 @@ function setSessionElements(sessionData) {
                 if (confirm('Session 수정?')) {
                     const sessionId = sessionElement.querySelector('.session-id').textContent;
                     localStorage.setItem('sessionId', sessionId);
-                    location.href = '/admin/session/fix';
+                    location.href = URLS.AdminPage.FixSession;
                 }
             });
 
@@ -52,7 +54,7 @@ function setSessionElements(sessionData) {
 
 // Session 삭제 요청 메서드
 async function deleteSession(sessionId) {
-    const url = '/api/admin/deleteSession';
+    const url = URLS.API.DeleteSession;
     const sessionDTO = { id: sessionId };
 
     try {
@@ -60,7 +62,7 @@ async function deleteSession(sessionId) {
 
         if (response.ok) {
             alert('삭제 완료');
-            window.location.href = '/admin/';
+            window.location.href = URLS.AdminPage.Session;
         } else {
             const errorData = await response.json();
             throw new Error(`Failed to delete session: ${response.status} ${errorData.message}`);

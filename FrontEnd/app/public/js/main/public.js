@@ -1,43 +1,44 @@
 
 import FetchRequestBuilder from "../utils/fetchRequest.js";
+import * as URLS from "../utils/fetchURLStr.js";
 
 //일반 사용자 페이지가 공통적으로 활용할 메서드들
 
 function navigateToHome() {
-    window.location.href = '/';
+    window.location.href = URLS.UserPage.Home;
 }
 
 function navigateToAbout() {
-    window.location.href = '/about';
+    window.location.href = URLS.UserPage.About;
 }
 
 function navigateToSession() {
-    window.location.href = '/session';
+    window.location.href = URLS.UserPage.Session;
 }
 
 function navigateToProject() {
-    window.location.href = '/project';
+    window.location.href = URLS.UserPage.Project;
 }
 
 function navigateToFAQ() {
-    window.location.href = '/faq';
+    window.location.href = URLS.UserPage.FAQ;
 }
 
 function navigateToApplication() {
-    window.location.href = '/application';
+    window.location.href = URLS.UserPage.Application;
 }
 
 function navigateToLogin() {
-    window.location.href = '/account/login';
+    window.location.href = URLS.UserPage.Login;
 }
 
 function navigateToSignUp() {
-    window.location.href = "/account/signup";
+    window.location.href = URLS.UserPage.SignUp;
 }
 
 async function navigateToLogout() {
 
-    const url = '/api/logout';
+    const url = URLS.API.Logout;
     const fetchRequest = new FetchRequestBuilder()
         .setUrl(url)
         .setMethod("POST")

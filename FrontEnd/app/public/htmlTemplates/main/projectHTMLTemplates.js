@@ -1,5 +1,7 @@
+import * as URLS from "../../js/utils/fetchURLStr.js";
+
 export function projectElementTemplate(project) {
-    const imageUrl = `/file/downloadImg?filePath=${encodeURIComponent(project.thumbnail)}`;
+    const imageUrl = URLS.API.FileDownloadImg(project.thumbnail);
     return `
         <div class="aspect-w-16 aspect-h-9">
             <img src="${imageUrl}" alt="Project thumbnail" class="object-cover w-full h-full"/>
@@ -23,7 +25,7 @@ export function projectPopupTemplate(project) {
             <button class="absolute top-2 right-2 text-black hover:text-gray-700" onclick="closePopup()">
                 <i class="fas fa-times fa-2x"></i>
             </button>
-            <img src="/file/downloadImg?filePath=${encodeURIComponent(project.thumbnail)}" alt="Thumbnail" class="w-full h-auto mb-4"/>
+            <img src="${URLS.API.FileDownloadImg(project.thumbnail)}" alt="Thumbnail" class="w-full h-auto mb-4"/>
             <div class="border-t border-gray-300 mt-4 pt-4"></div>
             <p class="text-lg font-semibold mb-2">팀명: ${project.team}</p>
             <h3 class="text-2xl font-bold mb-4">프로젝트명: ${project.title}</h3>
@@ -34,7 +36,7 @@ export function projectPopupTemplate(project) {
                 <ul>
                     ${project.attachmentFilePaths.map(filePath => {
                         const fileName = filePath.split('/').pop().split('_').slice(1).join('_');
-                        return `<li><a href="/file/downloadFile?filePath=${encodeURIComponent(filePath)}" class="text-blue-500 hover:underline">${fileName}</a></li>`;
+                        return `<li><a href="${URLS.API.FileDownloadFile(filePath)}" class="text-blue-500 hover:underline">${fileName}</a></li>`;
                     }).join('')}
                 </ul>
             </div>

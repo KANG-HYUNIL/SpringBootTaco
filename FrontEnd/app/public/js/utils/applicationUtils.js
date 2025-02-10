@@ -1,4 +1,6 @@
 import FetchRequestBuilder from "./fetchRequest.js";
+import * as URLS from "../utils/fetchURLStr.js";
+
 
 // Function to fetch application data
 export async function fetchApplicationData(url, callback) {
@@ -50,19 +52,19 @@ export function displayApplications(applications, isAdmin = false) {
         titleCell.textContent = application.title;
         titleCell.style.cursor = 'pointer';
         titleCell.addEventListener('click', () => {
-            const basePath = isAdmin ? '/admin/application/content' : '/application/content';
-            window.location.href = `${basePath}?id=${application.id}`;
+            const basePath = isAdmin ? URLS.AdminPage.ApplicationContent(application.id) : URLS.UserPage.ApplicationContent(application.id);
+            window.location.href = basePath;
         });
         row.appendChild(titleCell);
 
         const startCell = document.createElement('td');
         startCell.className = 'px-6 py-4 whitespace-nowrap text-sm text-gray-900';
-        startCell.textContent = application.startTime.split('T')[0];
+        startCell.textContent = formatDateTime(application.startTime);
         row.appendChild(startCell);
 
         const endCell = document.createElement('td');
         endCell.className = 'px-6 py-4 whitespace-nowrap text-sm text-gray-900';
-        endCell.textContent = application.endTime.split('T')[0];
+        endCell.textContent = formatDateTime(application.endTime);
         row.appendChild(endCell);
 
         tbody.appendChild(row);
@@ -105,7 +107,7 @@ export function displayAttachments(attachmentFilePaths) {
         const fileName = filePath.split('/').pop().split('_').slice(1).join('_');
         const li = document.createElement('li');
         const fileLink = document.createElement('a');
-        fileLink.href = `/file/downloadFile?filePath=${encodeURIComponent(filePath)}`;
+        fileLink.href = URLS.API.FileDownloadFile(filePath);
         fileLink.textContent = fileName;
         fileLink.classList.add('text-blue-500', 'hover:underline');
         li.appendChild(fileLink);
@@ -147,7 +149,7 @@ export function displaySubmitters(submitters) {
             const fileName = filePath.split('/').pop().split('_').slice(1).join('_');
             const li = document.createElement('li');
             const fileLink = document.createElement('a');
-            fileLink.href = `/file/downloadFile?filePath=${encodeURIComponent(filePath)}`;
+            fileLink.href = URLS.API.FileDownloadFile(filePath);
             fileLink.textContent = fileName;
             fileLink.classList.add('text-blue-500', 'hover:underline');
             li.appendChild(fileLink);
@@ -159,4 +161,18 @@ export function displaySubmitters(submitters) {
 
         submitterList.appendChild(row);
     });
+}
+
+// Function to format date and time with timezone
+export function formatDateTime(dateTime) {
+    const date = new Date(dateTime);
+    const options = {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+        timeZoneName: 'short'
+    };
+    return date.toLocaleString(undefined, options);
 }

@@ -1,4 +1,5 @@
 import FetchRequestBuilder from "./fetchRequest.js";
+import * as URLS from "./fetchURLStr.js";
 
 function addThumbnailFunction() {
     // 썸네일 이미지 라벨에 들어갈 문자열 상수
@@ -65,7 +66,7 @@ async function handleThumbnailFiles(files) {
     const formData = new FormData();
     formData.append('multipartFile', file);
 
-    const url = '/api/file/preUpload';
+    const url = URLS.API.FilePreUpload;
 
     try {
         const fetchRequest = new FetchRequestBuilder()
@@ -146,7 +147,7 @@ async function handleAttachmentFiles(files) {
         formData.append('multipartFile', file);
 
         // 파일 업로드 경로
-        const url = '/api/file/preUpload';
+        const url =  URLS.API.FilePreUpload;
 
         try {
             const fetchRequest = new FetchRequestBuilder()
@@ -162,29 +163,7 @@ async function handleAttachmentFiles(files) {
                 const data = await response.json();
                 // 파일 업로드 성공 시 파일 목록에 추가
 
-                // 파일 목록에 추가할 요소 생성
-                const fileItem = document.createElement('div');
-                fileItem.classList.add('file-item', 'flex', 'items-center', 'mt-2'); // 파일 목록 클래스 적용
-                fileItem.dataset.filePath = data.filePath; // 파일 경로 설정
-                fileItem.dataset.fileName = data.fileName; // 파일 이름 설정
-
-                // 파일 이름 라벨 생성
-                const fileLabel = document.createElement('span');
-                fileLabel.textContent = file.name;
-                fileLabel.classList.add('text-sm', 'font-medium', 'text-gray-700');
-
-                // 파일 삭제 버튼 생성
-                const deleteButton = document.createElement('button');
-                deleteButton.innerHTML = '&times;';
-                deleteButton.classList.add('text-red-500', 'ml-2');
-                deleteButton.onclick = () => {
-                    attachmentFileList.removeChild(fileItem);
-                };
-
-                // 파일 목록에 추가
-                fileItem.appendChild(fileLabel);
-                fileItem.appendChild(deleteButton);
-                attachmentFileList.appendChild(fileItem);
+                populateAttachmentFileList(attachmentFileList, [data.filePath]);
             } 
             else 
             {
@@ -194,6 +173,34 @@ async function handleAttachmentFiles(files) {
         } catch (error) {
             showErrorMessage(error.message);
         }
+    });
+}
+
+// 첨부 파일 목록을 생성하는 메서드
+export function populateAttachmentFileList(attachmentFileList, attachmentFilePaths) {
+    attachmentFileList.innerHTML = ''; // Clear existing files
+
+    attachmentFilePaths.forEach(filePath => {
+        const fileName = filePath.split('/').pop();
+        const fileItem = document.createElement('div');
+        fileItem.classList.add('file-item', 'flex', 'items-center', 'mt-2');
+        fileItem.dataset.filePath = filePath;
+        fileItem.dataset.fileName = fileName;
+
+        const fileLabel = document.createElement('span');
+        fileLabel.textContent = fileName.split('_').slice(1).join('_');
+        fileLabel.classList.add('text-sm', 'font-medium', 'text-gray-700');
+
+        const deleteButton = document.createElement('button');
+        deleteButton.innerHTML = '&times;';
+        deleteButton.classList.add('text-red-500', 'ml-2');
+        deleteButton.onclick = () => {
+            attachmentFileList.removeChild(fileItem);
+        };
+
+        fileItem.appendChild(fileLabel);
+        fileItem.appendChild(deleteButton);
+        attachmentFileList.appendChild(fileItem);
     });
 }
 

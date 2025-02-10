@@ -1,9 +1,10 @@
 // login.js
 import FetchRequestBuilder from "../utils/fetchRequest.js";
+import * as URLS from "../utils/fetchURLStr.js";
 
 // 사용자 정보를 가져오는 메서드
 async function fetchUserInfo(username) {
-    const getUserURL = '/api/account/getUserById';
+    const getUserURL = URLS.API.GetUserById;
 
     const userRequest = new FetchRequestBuilder()
         .setUrl(getUserURL)
@@ -31,7 +32,7 @@ async function fetchUserInfo(username) {
 
 // 로그인 요청을 처리하는 메서드
 async function handleLogin(username, password) {
-    const url = "/api/login";
+    const url = URLS.API.Login;
 
     const loginRequest = new FetchRequestBuilder()
         .setUrl(url)
@@ -75,11 +76,11 @@ document.getElementById('loginForm').addEventListener('submit', async function(e
         if (redirectToAdmin === 'true') 
         {
             localStorage.removeItem('redirectToAdmin');
-            window.location.href = '/admin/';
+            window.location.href = URLS.AdminPage.Home;
         } 
         else 
         {
-            window.location.href = '/';
+            window.location.href = URLS.UserPage.Home;
         }
     } 
     catch (error) 

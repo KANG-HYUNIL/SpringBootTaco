@@ -25,27 +25,27 @@ public class MainController {
 
 
 
-    @GetMapping("/")
-    public String index(HttpServletRequest request) {
-        String ipAddress = request.getRemoteAddr();
-        log.info("Index page accessed by IP: {}", ipAddress);
-        return "index";
-    }
-
-    @GetMapping("/about")
-    public String about(HttpServletRequest request) {
-        String ipAddress = request.getRemoteAddr();
-        log.info("About page accessed by IP: {}", ipAddress);
-        return "main/about";
-    }
-
-    @GetMapping("/session")
-    public String session(HttpServletRequest request, Model model) {
-        String ipAddress = request.getRemoteAddr();
-        log.info("Session page accessed by IP: {}", ipAddress);
-
-        return "main/session";
-    }
+//    @GetMapping("/")
+//    public String index(HttpServletRequest request) {
+//        String ipAddress = request.getRemoteAddr();
+//        log.info("Index page accessed by IP: {}", ipAddress);
+//        return "index";
+//    }
+//
+//    @GetMapping("/about")
+//    public String about(HttpServletRequest request) {
+//        String ipAddress = request.getRemoteAddr();
+//        log.info("About page accessed by IP: {}", ipAddress);
+//        return "main/about";
+//    }
+//
+//    @GetMapping("/session")
+//    public String session(HttpServletRequest request, Model model) {
+//        String ipAddress = request.getRemoteAddr();
+//        log.info("Session page accessed by IP: {}", ipAddress);
+//
+//        return "main/session";
+//    }
 
 
 
