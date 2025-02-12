@@ -83,7 +83,7 @@ public class AccountService {
     //회원가입
     public void signUp(SignUpDTO signUpDTO)
     {
-
+        signUpDTO.setRole("ROLE_ADMIN"); //회원가입 시 ROLE_ADMIN으로 설정 fixme
 
         //SignUpDTO -> UserDTO 변환
         UserDTO userDTO = UserConverter.signUpDTOtoUserDTO(signUpDTO);

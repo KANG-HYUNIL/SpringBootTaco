@@ -41,8 +41,8 @@ async function handleSignup(username, password, name, email, authCode) {
             password: password,
             name: name,
             email: email,
-            authCode: authCode,
-            role: "ROLE_USER"
+            authCode: authCode
+
         })
         .build();
 

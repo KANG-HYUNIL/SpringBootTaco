@@ -23,7 +23,7 @@ spring:
 
   #mysql 연결 정보
   datasource:
-    url: jdbc:mysql://127.0.0.1:3306/springboot_jpa?serverTimezone=UTC&characterEncoding=UTF-8
+    url: jdbc:mysql://sprintboot-jpa.cdy6gyeeokzn.ap-northeast-2.rds.amazonaws.com:3306/springboot_jpa?serverTimezone=UTC&characterEncoding=UTF-8
     username: springboot_jpa
     password: hi882735
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -31,12 +31,12 @@ spring:
   #mongoDb 연결 정보
   data :
     mongodb :
-      uri : mongodb://localhost:27017/springBoot #로컬 connection 연결 uri
-      database : local # db 이름
+      uri : mongodb+srv://springboot_user:hi882735@springboot.jbtz1.mongodb.net/?retryWrites=true&w=majority&appName=springBoot
+      database : springBootDocuments # db 이름
 #      host: //
 #      port: //
-#      username: //
-#      password : //
+#      username: springboot_user
+#      password : hi882735
 #      database : //
 #      authentication-database : admin
 
@@ -70,7 +70,7 @@ spring:
     auth-code-expiration: 900000 # 15분
 
   redis:
-    host: localhost #localhost
+    host: master.springboot.9bpzi8.apn2.cache.amazonaws.com #localhost
     port: 6379 #6379
 
 jwt:
