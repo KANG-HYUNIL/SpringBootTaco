@@ -150,6 +150,7 @@ public class AdminController {
     @ResponseBody
     public ResponseEntity<?> fixProject(@RequestBody ProjectDTO projectDTO, HttpServletRequest request) {
         String accessToken = request.getHeader("access");
+        log.info(projectDTO.toString());
         adminService.fixProject(projectDTO, accessToken);
         return new ResponseEntity<>("Project Fix Complete", HttpStatus.OK);
     }

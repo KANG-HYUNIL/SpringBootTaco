@@ -16,6 +16,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/account")
@@ -47,22 +50,26 @@ public class AccountController {
         return new ResponseEntity<>("Sign up success", HttpStatus.OK);
     }
 
-    //id 로 사용자 정보 획득 메서드
+    // id로 사용자 정보 획득 메서드
     @PostMapping("/getUserById")
     @ResponseBody
-    public ResponseEntity<UserDTO> getUserById(@RequestBody UserDTO userDTO) {
-        UserEntity userEntity = accountService.getUserById(userDTO.getId());
-        UserDTO responseUserDTO = UserConverter.toDTO(userEntity);
-        return new ResponseEntity<>(responseUserDTO, HttpStatus.OK);
+    public ResponseEntity<List<UserDTO>> getUserById(@RequestBody UserDTO userDTO) {
+        List<UserEntity> userEntities = accountService.getUserById(userDTO.getId());
+        List<UserDTO> responseUserDTOs = userEntities.stream()
+                .map(UserConverter::toDTO)
+                .collect(Collectors.toList());
+        return new ResponseEntity<>(responseUserDTOs, HttpStatus.OK);
     }
 
-    //name 으로 사용자 정보 획득 메서드
+    // name으로 사용자 정보 획득 메서드
     @PostMapping("/getUserByName")
     @ResponseBody
-    public ResponseEntity<UserDTO> getUserByName(@RequestBody UserDTO userDTO) {
-        UserEntity userEntity = accountService.getUserByName(userDTO.getName());
-        UserDTO responseUserDTO = UserConverter.toDTO(userEntity);
-        return new ResponseEntity<>(responseUserDTO, HttpStatus.OK);
+    public ResponseEntity<List<UserDTO>> getUserByName(@RequestBody UserDTO userDTO) {
+        List<UserEntity> userEntities = accountService.getUserByName(userDTO.getName());
+        List<UserDTO> responseUserDTOs = userEntities.stream()
+                .map(UserConverter::toDTO)
+                .collect(Collectors.toList());
+        return new ResponseEntity<>(responseUserDTOs, HttpStatus.OK);
     }
 
 }

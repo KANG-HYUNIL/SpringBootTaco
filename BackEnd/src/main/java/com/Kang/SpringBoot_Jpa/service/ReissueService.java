@@ -29,12 +29,18 @@ public class ReissueService {
         try {
             //Refresh Token을 가져옴
             String refresh = null;
-            Cookie[] cookies = request.getCookies();
-            for (Cookie cookie : cookies) {
-                if (cookie.getName().equals("refresh")) {
-                    refresh = cookie.getValue();
+
+            try {
+                Cookie[] cookies = request.getCookies();
+                for (Cookie cookie : cookies) {
+                    if (cookie.getName().equals("refresh")) {
+                        refresh = cookie.getValue();
+                    }
                 }
+            } catch (Exception e) {
+                return new ResponseEntity<>("Cookie Error getting refresh token", HttpStatus.BAD_REQUEST);
             }
+
 
             //Refresh Token이 없을 경우
             if (refresh == null)
@@ -62,16 +68,29 @@ public class ReissueService {
                 return new ResponseEntity<>("invalid refresh token", HttpStatus.BAD_REQUEST);
             }
 
-            //Role 가져오기
-            String role = jwtUtil.getRole(refresh);
+            String role;
+            String newAccess;
+            String newRefresh;
 
-            //token 재발행
-            String newAccess = jwtUtil.createAccessJwt(username, role);
-            String newRefresh = jwtUtil.createRefreshJwt(username, role);
 
-            //redis 저장소에 저장된 Refresh Token 삭제 후 새로운 Refresh Token 저장
-            redisService.deleteValues(refreshString + username);
-            addRefreshEntity(username, newRefresh);
+            try {
+                //Role 가져오기
+                role = jwtUtil.getRole(refresh);
+                //token 재발행
+                newAccess = jwtUtil.createAccessJwt(username, role);
+                newRefresh = jwtUtil.createRefreshJwt(username, role);
+            } catch(Exception e)
+            {
+                return new ResponseEntity<>("JwtUtils Error, reissuing token", HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+
+             try {
+                 //redis 저장소에 저장된 Refresh Token 삭제 후 새로운 Refresh Token 저장
+                 redisService.deleteValues(refreshString + username);
+                 addRefreshEntity(username, newRefresh);
+             } catch (Exception e) {
+                 return new ResponseEntity<>("Redis Error, reissuing token", HttpStatus.INTERNAL_SERVER_ERROR);
+             }
 
             //응답 헤더와 쿠키에 새로운 Access Token과 Refresh Token 저장
             response.setHeader("access", newAccess);
@@ -91,7 +110,7 @@ public class ReissueService {
 
         Cookie cookie = new Cookie(key, value);
         cookie.setMaxAge(24*60*60);
-        cookie.setSecure(true);
+        //cookie.setSecure(true);
         cookie.setPath("/");
         cookie.setHttpOnly(true);
 

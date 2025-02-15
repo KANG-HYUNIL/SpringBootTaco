@@ -5,6 +5,7 @@ import jakarta.annotation.Nonnull;
 import lombok.NonNull;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
 import java.util.Optional; //Null을 반환할 수 있는 메소드의 반환 타입으로 사용
 
 public interface UserRepository  extends JpaRepository<UserEntity, String> {
@@ -16,6 +17,12 @@ public interface UserRepository  extends JpaRepository<UserEntity, String> {
 
     @Nonnull
     Optional<UserEntity> findByName(@Nonnull String name); //name으로 UserEntity를 찾는 메소드
+
+    @Nonnull
+    List<UserEntity> findByIdContaining(@Nonnull String id);
+
+    @Nonnull
+    List<UserEntity> findByNameContaining(@Nonnull String name);
 
     boolean existsByName(@Nonnull String name); //name으로 UserEntity가 존재하는지 확인하는 메소드
 

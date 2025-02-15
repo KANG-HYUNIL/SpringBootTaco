@@ -4,18 +4,18 @@ import java.util.regex.Pattern;
 
 public class InputValidator {
 
-    private static final String INVALID_CHARACTERS = ".*[\\s'\";\\-].*";
-    private static final String PASSWORD_VALID_CHARACTERS = "^[a-zA-Z0-9!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>\\/?]*$";
+    private static final String VALID_ID_CHARACTERS = "^[a-zA-Z0-9._-]+$";
+    private static final String VALID_PASSWORD_CHARACTERS = "^[a-zA-Z0-9!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>\\/?]*$";
 
     //id 유효성 검증
     //유효한 id면 true, 아니면 false
+    // ID validation
     public static boolean isValid(String input) {
-        return !Pattern.matches(INVALID_CHARACTERS, input);
+        return Pattern.matches(VALID_ID_CHARACTERS, input);
     }
-
     //password 유효성 검증
     //유효한 password면 true, 아니면 false
     public static boolean isPasswordValid(String password) {
-        return Pattern.matches(PASSWORD_VALID_CHARACTERS, password);
+        return Pattern.matches(VALID_PASSWORD_CHARACTERS, password);
     }
 }

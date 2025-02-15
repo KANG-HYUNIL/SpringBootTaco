@@ -54,7 +54,10 @@ export const API = {
     FixSession: '/api/admin/fixSession',
 
     GetApplicationById: (id) => `/api/getApplicationById?id=${id}`,
-    SubmitApplication: (id) => `/api/application/submit?id=${id}`
+    SubmitApplication: (id) => `/api/application/submit?id=${id}`,
+
+    UserTokenValidate : '/api/validate-token',
+    AdminTokenValidate : '/api/validate-admin-token'
 };
 
 // 일반 사용자 페이지 URL

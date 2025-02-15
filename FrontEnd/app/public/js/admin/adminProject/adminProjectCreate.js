@@ -49,7 +49,7 @@ document.addEventListener("DOMContentLoaded", async function() {
             const response = await fetchWithAccessToken(url, projectDTO);
 
             if (!response.ok) 
-                {
+            {
                 const errorData = await response.json();
                 throw new Error(`Request failed with status ${response.status}: ${errorData.message}`);
             }
@@ -99,7 +99,7 @@ document.addEventListener("DOMContentLoaded", async function() {
                 document.getElementById('uploadedFilePath').value = projectData.thumbnail;
                 const fileName = projectData.thumbnail.split('/').pop().split('_').slice(1).join('_');
                 document.getElementById('uploadedFileName').value = fileName;
-                document.getElementById('fileNameLabel').textContent = `파일 이름: ${fileName.split('_').slice(1).join('_')}`;
+                document.getElementById('fileNameLabel').textContent = `파일 이름: ${fileName}`;
                 editor.insertText(projectData.content);
 
                 // Populate attachment files

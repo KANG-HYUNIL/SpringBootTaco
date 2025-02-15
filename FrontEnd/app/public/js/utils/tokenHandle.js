@@ -1,5 +1,5 @@
 import FetchRequestBuilder from "./fetchRequest.js";
-
+import * as URLS from "../utils/fetchURLStr.js";
 
 export async function accessTokenValidate()
 {
@@ -10,7 +10,43 @@ export async function accessTokenValidate()
         return false;
     }
 
-    const url = '/api/validate-admin-token';
+    const url = URLS.API.UserTokenValidate;
+
+    const fetchRequest = new FetchRequestBuilder()
+        .setUrl(url)
+        .setMethod('POST')
+        .addHeader('access', accessToken)
+        .setCredentials(true)
+        .setPollingCount(3)
+        .build();
+
+    const response = await fetchRequest;
+
+    if(response.status === 406)
+    {
+        return reissueAccessToken();
+    }
+    if(response.status === 200)
+    {
+        return true;
+    }
+    else
+    {
+        handleRequestError(response, "Access token error");
+        return false;
+    }
+}
+
+export async function adminAccessTokenValidate()
+{
+    const accessToken = localStorage.getItem('access');
+
+    if(!accessToken)
+    {
+        return false;
+    }
+
+    const url = URLS.API.AdminTokenValidate;
 
     const fetchRequest = new FetchRequestBuilder()
         .setUrl(url)
@@ -84,8 +120,7 @@ export async function fetchWithAccessToken(url, body) {
     if (response.status === 406) {
         const reissueSuccess = await reissueAccessToken();
         if (reissueSuccess) {
-            accessToken = lo
-            calStorage.getItem('access');
+            accessToken = localStorage.getItem('access');
             const retryRequest = new FetchRequestBuilder()
                 .setUrl(url)
                 .setMethod('POST')

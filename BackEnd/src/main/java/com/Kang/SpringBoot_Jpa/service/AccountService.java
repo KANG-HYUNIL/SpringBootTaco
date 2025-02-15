@@ -18,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -107,33 +108,25 @@ public class AccountService {
     }
 
     //id로 UserEntity 가져오기
-    public UserEntity getUserById(String id)
-    {
-        //id로 UserEntity 가져오기
-        Optional<UserEntity> userEntity = userRepository.findById(id);
-        //UserEntity가 존재하지 않으면 예외 처리
-        if (userEntity.isEmpty())
-        {
-            throw new NoDataException("User id not found");
+    public List<UserEntity> getUserById(String id) {
+        List<UserEntity> userEntities = userRepository.findByIdContaining(id);
+        if (userEntities.isEmpty()) {
+            throw new NoDataException("No users found with the given ID");
         }
-
-        //UserEntity 반환
-        return userEntity.get();
+        return userEntities;
     }
 
-    //name으로 UserEntity 가져오기
-    public UserEntity getUserByName(String name)
-    {
-        //name으로 UserEntity 가져오기
-        Optional<UserEntity> userEntity = userRepository.findByName(name);
-        //UserEntity가 존재하지 않으면 예외 처리
-        if (userEntity.isEmpty())
-        {
-            throw new NoDataException("User name not found");
+    public List<UserEntity> getUserByName(String name) {
+        List<UserEntity> userEntities = userRepository.findByNameContaining(name);
+        if (userEntities.isEmpty()) {
+            throw new NoDataException("No users found with the given name");
         }
+        return userEntities;
+    }
 
-        //UserEntity 반환
-        return userEntity.get();
+    public UserEntity getUserByExactId(String id) {
+        Optional<UserEntity> userEntity = userRepository.findById(id);
+        return userEntity.orElseThrow(() -> new NoDataException("No user found with the given ID"));
     }
 
 }

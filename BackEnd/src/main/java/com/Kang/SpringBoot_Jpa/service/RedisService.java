@@ -1,6 +1,7 @@
 package com.Kang.SpringBoot_Jpa.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +14,7 @@ import java.time.Duration;
 public class RedisService<T> {
 
     //RedisTemplate 객체 생성 및 관리
+    @Autowired
     private final RedisTemplate<String, T> redisTemplate;
 
     //Redis에 값 저장

@@ -64,44 +64,44 @@ public class MainController {
     }
 
     //개별 Project 데이터 반환
-    @GetMapping("/getProjectById")
+    @PostMapping("/getProjectById")
     @ResponseBody
-    public ResponseEntity<ProjectDTO> getProjectById(ProjectDTO projectDTO) {
+    public ResponseEntity<ProjectDTO> getProjectById(@RequestBody ProjectDTO projectDTO) {
         ProjectDTO project = mainService.getProjectById(projectDTO);
         return new ResponseEntity<>(project, HttpStatus.OK);
     }
 
     //개별 Session 데이터 반환
-    @GetMapping("/getSessionById")
+    @PostMapping("/getSessionById")
     @ResponseBody
-    public ResponseEntity<SessionDTO> getSessionById(SessionDTO sessionDTO) {
+    public ResponseEntity<SessionDTO> getSessionById(@RequestBody SessionDTO sessionDTO) {
         SessionDTO session = mainService.getSessionById(sessionDTO);
         return new ResponseEntity<>(session, HttpStatus.OK);
     }
 
 
-    @GetMapping("/project")
-    public String project(HttpServletRequest request, Model model) {
-        String ipAddress = request.getRemoteAddr();
-        log.info("Project page accessed by IP: {}", ipAddress);
-        return "main/project";
-    }
-
-    @GetMapping("/faq")
-    public String faq(HttpServletRequest request, Model model) {
-        String ipAddress = request.getRemoteAddr();
-        log.info("FAQ page accessed by IP: {}", ipAddress);
-        return "main/faq";
-    }
-
-
-    //Application 페이지
-    @GetMapping("/application")
-    public String application(HttpServletRequest request, Model model) {
-        String ipAddress = request.getRemoteAddr();
-        log.info("Application page accessed by IP: {}", ipAddress);
-        return "main/application";
-    }
+//    @GetMapping("/project")
+//    public String project(HttpServletRequest request, Model model) {
+//        String ipAddress = request.getRemoteAddr();
+//        log.info("Project page accessed by IP: {}", ipAddress);
+//        return "main/project";
+//    }
+//
+//    @GetMapping("/faq")
+//    public String faq(HttpServletRequest request, Model model) {
+//        String ipAddress = request.getRemoteAddr();
+//        log.info("FAQ page accessed by IP: {}", ipAddress);
+//        return "main/faq";
+//    }
+//
+//
+//    //Application 페이지
+//    @GetMapping("/application")
+//    public String application(HttpServletRequest request, Model model) {
+//        String ipAddress = request.getRemoteAddr();
+//        log.info("Application page accessed by IP: {}", ipAddress);
+//        return "main/application";
+//    }
 
     //Application 전체 데이터 반환
     @GetMapping("/getApplicationData")
@@ -111,19 +111,19 @@ public class MainController {
         return new ResponseEntity<>(applications, HttpStatus.OK);
     }
 
-    //Application 게시물 본문 요청 메서드
-    @GetMapping("/application/content")
-    public String getApplicationSubmit(@RequestParam("id") String id, HttpServletRequest request) {
-        String ipAddress = request.getRemoteAddr();
-        log.info("Application Content page ID: {} accessed by IP: {}", id, ipAddress);
-        return "main/applicationSubmit";
-    }
+//    //Application 게시물 본문 요청 메서드
+//    @GetMapping("/application/content")
+//    public String getApplicationSubmit(@RequestParam("id") String id, HttpServletRequest request) {
+//        String ipAddress = request.getRemoteAddr();
+//        log.info("Application Content page ID: {} accessed by IP: {}", id, ipAddress);
+//        return "main/applicationSubmit";
+//    }
 
     //개별 Application 데이터 반환
-    @GetMapping("/getApplicationById")
+    @PostMapping("/getApplicationById")
     @ResponseBody
-    public ResponseEntity<ApplicationDTO> getApplicationById(ApplicationDTO applicationDTO) {
-        ApplicationDTO application = mainService.getApplicationById(applicationDTO.getId());
+    public ResponseEntity<ApplicationDTO> getApplicationById(@RequestParam String id) {
+        ApplicationDTO application = mainService.getApplicationById(id);
         return new ResponseEntity<>(application, HttpStatus.OK);
     }
 

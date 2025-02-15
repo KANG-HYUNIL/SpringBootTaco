@@ -25,7 +25,7 @@ public class TokenValidationController {
     public ResponseEntity<?> validateToken(@RequestHeader("access") String accessToken) {
 
         //토큰이 없거나 만료되었다면 NOT_ACCEPTABLE 406 반환
-        if (accessToken == null || !jwtUtil.isExpired(accessToken)) {
+        if (accessToken == null || jwtUtil.isExpired(accessToken)) {
             return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
         }
 

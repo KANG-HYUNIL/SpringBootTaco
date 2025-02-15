@@ -1,4 +1,5 @@
 import * as URLS from "./fetchURLStr.js";
+import FetchRequestBuilder from "./fetchRequest.js";
 
 export async function initializeToastEditor(editorElementId) {
     // 외부 스크립트가 로드될 때까지 기다리는 함수
@@ -95,20 +96,26 @@ export async function initializeToastEditor(editorElementId) {
         const imageURL = URLS.API.FilePreUpload;
 
         try {
-            const response = await fetch(imageURL, {
-                method: 'POST',
-                body: formData
-            });
+            const fetchRequest = new FetchRequestBuilder()
+                .setUrl(imageURL)
+                .setMethod('POST')
+                .addBody(formData)
+                .build();
+
+            const response = await fetchRequest;
 
             if (!response.ok) {
                 throw new Error('파일 업로드 실패');
             }
 
             const data = await response.json();
+            console.log(data);
             const filePath = data.filePath;
-            const imageUrl = URLS.API.FileDownloadImg(filePath);
-            callback(imageUrl, 'image alt attribute');
+            const imageDownloadUrl = URLS.API.FileDownloadImg(filePath);
+            console.log(imageDownloadUrl);
+            callback(imageDownloadUrl, 'image alt attribute');
             editor.eventEmitter.emit('closePopup');
+            
         } catch (error) {
             console.error('업로드 실패:', error);
         }

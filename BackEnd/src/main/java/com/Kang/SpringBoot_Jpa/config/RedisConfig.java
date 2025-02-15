@@ -23,16 +23,24 @@ public class RedisConfig {
     @Value("${spring.redis.port}")
     private int port;
 
+    @Value("${spring.redis.password}")
+    private String password;
+
     @Value("${spring.mail.auth-code-expiration}")
     private long authCodeExpiration;
 
-    //Bean에 RedisConnectionFactory 등록해 객체 관리
     @Bean
     public RedisConnectionFactory redisConnectionFactory() {
-
-        return new LettuceConnectionFactory(
-                new RedisStandaloneConfiguration(host, port)
-        );
+        RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration();
+        redisStandaloneConfiguration.setHostName(host);
+        redisStandaloneConfiguration.setPort(port);
+        //redisStandaloneConfiguration.setPassword(password);
+        try {
+            return new LettuceConnectionFactory(redisStandaloneConfiguration);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("Error connecting to Redis", e);
+        }
     }
 
     //RedisTemplate 객체 생성 및 관리

@@ -121,6 +121,7 @@ document.addEventListener("DOMContentLoaded", function() {
         catch (error) 
         {
             console.error('Signup failed:', error);
+            alert('Signup failed:', error);
         }
     });
 

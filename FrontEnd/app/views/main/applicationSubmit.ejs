@@ -74,14 +74,15 @@
                     </div>
                 </div>
             </div>
-            <!--첨부파일 목록들-->
+            <!-- 게시물의 첨부 파일 목록을 표시할 div 추가 -->
             <div class="px-4 py-5 sm:px-6 mt-6 border-t border-gray-200">
-                <label class="block text-sm font-medium text-gray-700">첨부 파일</label>
+                <h2 class="text-xl font-bold text-gray-900 mb-4">게시물 첨부 파일</h2>
                 <div id="applicationAttachmentFileList" class="mt-2"></div>
             </div>
 
+            <!-- 제출 부분의 첨부 파일 업로드 및 표시 -->
             <div class="px-4 py-5 sm:px-6 mt-6 border-t border-gray-200">
-                <label class="block text-sm font-medium text-gray-700">제출</label>
+                <h2 class="text-xl font-bold text-gray-900 mb-4">파일 제출하기</h2>
                 <div class="mt-2 flex items-start space-x-4">
                     <div id="attachmentDropZone" class="flex justify-center items-center w-64 h-36 px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-lg">
                         <div class="space-y-1 text-center">
@@ -98,7 +99,7 @@
                 <div id="attachmentFileList" class="mt-2"></div>
             </div>
             <!-- 제출하기 버튼 추가 -->
-            <div class="px-4 py-5 sm:px-6 flex justify-center mt-4 border-t border-gray-200">
+            <div class="px-4 py-5 sm:px-6 flex justify-center mt-4">
                 <button id="submitButton" class="!rounded-button bg-custom text-white px-4 py-2 text-sm font-medium hover:bg-custom/90">제출하기</button>
             </div>
 

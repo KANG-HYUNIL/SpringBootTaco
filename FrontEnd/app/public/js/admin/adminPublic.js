@@ -1,5 +1,5 @@
 import FetchRequestBuilder from "../utils/fetchRequest.js";
-import {accessTokenValidate} from "../utils/tokenHandle.js";
+import {adminAccessTokenValidate} from "../utils/tokenHandle.js";
 import * as URLS from "../utils/fetchURLStr.js";
 
 // Admin 메인 페이지
@@ -96,17 +96,17 @@ function updateNavBar() {
 document.addEventListener("DOMContentLoaded", async function() {
 
     // //관리자 권한 점검
-    // const isValidToken = await accessTokenValidate();
-    // if (!isValidToken) 
-    // {
-    //     redirectToLogin();
-    // } 
-    // else 
-    // {
-    //     updateNavBar();
-    // }
+    const isValidToken = await adminAccessTokenValidate();
+    if (!isValidToken) 
+    {
+        redirectToLogin();
+    } 
+    else 
+    {
+        updateNavBar();
+    }
 
-    updateNavBar(); //fixme
+    // updateNavBar(); //fixme
 
     // Export functions to be used in HTML
     window.navigateToAdminHome = navigateToAdminHome;

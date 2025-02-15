@@ -4,8 +4,8 @@ import * as URLS from "../utils/fetchURLStr.js";
 
 
 // Extract application id from URL
-const urlParams = new URLSearchParams(window.location.search);
-let applicationId = urlParams.get('id');
+ 
+let applicationId ;
 
 // application 게시물의 세부 데이터 가져와 표시하기
 async function fetchAndDisplayApplicationData() {
@@ -15,7 +15,7 @@ async function fetchAndDisplayApplicationData() {
         document.getElementById('startDate').textContent = formatDateTime(data.startTime);
         document.getElementById('endDate').textContent = formatDateTime(data.endTime);
         document.getElementById('applicationContent').innerHTML = data.content;
-        displayAttachments(data.attachmentFilePaths);
+        displayAttachments(data.attachmentFilePaths, 'applicationAttachmentFileList'); // 게시물 첨부 파일 표시
         handleSubmitterList(data.submitters);
     });
 }
@@ -36,8 +36,11 @@ async function handleSubmitterList(submitters) {
         return;
     }
 
-    const userId = localStorage.getItem('userId');
-    const userSubmission = submitters.find(submitter => submitter.id === userId);
+    const userName = localStorage.getItem('userName');
+
+    //user
+
+    const userSubmission = submitters.find(submitter => submitter.name === userName);
     if (userSubmission) 
     {
         displaySubmitters([userSubmission]); // displaySubmitters 메서드 사용
@@ -49,8 +52,8 @@ async function handleSubmitterList(submitters) {
 }
 
 function displayNoSubmission() {
-    const submittedAttachmentFileList = document.getElementById('submittedAttachmentFileList');
-    submittedAttachmentFileList.innerHTML = '<p class="text-sm text-gray-500">제출 기록이 없습니다</p>';
+    const submittedAttachmentFileList = document.getElementById('submitterList');
+    submittedAttachmentFileList.innerHTML = '<tr><td colspan="4" class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">제출 기록이 없습니다</td></tr>';
 }
 
 function setSubmitBtn() {
@@ -70,11 +73,11 @@ function setSubmitBtn() {
 }
 
 async function submitApplication() {
-    const filePaths = Array.from(document.querySelectorAll('#attachmentFileList .file-item'))
+    const submittedFilePaths = Array.from(document.querySelectorAll('#attachmentFileList .file-item'))
         .map(item => item.dataset.filePath);
 
     const url = URLS.API.SubmitApplication(applicationId);
-    const body = { filePath: filePaths[0] };
+    const body = { submittedFilePaths: submittedFilePaths }; // List 형태로 변경
 
     try {
         const response = await fetchWithAccessToken(url, body);
@@ -92,7 +95,7 @@ async function submitApplication() {
         {
             const data = await response.json();
             console.error(`${response.status}: ${data.message}`);
-            alert('알 수 없는 에러 발생');
+            alert(`알 수 없는 에러 : ${response.status}: ${data.message}`);
             window.location.href = URLS.UserPage.Application;
         }
     } catch (error) {
@@ -101,6 +104,9 @@ async function submitApplication() {
 }
 
 document.addEventListener("DOMContentLoaded", function() { 
+    const urlParams = new URLSearchParams(window.location.search);
+    applicationId = urlParams.get('id');
+    console.log(applicationId);
     fetchAndDisplayApplicationData();
     setSubmitBtn();
 });

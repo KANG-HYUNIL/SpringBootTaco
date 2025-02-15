@@ -24,7 +24,7 @@ export function sessionPopupTemplate(session) {
             <button class="absolute top-2 right-2 text-black hover:text-gray-700" onclick="closePopup()">
                 <i class="fas fa-times fa-2x"></i>
             </button>
-            <img src="/api/file/downloadImg?filePath=${encodeURIComponent(session.thumbnail)}" alt="Thumbnail" class="w-full h-auto mb-4"/>
+            <img src="${URLS.API.FileDownloadImg(session.thumbnail)}" alt="Thumbnail" class="w-full h-auto mb-4"/>
             <div class="border-t border-gray-300 mt-4 pt-4"></div>
             <h3 class="text-2xl font-bold mb-4">세션명: ${session.title}</h3>
             <div class="border-t border-gray-300 mt-4 pt-4"></div>
@@ -34,7 +34,7 @@ export function sessionPopupTemplate(session) {
                 <ul>
                     ${session.attachmentFilePaths.map(filePath => {
                         const fileName = filePath.split('/').pop().split('_').slice(1).join('_');
-                        return `<li><a href="${URLS.API.FileDownloadFile(filePath)}" class="text-blue-500 hover:underline">${fileName}</a></li>`;
+                        return `<li><a href="${URLS.API.FileDownloadFile(filePath)}" class="text-blue-500 hover:underline" download="${fileName}">${fileName}</a></li>`;
                     }).join('')}
                 </ul>
             </div>

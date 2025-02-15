@@ -43,7 +43,10 @@ document.addEventListener("DOMContentLoaded", async function() {
         // URL 설정
         const url = applicationId ? URLS.API.FixApplication : URLS.API.WriteApplication;
 
-        try {
+        console.log(applicationDTO);
+
+        try 
+        {
             const response = await fetchWithAccessToken(url, applicationDTO);
 
             if (!response.ok) 
@@ -55,7 +58,8 @@ document.addEventListener("DOMContentLoaded", async function() {
             alert('Application 제출 성공');
             navigateToAdminApplication();
 
-        } catch (error) {
+        } 
+        catch (error) {
             alert(`Error: ${error.message}`);
             console.error('Error submitting application:', error);
         }
@@ -147,9 +151,15 @@ document.addEventListener("DOMContentLoaded", async function() {
         const day = document.getElementById(`${prefix}Day`).value.padStart(2, '0');
         const hour = document.getElementById(`${prefix}Hour`).value.padStart(2, '0');
         const minute = document.getElementById(`${prefix}Minute`).value.padStart(2, '0');
-        const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-
-        return `${year}-${month}-${day}T${hour}:${minute}:00[${timeZone}]`;
+    
+        // 사용자의 로컬 시간대 오프셋을 포함한 ISO 8601 형식의 문자열 반환
+        const date = new Date(`${year}-${month}-${day}T${hour}:${minute}:00`);
+        const timezoneOffset = -date.getTimezoneOffset();
+        const offsetHours = String(Math.floor(Math.abs(timezoneOffset) / 60)).padStart(2, '0');
+        const offsetMinutes = String(Math.abs(timezoneOffset) % 60).padStart(2, '0');
+        const offsetSign = timezoneOffset >= 0 ? '+' : '-';
+    
+        return `${year}-${month}-${day}T${hour}:${minute}:00${offsetSign}${offsetHours}:${offsetMinutes}`;
     }
 
 

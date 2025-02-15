@@ -32,7 +32,7 @@ async function searchById() {
     catch (error) 
     {
         console.error('Error:', error);
-        alert(`Error: ${error.message}`);
+        alert('User not found');
     }
 }
 
@@ -63,23 +63,28 @@ async function searchByName() {
         }
     } catch (error) {
         console.error('Error:', error);
-        alert(`Error: ${error.message}`);
+        alert('User not found');
     }
 }
 
-//사용자 정보를 웹 페이지에 표시하기
-function displayUserInfo(user) {
+// 사용자 정보를 웹 페이지에 표시하기
+function displayUserInfo(users) {
     const userInfoContainer = document.getElementById('userInfoContainer');
-    userInfoContainer.innerHTML = `
-        <div class="p-4 border border-gray-300 rounded-md shadow-sm">
+    userInfoContainer.innerHTML = ''; // Clear existing content
+
+    users.forEach(user => {
+        const userDiv = document.createElement('div');
+        userDiv.className = 'p-4 border border-gray-300 rounded-md shadow-sm mb-4';
+        userDiv.innerHTML = `
             <p>ID: ${user.id}</p>
             <p>Name: ${user.name}</p>
             <p>Email: ${user.email}</p>
             <p>Role: ${user.role}</p>
             <button onclick="setRole('${user.id}', 'ROLE_ADMIN')" class="!rounded-button bg-custom text-white px-4 py-2 text-sm font-medium hover:bg-custom/90">SET TO ADMIN</button>
             <button onclick="setRole('${user.id}', 'ROLE_USER')" class="!rounded-button bg-custom text-white px-4 py-2 text-sm font-medium hover:bg-custom/90">SET TO USER</button>
-        </div>
-    `;
+        `;
+        userInfoContainer.appendChild(userDiv);
+    });
 }
 
 // 사용자 role 변경

@@ -1,8 +1,27 @@
 #server 실행 port
 server:
-  8080
+  5000
+
+cloud:
+  aws:
+    region:
+      static: ap-northeast-2
+    credentials:
+      access-key: AKIAWFIPTHQM4GYFI3M7
+      secret-key: 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
+    s3:
+        bucket: springboot-taco
+        tempbucket : springboot-taco-temp
+
+
 
 spring:
+  servlet:
+    multipart:
+      max-file-size: 300MB
+      max-request-size: 300MB
+
+
   http:
     encoding:
       charset: UTF-8
@@ -15,6 +34,8 @@ spring:
   logging:
     level:
         com.kang: DEBUG
+        org.springframework.data.redis: TRACE
+        redis.clients.jedis: TRACE
 
   #favicon 사용 안함 설정
   mvc:
@@ -70,14 +91,17 @@ spring:
     auth-code-expiration: 900000 # 15분
 
   redis:
-    host: master.springboot.9bpzi8.apn2.cache.amazonaws.com #localhost
+    host: springboot-taco-backend-redis-nopw-ro.9bpzi8.ng.0001.apn2.cache.amazonaws.com #localhost
     port: 6379 #6379
+    ssl: false
+    password :
+    #hi882735hi882735
 
 jwt:
   access:
     secret: IamKangConquerorDushIamKangConquerorDushIamKangConquerorDushIamKangConquerorDush
-    expiration: 3600000
+    expiration: 36000000
 
   refresh:
-    secret: UmvengersAssembleU2zin
+    secret: UmvengersAssembleU2zinUmvengersAssembleU2zinUmvengersAssembleU2zinUmvengersAssembleU2zin
     expiration: 204800000

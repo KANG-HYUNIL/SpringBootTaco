@@ -28,7 +28,7 @@ export async function fetchApplicationData(url, callback) {
 // Function to display applications
 export function displayApplications(applications, isAdmin = false) {
     // Sort applications by start date in ascending order
-    applications.sort((a, b) => new Date(a.startTime) - new Date(b.startTime));
+    applications.sort((a, b) => new Date(b.startTime) - new Date(a.startTime));
 
     const tbody = document.querySelector('tbody');
     tbody.innerHTML = ''; // Clear existing rows
@@ -77,7 +77,7 @@ export async function fetchApplicationDetails(url, callback) {
     try {
         const fetchRequest = new FetchRequestBuilder()
             .setUrl(url)
-            .setMethod('GET')
+            .setMethod('POST')
             .addHeader('Content-Type', 'application/json')
             .setPollingCount(3)
             .build();
@@ -96,8 +96,8 @@ export async function fetchApplicationDetails(url, callback) {
 }
 
 // Function to display attachments
-export function displayAttachments(attachmentFilePaths) {
-    const attachmentFileList = document.getElementById('attachmentFileList');
+export function displayAttachments(attachmentFilePaths, elementId = 'attachmentFileList') {
+    const attachmentFileList = document.getElementById(elementId);
     attachmentFileList.innerHTML = ''; // Clear existing files
 
     const ul = document.createElement('ul');
@@ -110,6 +110,7 @@ export function displayAttachments(attachmentFilePaths) {
         fileLink.href = URLS.API.FileDownloadFile(filePath);
         fileLink.textContent = fileName;
         fileLink.classList.add('text-blue-500', 'hover:underline');
+        fileLink.setAttribute('download', fileName); // Add download attribute
         li.appendChild(fileLink);
         ul.appendChild(li);
     });

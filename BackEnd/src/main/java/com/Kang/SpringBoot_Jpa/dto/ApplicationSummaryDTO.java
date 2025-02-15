@@ -4,6 +4,7 @@ import lombok.*;
 
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
+import java.util.Date;
 
 @Data
 @Getter
@@ -15,8 +16,8 @@ public class ApplicationSummaryDTO {
 
     private String id;
     private String title;
-    private ZonedDateTime startTime;
-    private ZonedDateTime endTime;
+    private Date startTime;
+    private Date endTime;
 
 
 }

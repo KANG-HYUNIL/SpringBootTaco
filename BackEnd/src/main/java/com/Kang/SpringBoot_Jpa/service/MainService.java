@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -118,7 +119,7 @@ public class MainService {
         //token을 통한 id 획득, id를 이용한 name 획득
         try {
             username = jwtUtil.getUsername(accessToken);
-            UserEntity user = accountService.getUserById(username);
+            UserEntity user = accountService.getUserByExactId(username);
             name = user.getName();
         }
         catch (Exception e)
@@ -134,11 +135,12 @@ public class MainService {
 
         //제출 기한이 올바른지 검증 필요, 가져온 게시물에서 시작 및 종료 기간을 획득하고, 서버의 현재 시간과 비교해 처리(시간대 차이는 어떻게 하지?
         //통일된 시간대로 치환해서 비교 로직을 수행해야 할 듯. 그럼 더 나아가서 애초에 시간 데이터 표시가 시간대도 같이 표시하게끔
-        ZonedDateTime now = ZonedDateTime.now(ZoneId.of("UTC"));
-        ZonedDateTime startTime = applicationDocument.getStartTime();
-        ZonedDateTime endTime = applicationDocument.getEndTime();
+        // 제출 기한이 올바른지 검증 필요
+        Date now = new Date();
+        Date startTime = applicationDocument.getStartTime();
+        Date endTime = applicationDocument.getEndTime();
 
-        if (now.isBefore(startTime) || now.isAfter(endTime)) {
+        if (now.compareTo(startTime) < 0 || now.compareTo(endTime) > 0) {
             throw new SubmissionDeadlineException("Submission is not within the allowed time frame");
         }
 

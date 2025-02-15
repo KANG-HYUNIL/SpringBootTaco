@@ -97,7 +97,7 @@ document.addEventListener("DOMContentLoaded", async function() {
                 document.getElementById('uploadedFilePath').value = sessionData.thumbnail;
                 const fileName = sessionData.thumbnail.split('/').pop().split('_').slice(1).join('_');
                 document.getElementById('uploadedFileName').value = fileName;
-                document.getElementById('fileNameLabel').textContent = `파일 이름: ${fileName.split('_').slice(1).join('_')}`;
+                document.getElementById('fileNameLabel').textContent = `파일 이름: ${fileName}`;
                 editor.insertText(sessionData.content);
 
                 // Populate attachment files

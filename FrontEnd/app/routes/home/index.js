@@ -46,7 +46,7 @@ router.get("/admin/session", ctrl.admin.session);
 
 router.get("/admin/session/write", ctrl.admin.sessionCreate);
 
-router.get("/admim/session/fix", ctrl.admin.sessionFix);
+router.get("/admin/session/fix", ctrl.admin.sessionFix);
 
 
 router.get("/admin/application", ctrl.admin.application);

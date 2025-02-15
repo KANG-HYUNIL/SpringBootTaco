@@ -178,7 +178,8 @@ async function handleAttachmentFiles(files) {
 
 // 첨부 파일 목록을 생성하는 메서드
 export function populateAttachmentFileList(attachmentFileList, attachmentFilePaths) {
-    attachmentFileList.innerHTML = ''; // Clear existing files
+    
+    //attachmentFileList.innerHTML = ''; // Clear existing files
 
     attachmentFilePaths.forEach(filePath => {
         const fileName = filePath.split('/').pop();
@@ -210,6 +211,14 @@ function showErrorMessage(message) {
 }
 
 document.addEventListener("DOMContentLoaded", function() {
-    addThumbnailFunction(); // 썸네일 이미지 처리 기능 추가 함수 호출
-    addAttachmentFunction(); // 첨부 파일 처리 기능 추가 함수 호출
+    try {
+        addThumbnailFunction(); // 썸네일 이미지 처리 기능 추가 함수 호출
+    } catch (error) {
+        console.error("Error in addThumbnailFunction:", error);
+    }
+    try {
+        addAttachmentFunction(); // 첨부 파일 처리 기능 추가 함수 호출
+    } catch (error) {
+        console.error("Error in addAttachmentFunction:", error);
+    }
 });
