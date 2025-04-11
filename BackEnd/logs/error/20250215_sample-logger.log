@@ -1,0 +1,33 @@
+2025-02-15 00:29:03.665 [ERROR] [main] [o.s.b.d.LoggingFailureAnalysisReporter] - 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Web server failed to start. Port 8080 was already in use.
+
+Action:
+
+Identify and stop the process that's listening on port 8080 or configure this application to listen on another port.
+
+2025-02-15 00:51:06.128 [ERROR] [http-nio-8080-exec-1] [c.K.S.e.GlobalExceptionHandler] - An unexpected error occurred: Request method 'GET' is not supported
+2025-02-15 00:51:14.840 [ERROR] [http-nio-8080-exec-4] [c.K.S.e.GlobalExceptionHandler] - An unexpected error occurred: The given id must not be null
+2025-02-15 01:29:23.308 [ERROR] [http-nio-8080-exec-2] [c.K.S.e.GlobalExceptionHandler] - An unexpected error occurred: CharSequence cannot be null or empty.
+2025-02-15 01:37:52.718 [ERROR] [http-nio-8080-exec-2] [c.K.S.e.GlobalExceptionHandler] - An unexpected error occurred: CharSequence cannot be null or empty.
+2025-02-15 01:41:40.241 [ERROR] [http-nio-8080-exec-3] [c.K.S.e.GlobalExceptionHandler] - An unexpected error occurred: CharSequence cannot be null or empty.
+2025-02-15 01:43:32.170 [ERROR] [http-nio-8080-exec-3] [c.K.S.e.GlobalExceptionHandler] - An unexpected error occurred: CharSequence cannot be null or empty.
+2025-02-15 01:45:08.311 [ERROR] [http-nio-8080-exec-2] [c.K.S.e.GlobalExceptionHandler] - An unexpected error occurred: CharSequence cannot be null or empty.
+2025-02-15 01:46:10.287 [ERROR] [http-nio-8080-exec-5] [c.K.S.e.GlobalExceptionHandler] - An unexpected error occurred: CharSequence cannot be null or empty.
+2025-02-15 01:46:21.929 [ERROR] [http-nio-8080-exec-7] [c.K.S.e.GlobalExceptionHandler] - An unexpected error occurred: CharSequence cannot be null or empty.
+2025-02-15 01:46:34.150 [ERROR] [http-nio-8080-exec-8] [c.K.S.e.GlobalExceptionHandler] - An unexpected error occurred: CharSequence cannot be null or empty.
+2025-02-15 01:50:33.130 [ERROR] [http-nio-8080-exec-10] [c.K.S.e.GlobalExceptionHandler] - An unexpected error occurred: CharSequence cannot be null or empty.
+2025-02-15 02:38:12.613 [ERROR] [http-nio-8080-exec-2] [c.K.S.e.GlobalExceptionHandler] - An unexpected error occurred: JSON parse error: Cannot deserialize value of type `java.time.ZonedDateTime` from String "2025-02-15T00:00:00[Asia/Seoul]": Failed to deserialize java.time.ZonedDateTime: (java.time.format.DateTimeParseException) Text '2025-02-15T00:00:00[Asia/Seoul]' could not be parsed at index 19
+2025-02-15 02:40:25.992 [ERROR] [http-nio-8080-exec-2] [c.K.S.e.GlobalExceptionHandler] - An unexpected error occurred: JSON parse error: Cannot construct instance of `java.util.ArrayList` (although at least one Creator exists): no String-argument constructor/factory method to deserialize from String value ('[]')
+2025-02-15 02:40:34.147 [ERROR] [http-nio-8080-exec-4] [c.K.S.e.GlobalExceptionHandler] - An unexpected error occurred: org.bson.codecs.configuration.CodecConfigurationException: Can't find a codec for CodecCacheKey{clazz=class java.time.ZonedDateTime, types=null}.
+2025-02-15 16:25:39.560 [ERROR] [http-nio-8080-exec-1] [c.K.S.e.GlobalExceptionHandler] - An unexpected error occurred: Required request body is missing: public org.springframework.http.ResponseEntity<?> com.Kang.SpringBoot_Jpa.controller.AdminController.writeProject(com.Kang.SpringBoot_Jpa.dto.ProjectDTO,jakarta.servlet.http.HttpServletRequest)
+2025-02-15 16:27:09.761 [ERROR] [http-nio-8080-exec-4] [c.K.S.e.GlobalExceptionHandler] - An unexpected error occurred: No static resource applicatoin/submit.
+2025-02-15 16:34:11.592 [ERROR] [http-nio-8080-exec-1] [c.K.S.e.GlobalExceptionHandler] - An unexpected error occurred: Required request parameter 'id' for method parameter type String is not present
+2025-02-15 17:09:07.294 [ERROR] [http-nio-8080-exec-2] [c.K.S.e.GlobalExceptionHandler] - An unexpected error occurred: Cannot invoke "java.util.List.iterator()" because the return value of "com.Kang.SpringBoot_Jpa.dto.SubmitterDTO.getSubmittedFilePaths()" is null
+2025-02-15 21:44:10.051 [ERROR] [http-nio-8080-exec-2] [c.K.S.e.GlobalExceptionHandler] - An unexpected error occurred: Request method 'GET' is not supported

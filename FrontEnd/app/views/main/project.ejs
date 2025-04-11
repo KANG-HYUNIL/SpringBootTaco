@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ko" ><head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>TEST - IT 동아리</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+    <link href="https://ai-public.creatie.ai/gen_page/tailwind-custom.css" rel="stylesheet"/>
+    <script src="https://cdn.tailwindcss.com/3.4.5?plugins=forms@0.5.7,typography@0.5.13,aspect-ratio@0.4.2,container-queries@0.1.1"></script>
+    <script src="https://ai-public.creatie.ai/gen_page/tailwind-config.min.js" data-color="#000000" data-border-radius="small"></script>
+    <script type="module" src="/js/main/public.js" defer></script>
+    <script type="module" src="/js/main/project.js" defer></script>
+    <link rel="stylesheet" href="/css/iframeTUI.css" />
+</head>
+<body class="font-[&#39;Noto_Sans_KR&#39;] bg-gray-50">
+<nav class="fixed top-0 left-0 right-0 bg-white shadow-sm z-50">
+    <div class="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between h-16">
+            <div class="flex items-center">
+                <a href="#" onclick="navigateToHome()" class="flex-shrink-0">
+                    <span class="text-2xl font-bold text-custom">TEST</span>
+                </a>
+            </div>
+            <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
+                <a href="#" onclick="navigateToHome()" class="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700">
+                    Main
+                </a>
+                <a href="#" onclick="navigateToAbout()" class="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700">
+                    About
+                </a>
+                <a href="#" onclick="navigateToSession()" class="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700">
+                    Session
+                </a>
+                <a href="#" onclick="navigateToProject()" class="inline-flex items-center px-1 pt-1 border-b-2 border-custom text-sm font-medium text-gray-900">
+                    Project
+                </a>
+                <a href="#" onclick="navigateToFAQ()" class="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700">
+                    FAQ
+                </a>
+                <a href="#" onclick="navigateToApplication()" class="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700">
+                    Application
+                </a>
+            </div>
+            <div id="navBar" class="hidden sm:ml-6 sm:flex sm:items-center">
+                <button onclick="navigateToLogin()" class="!rounded-button bg-custom text-white px-4 py-2 text-sm font-medium hover:bg-custom/90">
+                    로그인/회원가입
+                </button>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<main class="pt-16 mb-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
+        <div class="w-64 mx-auto mt-8">
+            <select id="termSelect" class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:border-custom focus:ring-custom">
+
+            </select>
+        </div>
+        <div id="projectContainer" class="mt-12 grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto">
+            <!-- Projects will be dynamically inserted here -->
+        </div>
+    </div>
+</main>
+
+<footer class="bg-gray-900">
+    <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+        <div class="text-center text-gray-400 text-sm">
+            <p>© 2024 TEST IT 동아리. All rights reserved.</p>
+        </div>
+    </div>
+</footer>
+
+
+
+
+
+
+<script type="text/javascript">
+    var projectData = /*[[${projectData}]]*/ {};
+</script>
+
+
+
+</body>
+</html>

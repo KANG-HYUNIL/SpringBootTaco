@@ -1,0 +1,107 @@
+#server 실행 port
+server:
+  5000
+
+cloud:
+  aws:
+    region:
+      static: ap-northeast-2
+    credentials:
+      access-key: AKIAWFIPTHQM4GYFI3M7
+      secret-key: 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
+    s3:
+        bucket: springboot-taco
+        tempbucket : springboot-taco-temp
+
+
+
+spring:
+  servlet:
+    multipart:
+      max-file-size: 300MB
+      max-request-size: 300MB
+
+
+  http:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+
+  application:
+    name: springboot_jpa
+
+  logging:
+    level:
+        com.kang: DEBUG
+        org.springframework.data.redis: TRACE
+        redis.clients.jedis: TRACE
+
+  #favicon 사용 안함 설정
+  mvc:
+    favicon:
+      enabled: false
+
+  #mysql 연결 정보
+  datasource:
+    url: jdbc:mysql://sprintboot-jpa.cdy6gyeeokzn.ap-northeast-2.rds.amazonaws.com:3306/springboot_jpa?serverTimezone=UTC&characterEncoding=UTF-8
+    username: springboot_jpa
+    password: hi882735
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  #mongoDb 연결 정보
+  data :
+    mongodb :
+      uri : mongodb+srv://springboot_user:hi882735@springboot.jbtz1.mongodb.net/?retryWrites=true&w=majority&appName=springBoot
+      database : springBootDocuments # db 이름
+#      host: //
+#      port: //
+#      username: springboot_user
+#      password : hi882735
+#      database : //
+#      authentication-database : admin
+
+  thymeleaf:
+    cache: false
+
+  #jpa 설정
+  jpa:
+    open-in-view: false
+    show-sql: true
+    hibernate:
+      ddl-auto: update #테이블을 매 번 새로 만들지 않고 update하게끔 설정하는 속성값
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: usk883135@gmail.com #구글 계정
+    password: vwwvejgrqsalzcym #앱 비밀번호
+    protocol : smtp #반드시 소문자
+    properties:
+      mail:
+        protocol : smtp #반드시 소문자
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+          connectiontimeout: 20000
+          timeout: 20000
+          writetimeout: 20000
+    auth-code-expiration: 900000 # 15분
+
+  redis:
+    host: springboot-taco-backend-redis-nopw-ro.9bpzi8.ng.0001.apn2.cache.amazonaws.com #localhost
+    port: 6379 #6379
+    ssl: false
+    password :
+    #hi882735hi882735
+
+jwt:
+  access:
+    secret: IamKangConquerorDushIamKangConquerorDushIamKangConquerorDushIamKangConquerorDush
+    expiration: 36000000
+
+  refresh:
+    secret: UmvengersAssembleU2zinUmvengersAssembleU2zinUmvengersAssembleU2zinUmvengersAssembleU2zin
+    expiration: 204800000
